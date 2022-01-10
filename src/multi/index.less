@@ -26,6 +26,8 @@
     justify-content: flex-start;
     width: 100%;
     height: 100%;
+    position: relative;
+    color: var(--monaco-editor-foreground);
 
     &-drag {
         width: 5px;
@@ -39,7 +41,6 @@
     }
 
     &-area {
-        overflow: hidden;
         color: var(--monaco-editor-foreground);
         background-color: var(--monaco-editor-background);
         flex: 1;
@@ -61,12 +62,85 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            user-select: none;
 
             &-icon {
+                user-select: none;
                 width: 100px;
                 height: 100px;
                 margin-bottom: 20px;
             }
+        }
+    }
+
+    &-setting {
+        width: 400px;
+        height: 200px;
+        background: var(--monaco-editor-background);
+        border-radius: 10px;
+        color: var(--monaco-list-activeSelectionForeground);
+        display: flex;
+        flex-direction: column;
+
+        &-button {
+            cursor: pointer;
+            position: absolute;
+            left: 8px;
+            bottom: 5px;
+        }
+
+        &-header {
+            position: relative;
+            height: 25px;
+            width: 100%;
+            background: var(--monaco-editorCursor-foreground);
+            border-radius: 10px 10px 0 0;
+            box-sizing: border-box;
+            padding-left: 10px;
+
+            &-close {
+                cursor: pointer;
+                line-height: 12px;
+                height: 12px;
+                top: 4px;
+                padding: 4px;
+                position: absolute;
+                right: 10px;
+            }
+        }
+
+        &-content {
+            flex-grow: 1;
+            padding: 10px 10px 10px 30px;
+            overflow-y: scroll;
+        }
+    }
+
+    &-prettier {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        cursor: pointer;
+    }
+
+    &-input {
+        &-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        &-name {
+            font-size: 12px;
+            line-height: 20px;
+            width: 100px;
+            text-align: left;
+        }
+
+        &-value {
+            font-size: 12px;
+            line-height: 20px;
         }
     }
 }

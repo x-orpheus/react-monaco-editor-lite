@@ -3,7 +3,7 @@ import { Registry } from 'monaco-textmate';
 import { wireTmGrammars } from 'monaco-editor-textmate';
 declare type monacoType = typeof import("monaco-editor");
 import { ASSETSPATH } from './consts';
-
+// import config from './eslintconfig';
 declare global {
     interface Window {
         monaco: monacoType;
@@ -35,78 +35,80 @@ const grammerMap: {
     'source.ts.tsx': 'TypesSriptReact.tmLanguage.json',
     'source.css': 'css.tmLanguage.json',
     'source.less': 'less.tmLanguage.json',
+    'text.html.basic': 'html.tmLanguage.json',
 }
 
-export async function configTheme(name: string) {
-    const theme = JSON.parse(await (await fetch(`${ASSETSPATH}themes/${name}.json`)).text());
+export const themes: {
+    [key: string]: any,
+} = {};
 
-    const variables = [
-        'list.activeSelectionBackground',
-        'list.activeSelectionForeground',
-        'list.focusBackground',
-        'list.focusForeground',
-        'list.highlightForeground',
-        'list.hoverBackground',
-        'list.hoverForeground',
-        'list.inactiveSelectionBackground',
-        'list.inactiveSelectionForeground',
-        'list.warningForeground',
-        'editor.background',
-        'editor.foreground',
-        'scrollbar.shadow',
-        'scrollbarSlider.activeBackground',
-        'scrollbarSlider.background',
-        'scrollbarSlider.hoverBackground',
-        'editorCursor.foreground',
-    ];
+export async function configTheme(name: string) {
+    let theme = themes[name];
+    if (!theme) {
+        theme = JSON.parse(await (await fetch(`${ASSETSPATH}themes/${name}.json`)).text());
+        themes[name] = theme;
+        // 定义主题
+        window.monaco.editor.defineTheme(name, theme);
+    }
 
     const prefix = '--monaco-';
 
-    variables.forEach(v => {
-        console.log(v, theme.colors[v]);
-        document.documentElement.style.setProperty(`${prefix}${v.replace('.', '-')}`, theme.colors[v] || '#fff');
-    });
+    Object.keys(theme.colors).forEach(v => {
+        document.documentElement.style.setProperty(`${prefix}${v.replace('.', '-')}`, theme.colors[v] || themes.OneDarkPro.colors[v] || 'rgba(0, 0, 0, 0)');
+    })
 
-     // 定义主题
-     window.monaco.editor.defineTheme('OneDarkPro', theme);
-     // 设置主题
-     window.monaco.editor.setTheme('OneDarkPro');
+    // 设置主题
+    window.monaco.editor.setTheme(name);
+}
+
+async function addExtraLib() {
+    let res = await (await fetch(`${ASSETSPATH}@types/react/index.d.ts`)).text();
+    window.monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+        allowJs: true,
+        allowNonTsExtensions: true,
+        allowSyntheticDefaultImports: true, // for use of import React from 'react' ranther than import * as React from 'react'
+    })
+    window.monaco.languages.typescript.javascriptDefaults.addExtraLib(
+        res,
+        'file:///node_modules/@types/react/index.d.ts'
+    );
+    window.monaco.languages.typescript.typescriptDefaults.addExtraLib(
+        res,
+        'file:///node_modules/@types/react/index.d.ts'
+    );
+    res = await (await fetch(`${ASSETSPATH}@types/react/global.d.ts`)).text();
+    window.monaco.languages.typescript.javascriptDefaults.addExtraLib(
+        res,
+        'file:///node_modules/%40types/react/global.d.ts'
+    );
+    window.monaco.languages.typescript.typescriptDefaults.addExtraLib(
+        res,
+        'file:///node_modules/%40types/react/global.d.ts'
+    );
+    res = await (await fetch(`${ASSETSPATH}@types/react-dom/index.d.ts`)).text();
+    window.monaco.languages.typescript.javascriptDefaults.addExtraLib(
+        res,
+        'file:///node_modules/@types/react-dom/index.d.ts'
+    );
+    window.monaco.languages.typescript.typescriptDefaults.addExtraLib(
+        res,
+        'file:///node_modules/@types/react-dom/index.d.ts'
+    );
 }
 
 function configMonaco() {
     const init = async () => {
         window.monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true);
-        // monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
-        //     noSemanticValidation: true,
-        //     noSyntaxValidation: true,
-        // });
+        window.monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+            noSemanticValidation: true,
+            noSyntaxValidation: true,
+        });
         // 加载textmate语义解析webassembly文件
         await loadWASM(`${ASSETSPATH}onigasm.wasm`);
         //
         configTheme('OneDarkPro');
-        /**
-         * Use prettier to format JavaScript code.
-         * This will replace the default formatter.
-         */
-        window.monaco.languages.registerDocumentFormattingEditProvider('javascript', {
-            async provideDocumentFormattingEdits(model) {
-                const prettier = await import('prettier/standalone');
-                // @ts-ignore
-                const babylon = await import('prettier/parser-babylon');
-                const text = prettier.format(model.getValue(), {
-                    parser: 'babylon',
-                    plugins: [babylon],
-                    singleQuote: true,
-                });
-            
-                return [
-                    {
-                    range: model.getFullModelRange(),
-                    text,
-                    },
-                ];
-            },
-        });
+
+        addExtraLib();
     };
     init();
 
@@ -122,6 +124,7 @@ function configMonaco() {
     grammars.set('TypescriptReact', 'source.ts.tsx');
     grammars.set('less', 'source.less');
     grammars.set('css', 'source.css');
+    grammars.set('html', 'text.html.basic');
     
     // 创建一个注册表，可以从作用域名称来加载对应的语法文件
     const registry = new Registry({
@@ -148,9 +151,9 @@ function configMonaco() {
 export const startUp = () => {
     if (execed) return;
     execed = true;
-    loadScript('https://cdn.jsdelivr.net/npm/monaco-editor@0.30.1/min/vs/loader.js', () => {
+    loadScript('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.1/min/vs/loader.min.js', () => {
         loadCode(`
-            require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.30.1/min/vs' } });
+            require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.1/min/vs' } });
 
             require(['vs/editor/editor.main'], function () {
             });

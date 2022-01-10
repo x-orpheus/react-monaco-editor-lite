@@ -1,28 +1,43 @@
 import ReactDOM, { unstable_batchedUpdates } from 'react-dom';
 import React, { useCallback, useState, useEffect, useRef } from 'react';
 import Editor from './Entry';
+import { themes } from '../utils/initEditor';
 import { THEMES } from '../utils/consts';
-
+import { copyDataToClipBoard } from '../utils';
 interface filelist {
     [key: string]: string,
 }
 
+declare global {
+    interface Window {
+        eslint: any,
+        linter: any,
+    }
+}
+
 const filesName = [
-    '/app.js',
-    '/cc.js',
-    '/app.ts',
+    '/index.html',
+    '/app/index.jsx',
+    '/app/index.css',
+    '/app/button.jsx',
+    // '/app.js',
+    // '/cc.js',
+    // '/app.ts',
     '/cc.ts',
-    '/test.css',
-    '/src/index.jsx',
-    '/style.less',
-    '/styles/index.less',
-    '/src/components/title/index.js',
-    '/src/components/title/index.less',
+    // '/test.css',
+    // '/src/index.jsx',
+    // '/style.less',
+    // '/styles/index.less',
+    // '/src/components/title/index.js',
+    // '/src/components/title/index.less',
 ];
 
 const App = () => {
     const [files, setFiles] = useState<filelist>({});
     const editorRef = useRef<any>(null);
+    const [colors, setColors] = useState<{
+        [key: string]: string,
+    }>({});
 
     useEffect(() => {
         // 获取多文件
@@ -37,12 +52,15 @@ const App = () => {
                 // setPath(filesName[0]);
                 // setValue(filesContent[0]);
             });
-        })
+        });
+        setTimeout(() => {
+            setColors(themes['OneDarkPro'].colors);
+        }, 5000);
     }, []);
 
     // 设置当前文件路径和value
     const handlePathChange = useCallback((key: string) => {
-        console.log(key);
+        // console.log(key);
     }, []);
 
     // // 同步ide内容修改
@@ -51,27 +69,41 @@ const App = () => {
     // }, []);
 
     // const handleFileChange = (key: string, value: string) => {
-    //     // console.log(key, value);
+    //     console.log(key, value);
     // }
 
-    const [options, setOptions] = useState({
-        fontSize: 14,
-        automaticLayout: true,
-    });
-
     const handleThemeChange = (e: any) => {
-        setOptions(pre => (
-            {
-                ...pre,
-                theme: e.target.value
-            }
-        ))
+        editorRef.current.setTheme(e.target.value);
     };
+
+    // const sandboxRef = useRef(null);
+
+    // const sendMessage = () => {
+    //     // @ts-ignore
+    //     sandboxRef.current.contentWindow.postMessage({
+    //         type: 'SAVE_FILES',
+    //         files,
+    //     }, 'http://localhost:8081');
+    // };
+
+    // useEffect(() => {
+    //     window.addEventListener('message', res => console.log(res));
+    // }, []);
+
+    const linter = useCallback(() => {
+        console.log(editorRef.current.getValue('/index.jsx'));
+    }, []);
 
     return (
         <div>
-            <div onClick={() => console.log(editorRef.current?.getValue('/app.js')) }>ref api</div>
-            <select name="theme" onChange={handleThemeChange}>
+            <div onClick={() => console.log(editorRef.current) }>ref api</div>
+            {/* <div onClick={sendMessage}>send postmessage</div> */}
+            <div onClick={linter}>eslint</div>
+            <div onClick={() => setColors(themes['OneDarkPro'].colors)}>refresh theme color</div>
+            <select
+                name="theme"
+                onChange={handleThemeChange}
+                defaultValue="OneDarkPro" >
                 {
                     THEMES.map(theme => <option key={theme} value={theme}>{theme}</option>)
                 }
@@ -88,10 +120,46 @@ const App = () => {
                             onPathChange={handlePathChange}
                             // onValueChange={handleChange}
                             // onFileChange={handleFileChange}
-                            options={options} />
+                            options={{
+                                fontSize: 14,
+                                automaticLayout: true,
+                            }} />
                     </div>
                 )
             }
+            {/* <iframe src="http://localhost:8081/index.html" ref={sandboxRef} /> */}
+            <div style={{
+                position: 'absolute',
+                right: '0',
+                top: '0',
+                bottom: '0',
+                width: '400px',
+                overflow: 'scroll',
+            }}>
+                {
+                    Object.keys(colors).map(v => (
+                        <div
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                            }}
+                            onClick={() => {
+                                copyDataToClipBoard(`var(--monaco-${v.replace('.', '-')})`)
+                            }}
+                            key={v}>
+                            <div style={{
+                                marginRight: '5px',
+                            }}>{v}</div>
+                            <div style={{
+                                width: '100px',
+                                height: '14px',
+                                background: colors[v],
+                            }} />
+                        </div>)
+                    )
+                }
+            </div>
         </div>
     );
 }

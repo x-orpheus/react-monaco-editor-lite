@@ -1,3 +1,5 @@
+import { ASSETSPATH } from "./consts";
+
 export function generateFileTree(files: any) {
     const keys = Object.keys(files);
     const tree = {};
@@ -21,3 +23,22 @@ export function generateFileTree(files: any) {
     });
     return tree;
 }
+
+export const copyDataToClipBoard = (
+    data: string,
+    callback?: (res: boolean) => void,
+) => {
+    const input = document.createElement('input');
+    document.body.appendChild(input);
+    input.setAttribute('value', data);
+    input.select();
+    if (document.execCommand('copy')) {
+        document.execCommand('copy');
+        callback && callback(true);
+    } else {
+        callback && callback(false);
+    }
+    document.body.removeChild(input);
+};
+
+export const worker = new Worker(`${ASSETSPATH}eslint.worker.js`);

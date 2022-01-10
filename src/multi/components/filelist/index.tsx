@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import Icon from '../icons';
+import Arrow from '../icons/arrow';
 import './index.less';
 
 const File: React.FC<{
@@ -35,6 +36,7 @@ const File: React.FC<{
                 <Icon
                     type={`file_type_${fileType}`}
                     style={{
+                        marginLeft: '14px',
                         marginRight: '5px',
                     }} />
                 {file.name}
@@ -46,6 +48,7 @@ const File: React.FC<{
             {
                 directory && (
                     <div onClick={handleClick} className="music-monaco-editor-list-file-item-row">
+                        <Arrow collpase={!showChild} />
                         <Icon
                             style={{
                                 marginRight: '5px',
@@ -57,7 +60,7 @@ const File: React.FC<{
             }
             {
                 (showChild || root) && (
-                    <div style={{paddingLeft: directory ? '5px' : '0'}}>
+                    <div style={{paddingLeft: directory ? '7px' : '0'}}>
                         {
                             Object.keys(file).map(item => (
                                 <File
@@ -90,19 +93,32 @@ const FileTree: React.FC<{
     currentPath = '',
     style,
 }) => {
+    const [collpase, setCollpase] = useState(false);
+
+    const handleCollapse = useCallback(() => {
+        setCollpase(pre => !pre);
+    }, []);
 
     return (
         <div className="music-monaco-editor-list-wrapper" style={style}>
             <div className="music-monaco-editor-list-title">
                 {title}
             </div>
-            <div className="music-monaco-editor-list-files">
-                <File
-                    currentPath={currentPath}
-                    root
-                    file={filetree}
-                    onPathChange={onPathChange} />
+            <div className="music-monaco-editor-list-split" onClick={handleCollapse}>
+                <Arrow collpase={collpase} />
+                <span>Files</span>
             </div>
+            {
+                !collpase && (
+                <div className="music-monaco-editor-list-files">
+                    <File
+                        currentPath={currentPath}
+                        root
+                        file={filetree}
+                        onPathChange={onPathChange} />
+                </div>
+                )
+            }
         </div>
     )
 };

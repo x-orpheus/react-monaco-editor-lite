@@ -2,12 +2,17 @@ import React, { useCallback, useEffect, useRef, useState, useImperativeHandle } 
 import * as monacoType from 'monaco-editor';
 import OpenedTab from './components/openedtab';
 import FileList from './components/filelist';
-import { generateFileTree } from '../utils';
+import Modal from './components/modal';
+import Select from './components/select';
+import Close from './components/icons/close';
+import SettingIcon from './components/icons/setting';
+import Prettier from './components/prettier';
+import { generateFileTree, worker } from '../utils';
+import { THEMES } from '../utils/consts';
 import { configTheme } from '../utils/initEditor';
 export interface filelist {
     [key: string]: string,
 }
-
 export interface MultiEditorIProps {
     defaultPath?: string,
     // path?: string,
@@ -22,9 +27,10 @@ export interface MultiEditorIProps {
 }
 
 export interface MultiRefType {
-    test: () => void,
     getValue: (path: string) => string,
     getAllValue: () => filelist,
+    getSupportThemes: () => Array<string>,
+    setTheme: (name: string) => void,
 }
 
 // 初始化各个文件
@@ -63,6 +69,9 @@ function initializeFile(path: string, value: string) {
             config[type] || type,
             new window.monaco.Uri().with({ path })
         );
+        model.updateOptions({
+            tabSize: 4,
+        });
     }
 }
 
@@ -90,6 +99,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
     onValueChangeRef.current = onValueChange;
     onFileChangeRef.current = onFileChange;
     optionsRef.current = options;
+    const autoPrettierRef = useRef<boolean>(true);
 
     const editorNodeRef = useRef<HTMLDivElement>(null);
     const editorRef = useRef<monacoType.editor.IStandaloneCodeEditor | null>(null);
@@ -109,6 +119,10 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
     const [curPath, setCurPath] = useState(defaultPath || '');
     const curPathRef = useRef(defaultPath || '');
     const curValueRef = useRef('');
+
+    const handleFromat = useCallback(() => {
+        return editorRef.current?.getAction('editor.action.formatDocument').run();
+    }, []);
 
     const restoreModel = useCallback((path: string) => {
         const editorStates = editorStatesRef.current;
@@ -131,6 +145,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                 }
                 // 聚焦editor
                 editorRef.current?.focus();
+                let timer: any = null;
                 valueLisenerRef.current = model.onDidChangeContent(() => {
                     const v = model.getValue();
                     setOpenedFiles((pre) => pre.map(v => {
@@ -146,12 +161,38 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                     if (onValueChangeRef.current) {
                         onValueChangeRef.current(v);
                     }
+
+                    // eslint解析需要消抖，延迟500ms消抖即可
+                    if (timer) clearTimeout(timer);
+                    timer = setTimeout(() => {
+                        timer = null;
+                        worker.postMessage({
+                            code: model.getValue(),
+                            version: model.getVersionId(),
+                            path,
+                        });
+                    }, 500);
                 })
             }
+            worker.postMessage({
+                code: model.getValue(),
+                version: model.getVersionId(),
+                path,
+            });
             prePath.current = path;
             return model;
         }
         return false;
+    }, []);
+
+    useEffect(() => {
+        worker.onmessage = function (event) {
+            const { markers, version } = event.data;
+            const model = editorRef.current?.getModel();
+            if (model && model.getVersionId() === version) {
+                window.monaco.editor.setModelMarkers(model, 'eslint', markers);
+            }
+        }
     }, []);
     
     const openOrFocusPath = useCallback((path: string) => {
@@ -211,15 +252,27 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
 
         if (ctrlKey && keyCode === 83) {
             e.preventDefault();
-            setOpenedFiles((pre) => pre.map(v => {
-                if (v.path === curPathRef.current) {
-                    v.status = 'saved';
-                }
-                return v;
-            }));
-            filesRef.current[curPathRef.current] = curValueRef.current;
+            if (autoPrettierRef.current) {
+                handleFromat()?.then(() => {
+                    setOpenedFiles((pre) => pre.map(v => {
+                        if (v.path === curPathRef.current) {
+                            v.status = 'saved';
+                        }
+                        return v;
+                    }));
+                    filesRef.current[curPathRef.current] = curValueRef.current;
+                });
+            } else {
+                setOpenedFiles((pre) => pre.map(v => {
+                    if (v.path === curPathRef.current) {
+                        v.status = 'saved';
+                    }
+                    return v;
+                }));
+                filesRef.current[curPathRef.current] = curValueRef.current;
+            }
         }
-    }, []);
+    }, [handleFromat]);
 
     useEffect(() => {
         // 初始化创建各个文件model
@@ -228,7 +281,9 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
 
     useEffect(() => {
         if (editorRef.current) {
-            configTheme(options.theme || 'OneDarkPro')
+            if (options.theme) {
+                configTheme(options.theme);
+            }
             editorRef.current.updateOptions(options);
         }
     }, [options]);
@@ -273,9 +328,10 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
     }, [restoreModel]);
 
     useImperativeHandle(ref, () => ({
-        test: () => console.log('test'),
         getValue: (path: string) => filesRef.current[path],
         getAllValue: () => filesRef.current,
+        getSupportThemes: () => THEMES,
+        setTheme: (name) => configTheme(name),
     }));
 
     const [filelistWidth, setFilelistWidth] = useState(180);
@@ -311,8 +367,18 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
         };
     }, []);
 
+    const rootRef = useRef(null);
+
+    const [settingVisible, setSettingVisible] = useState(false);
+
+    const handleSetAutoPrettier = useCallback((e) => {
+        autoPrettierRef.current = e.target.checked;
+    }, []);
+
     return (
         <div
+            ref={rootRef}
+            id="music-monaco-editor-root"
             tabIndex={1}
             onKeyDown={dealKey}
             onMouseMove={handleMove}
@@ -349,6 +415,61 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                     )
                 }
             </div>
+            <div
+                className="music-monaco-editor-setting-button"
+                onClick={() => setSettingVisible(true) }>
+                <SettingIcon
+                    style={{
+                        width: '20px',
+                        height: '20px',
+                    }} />
+            </div>
+            <Prettier
+                onClick={handleFromat}
+                className="music-monaco-editor-prettier" />
+            <Modal
+                onClose={() => { setSettingVisible(false) }}
+                visible={settingVisible}
+                target={rootRef.current}>
+                <div className="music-monaco-editor-setting">
+                    <div className="music-monaco-editor-setting-header">
+                        设置
+                        <div
+                            onClick={() => setSettingVisible(false) }
+                            className="music-monaco-editor-setting-header-close">
+                            <Close style={{
+                                width: '12px',
+                                height: '12px'
+                            }} />
+                        </div>
+                    </div>
+                    <div className="music-monaco-editor-setting-content">
+                        <div className="music-monaco-editor-input-row">
+                            <div className="music-monaco-editor-input-name">
+                                prettier
+                            </div>
+                            <div className="music-monaco-editor-input-value">
+                                <input
+                                    defaultChecked={autoPrettierRef.current}
+                                    type="checkbox"
+                                    onChange={handleSetAutoPrettier}/>
+                                <label>prettier on save</label>
+                            </div>
+                        </div>
+                        <div className="music-monaco-editor-input-row">
+                            <div className="music-monaco-editor-input-name">
+                                主题选择
+                            </div>
+                            <div className="music-monaco-editor-input-value">
+                                <Select
+                                    onChange={(v) => configTheme(v)}
+                                    defaultValue="OneDarkPro"
+                                    options={THEMES} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Modal>
         </div>
     )
 });
