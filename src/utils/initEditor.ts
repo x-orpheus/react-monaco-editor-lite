@@ -7,6 +7,10 @@ import { ASSETSPATH } from './consts';
 declare global {
     interface Window {
         monaco: monacoType;
+        define: any;
+        prettier: any;
+        prettierPlugins: any;
+        require: any,
     }
 }
 
@@ -17,12 +21,12 @@ function loadScript(url: string, cb: () => void) {
     script.onload = cb;
 }
 
-function loadCode(code: string) {
-    const script = document.createElement('script');
-    script.type = ' text/javascript';
-    script.appendChild(document.createTextNode(code));
-    document.getElementsByTagName('body')[0].appendChild(script);
-}
+// function loadCode(code: string) {
+//     const script = document.createElement('script');
+//     script.type = ' text/javascript';
+//     script.appendChild(document.createTextNode(code));
+//     document.getElementsByTagName('body')[0].appendChild(script);
+// }
 
 let execed = false;
 
@@ -70,29 +74,29 @@ async function addExtraLib() {
     })
     window.monaco.languages.typescript.javascriptDefaults.addExtraLib(
         res,
-        'file:///node_modules/@types/react/index.d.ts'
+        'music:/node_modules/@types/react/index.d.ts'
     );
     window.monaco.languages.typescript.typescriptDefaults.addExtraLib(
         res,
-        'file:///node_modules/@types/react/index.d.ts'
+        'music:/node_modules/@types/react/index.d.ts'
     );
     res = await (await fetch(`${ASSETSPATH}@types/react/global.d.ts`)).text();
     window.monaco.languages.typescript.javascriptDefaults.addExtraLib(
         res,
-        'file:///node_modules/%40types/react/global.d.ts'
+        'music:/node_modules/%40types/react/global.d.ts'
     );
     window.monaco.languages.typescript.typescriptDefaults.addExtraLib(
         res,
-        'file:///node_modules/%40types/react/global.d.ts'
+        'music:/node_modules/%40types/react/global.d.ts'
     );
     res = await (await fetch(`${ASSETSPATH}@types/react-dom/index.d.ts`)).text();
     window.monaco.languages.typescript.javascriptDefaults.addExtraLib(
         res,
-        'file:///node_modules/@types/react-dom/index.d.ts'
+        'music:/node_modules/@types/react-dom/index.d.ts'
     );
     window.monaco.languages.typescript.typescriptDefaults.addExtraLib(
         res,
-        'file:///node_modules/@types/react-dom/index.d.ts'
+        'music:/node_modules/@types/react-dom/index.d.ts'
     );
 }
 
@@ -152,12 +156,28 @@ export const startUp = () => {
     if (execed) return;
     execed = true;
     loadScript('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.1/min/vs/loader.min.js', () => {
-        loadCode(`
-            require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.1/min/vs' } });
+        window.require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.1/min/vs' } });
 
-            require(['vs/editor/editor.main'], function () {
-            });
-        `)
+        window.require(['vs/editor/editor.main'], function () {
+        });
+        window.define('prettier', [
+                'https://unpkg.com/prettier@2.5.1/standalone.js',
+                'https://unpkg.com/prettier@2.5.1/parser-babel.js',
+                'https://unpkg.com/prettier@2.5.1/parser-html.js',
+                'https://unpkg.com/prettier@2.5.1/parser-postcss.js',
+                'https://unpkg.com/prettier@2.5.1/parser-typescript.js'
+            ], (prettier: any, ...args: any[]) => {
+            const prettierPlugins = {
+                babel: args[0],
+                html: args[1],
+                postcss: args[2],
+                typescript: args[3],
+            }
+            return {
+                prettier,
+                prettierPlugins,
+            }
+        });
     });
     const interval = setInterval(() => {
         if(window.monaco) {

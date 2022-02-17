@@ -1,17 +1,24 @@
-import React, { useCallback, useEffect, useRef, useState, useImperativeHandle } from 'react';
+import React, {
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+    useImperativeHandle,
+    useMemo
+} from 'react';
 import * as monacoType from 'monaco-editor';
-import OpenedTab from './components/openedtab';
-import FileList from './components/filelist';
-import Modal from './components/modal';
-import Select from './components/select';
-import Close from './components/icons/close';
-import SettingIcon from './components/icons/setting';
-import Prettier from './components/prettier';
-import { generateFileTree, worker } from '../utils';
-import { THEMES } from '../utils/consts';
-import { configTheme } from '../utils/initEditor';
+import OpenedTab from '@components/openedtab';
+import FileList from '@components/filelist';
+import Modal from '@components/modal';
+import Select from '@components/select';
+import Close from '@components/icons/close';
+import SettingIcon from '@components/icons/setting';
+import Prettier from '@components/prettier';
+import { worker, createOrUpdateModel, deleteModel } from '@utils';
+import { THEMES } from '@utils/consts';
+import { configTheme } from '@utils/initEditor';
 export interface filelist {
-    [key: string]: string,
+    [key: string]: string | null,
 }
 export interface MultiEditorIProps {
     defaultPath?: string,
@@ -27,57 +34,11 @@ export interface MultiEditorIProps {
 }
 
 export interface MultiRefType {
-    getValue: (path: string) => string,
+    getValue: (path: string) => string | null,
     getAllValue: () => filelist,
     getSupportThemes: () => Array<string>,
     setTheme: (name: string) => void,
 }
-
-// 初始化各个文件
-function initializeFile(path: string, value: string) {
-    // model 是否存在
-    let model = window.monaco.editor
-      .getModels()
-      .find(model => model.uri.path === path);
-
-    if (model) {
-        if (model.getValue() !== value) {
-            model.pushEditOperations(
-                [],
-                [
-                    {
-                        range: model?.getFullModelRange(),
-                        text: value,
-                    },
-                ],
-                () => [],
-            );
-        }
-    } else if (path) {
-        const type = path.split('.').slice(-1)[0];
-        const config: {
-            [key: string]: string
-        } = {
-            'js': 'javascript',
-            'ts': 'typescript',
-            'less': 'less',
-            'jsx': 'javascript',
-            'tsx': 'typescript',
-        }
-        model = window.monaco.editor.createModel(
-            value,
-            config[type] || type,
-            new window.monaco.Uri().with({ path })
-        );
-        model.updateOptions({
-            tabSize: 4,
-        });
-    }
-}
-
-// TODO:删除model
-
-// TODO:重命名model
 
 export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>(({
     defaultPath,
@@ -105,7 +66,6 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
     const editorRef = useRef<monacoType.editor.IStandaloneCodeEditor | null>(null);
     const prePath = useRef<string | null>(defaultPath || '');
     const filesRef = useRef(defaultFiles);
-    const [filetree] = useState(generateFileTree(defaultFiles));
     const valueLisenerRef = useRef<monacoType.IDisposable>();
     const editorStatesRef = useRef(new Map());
 
@@ -154,6 +114,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                         }
                         return v;
                     }));
+                    // filesRef.current[path] = v;
                     if (onFileChangeRef.current) {
                         onFileChangeRef.current(path, v);
                     }
@@ -221,7 +182,10 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
 
     useEffect(() => {
         // 创建editor 实例
-        editorRef.current = window.monaco.editor.create(editorNodeRef.current!, optionsRef.current);
+        editorRef.current = window.monaco.editor.create(editorNodeRef.current!, {
+            ...optionsRef.current,
+            model: null,
+        });
 
         const editorService = (editorRef.current as any)._codeEditorService;
         const openEditorBase = editorService.openCodeEditor.bind(editorService);
@@ -245,23 +209,9 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
         }
     }, [openOrFocusPath]);
 
-    const dealKey = useCallback((e: React.KeyboardEvent<HTMLElement>) => {
-        const ctrlKey = e.ctrlKey || e.metaKey;
-        const keyCode = e.keyCode;
-
-        if (ctrlKey && keyCode === 83) {
-            e.preventDefault();
-            if (autoPrettierRef.current) {
-                handleFromat()?.then(() => {
-                    setOpenedFiles((pre) => pre.map(v => {
-                        if (v.path === curPathRef.current) {
-                            v.status = 'saved';
-                        }
-                        return v;
-                    }));
-                    filesRef.current[curPathRef.current] = curValueRef.current;
-                });
-            } else {
+    const saveFile = useCallback(() => {
+        if (autoPrettierRef.current) {
+            handleFromat()?.then(() => {
                 setOpenedFiles((pre) => pre.map(v => {
                     if (v.path === curPathRef.current) {
                         v.status = 'saved';
@@ -269,13 +219,141 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                     return v;
                 }));
                 filesRef.current[curPathRef.current] = curValueRef.current;
-            }
+            });
+        } else {
+            setOpenedFiles((pre) => pre.map(v => {
+                if (v.path === curPathRef.current) {
+                    v.status = 'saved';
+                }
+                return v;
+            }));
+            filesRef.current[curPathRef.current] = curValueRef.current;
         }
     }, [handleFromat]);
 
+    const onCloseFile = useCallback((path: string) => {
+        setOpenedFiles((pre) => {
+            let targetPath = '';
+            if (pre.length) {
+                const res =  pre.filter((v, index) => {
+                    if (v.path === path) {
+                        if (index === 0) {
+                            if (pre[index + 1]) {
+                                targetPath = pre[index + 1].path;
+                            }
+                        } else {
+                            targetPath = pre[index - 1].path;
+                        }
+                    }
+                    return v.path !== path
+                });
+                // 目标文件是当前文件，且存在下一激活文件时，执行model及path切换的逻辑
+                if (targetPath && curPathRef.current === path) {
+                    restoreModel(targetPath);
+                    setCurPath(targetPath);
+                }
+                if (res.length === 0) {
+                    restoreModel('');
+                    setCurPath('');
+                    prePath.current = '';
+                }
+                return res;
+            }
+            return pre;
+        });
+
+    }, [restoreModel]);
+
+    const closeOtherFiles = useCallback((path: string) => {
+        const unSavedFiles = openedFiles.filter(v => v.status === 'editing');
+        if (unSavedFiles.length) {
+            Modal.confirm({
+                title: '是否要保留未保存文件的修改',
+                target: rootRef.current,
+                okText: '保存',
+                cancelText: '不保存',
+                onCancel: (close: () => void) => {
+                    close();
+                    setOpenedFiles(pre => pre.filter(p => p.path === path));
+                    restoreModel(path);
+                    setCurPath(path);
+                    // 恢复文件的数值修改
+                    unSavedFiles.forEach((v) => {
+                        const value = filesRef.current[v.path] || '';
+                        createOrUpdateModel(v.path, value);
+                    });
+                    prePath.current = path;
+                },
+                onOk: (close: () => void) => {
+                    close();
+                    unSavedFiles.forEach((v) => {
+                        const model = window.monaco.editor
+                            .getModels()
+                            .find(model => model.uri.path === v.path);
+                        if (autoPrettierRef.current) {
+                            const p = window.require('prettier');
+                            if (!p.prettier) return;
+                            const text = p.prettier.format(model?.getValue(), {
+                                filepath: model?.uri.path,
+                                plugins: p.prettierPlugins,
+                                singleQuote: true,
+                                tabWidth: 4,
+                            });
+                            filesRef.current[v.path] = text;
+                            createOrUpdateModel(v.path, text);
+                        } else {
+                            filesRef.current[v.path] = model?.getValue() || '';
+                        }
+                    });
+                    setOpenedFiles(pre => pre.filter(p => p.path === path));
+                    restoreModel(path);
+                    setCurPath(path);
+                    prePath.current = path;
+                },
+                content: () => (
+                    <div>
+                        <div>如果不保存，你的更改将丢失</div>
+                        <div>
+                            未保存的文件路径: 
+                        </div>
+                        {
+                            unSavedFiles.map(v => (<div key={v.path}>{v.path}</div>))
+                        }
+                    </div>
+                ),
+            });
+        } else {
+            setOpenedFiles(pre => pre.filter(p => p.path === path));
+            restoreModel(path);
+            setCurPath(path);
+            prePath.current = path;
+        }
+    }, [restoreModel, openedFiles]);
+
+    const abortFileChange = useCallback((path: string) => {
+        const value = filesRef.current[path] || '';
+        createOrUpdateModel(path, value);
+        onCloseFile(path);
+    }, [onCloseFile]);
+
+    const dealKey = useCallback((e: React.KeyboardEvent<HTMLElement>) => {
+        const ctrlKey = e.ctrlKey || e.metaKey;
+        const keyCode = e.keyCode;
+
+        if (ctrlKey && keyCode === 83) {
+            e.preventDefault();
+            saveFile();
+        }
+    }, [saveFile]);
+
     useEffect(() => {
         // 初始化创建各个文件model
-        Object.keys(filesRef.current).forEach(key => initializeFile(key, filesRef.current[key]));
+        Object.keys(filesRef.current).forEach(key => {
+            const value = filesRef.current[key];
+            if (typeof value === 'string') {
+                createOrUpdateModel(key, value);
+            }
+        });
     }, []);
 
     useEffect(() => {
@@ -294,44 +372,104 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
         curPathRef.current = curPath;
     }, [curPath]);
 
-    const onCloseFile = useCallback((path: string) => {
-        setOpenedFiles((pre) => {
-            let targetPath = '';
-            if (pre.length) {
-                const res =  pre.filter((v, index) => {
-                    if (v.path === path) {
-                        if (index === 0) {
-                            if (pre[index + 1]) {
-                                targetPath = pre[index + 1].path;
-                            }
-                        } else {
-                            targetPath = pre[index - 1].path;
-                        }
-                    }
-                    return v.path !== path
-                });
-                if (targetPath) {
-                    restoreModel(targetPath);
-                    setCurPath(targetPath);
-                }
-                if (res.length === 0) {
-                    restoreModel('');
-                    setCurPath('');
-                    prePath.current = '';
-                }
-                return res;
-            }
-            return pre;
-        });
-
-    }, [restoreModel]);
-
     useImperativeHandle(ref, () => ({
         getValue: (path: string) => filesRef.current[path],
         getAllValue: () => filesRef.current,
         getSupportThemes: () => THEMES,
         setTheme: (name) => configTheme(name),
     }));
+
+    const addFile = useCallback((path: string, value?: string) => {
+        createOrUpdateModel(path, value || '');
+        filesRef.current[path] = value || '';
+        // 神奇的延时，此处不加延时，monaco会抛错
+        setTimeout(() => {
+            // 自动打开新建的文件
+            handlePathChange(path);
+        }, 50);
+    }, [handlePathChange]);
+
+    const deleteFile = useCallback((path: string) => {
+        deleteModel(path);
+        delete filesRef.current[path];
+        onCloseFile(path);
+    }, [onCloseFile]);
+
+    const editFileName = useCallback((path: string, name: string) => {
+        const value = filesRef.current[path] || '';
+        // 神奇的延时，此处不加延时，monaco会抛错
+        setTimeout(() => {
+            deleteFile(path);
+            // TODO:使用正则替换，减少开销
+            const newPath = path.split('/').slice(0, -1).concat(name).join('/');
+            addFile(newPath, value);
+        }, 50);
+    }, [deleteFile, addFile]);
+
+    const addFolder = useCallback((path: string) => {
+        let hasChild = false;
+        Object.keys(filesRef.current).forEach(p => {
+            if (p.startsWith(path + '/')) {
+                hasChild = true;
+            }
+        });
+        if (!hasChild) {
+            filesRef.current[path] = null;
+        }
+    }, []);
+
+    const deleteFolder = useCallback((path: string) => {
+        // 删除目录引用
+        delete filesRef.current[path];
+        // 删除子路径下的子文件和文件夹
+        Object.keys(filesRef.current).forEach(p => {
+            if (p.startsWith(path + '/')) {
+                const value = filesRef.current[p];
+                if (typeof value === 'string') {
+                    deleteFile(p);
+                }
+            }
+        });
+    }, [deleteFile]);
+
+    const editFolderName = useCallback((path: string, name: string) => {
+        const paths = (path || '/').slice(1).split('/');
+        const newPath =  '/' + paths.slice(0, -1).concat(name).join('/');
+        // 删除文件夹引用
+        delete filesRef.current[path];
+        // 新建文件夹引用
+        addFolder(newPath);
+        // 删除子路径下的子文件和文件夹
+        Object.keys(filesRef.current).forEach(p => {
+            if (p.startsWith(path + '/')) {
+                const value = filesRef.current[p];
+                if (typeof value === 'string') {
+                    setTimeout(() => {
+                         // 子文件需要删除原model
+                        deleteModel(p);
+                        // 重新创建新model
+                        const finalPath = p.replace(path + '/', newPath + '/');
+                        createOrUpdateModel(finalPath, value || '');
+                        filesRef.current[finalPath] = value || '';
+                    }, 50);
+                }
+                delete filesRef.current[p];
+            }
+        });
+        // 对已打开的涉事文件进行路径替换处理
+        setOpenedFiles((pre) => pre.map(v => {
+            if (v.path.startsWith(path + '/')) {
+                v.path = v.path.replace(path + '/', newPath + '/');
+            }
+            return v;
+        }));
+        // 如果涉及当前激活的model，则需要重新打开
+        if (curPathRef.current.startsWith(path + '/')) {
+            setTimeout(() => {
+                handlePathChange(curPathRef.current.replace(path + '/', newPath + '/'));
+            }, 50);
+        }
+    }, [handlePathChange, addFolder]);
 
     const [filelistWidth, setFilelistWidth] = useState(180);
 
@@ -374,6 +512,10 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
         autoPrettierRef.current = e.target.checked;
     }, []);
 
+    const styles = useMemo(() => ({
+        width: `${filelistWidth}px`,
+    }), [filelistWidth]);
+
     return (
         <div
             ref={rootRef}
@@ -384,18 +526,27 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
             onMouseUp={handleMoveEnd}
             className="music-monaco-editor">
             <FileList
-                style={{
-                    width: `${filelistWidth}px`,
-                }}
+                rootEl={rootRef.current}
+                onEditFileName={editFileName}
+                onDeleteFile={deleteFile}
+                onAddFile={addFile}
+                onAddFolder={addFolder}
+                onDeleteFolder={deleteFolder}
+                onEditFolderName={editFolderName}
+                style={styles}
                 title="web editor"
                 currentPath={curPath}
-                filetree={filetree}
+                defaultFiles={defaultFiles}
                 onPathChange={handlePathChange} />
             <div
                 onMouseDown={handleMoveStart}
                 className="music-monaco-editor-drag" />
             <div className="music-monaco-editor-area">
                 <OpenedTab
+                    onCloseOtherFiles={closeOtherFiles}
+                    onSaveFile={saveFile}
+                    onAbortSave={abortFileChange}
+                    rootEl={rootRef.current}
                     currentPath={curPath}
                     openedFiles={openedFiles}
                     onCloseFile={onCloseFile}
@@ -427,6 +578,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                 onClick={handleFromat}
                 className="music-monaco-editor-prettier" />
             <Modal
+                destroyOnClose
                 onClose={() => { setSettingVisible(false) }}
                 visible={settingVisible}
                 target={rootRef.current}>
@@ -460,10 +612,13 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                                 主题选择
                             </div>
                             <div className="music-monaco-editor-input-value">
-                                <Select
-                                    onChange={(v) => configTheme(v)}
-                                    defaultValue="OneDarkPro"
-                                    options={THEMES} />
+                                <Select defaultValue="OneDarkPro" onChange={(v) => configTheme(v.value)}>
+                                    {
+                                        THEMES.map(theme => (
+                                            <Select.Menu label={theme} value={theme} key={theme} />
+                                        ))
+                                    }
+                                </Select>
                             </div>
                         </div>
                     </div>

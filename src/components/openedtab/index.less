@@ -1,0 +1,112 @@
+.music-monaco-editor-opened-tab {
+    height: 35px;
+    box-sizing: border-box;
+    font-size: 14px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    width: 100%;
+    white-space: nowrap;
+    background-color: var(--monaco-editor-background);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    /* 滚动槽 */
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+    &::-webkit-scrollbar-track {
+        background: var(--monaco-editor-background);
+        box-shadow: inset 0 0 5px var(--monaco-scrollbar-shadow);
+        -webkit-box-shadow: inset 0 0 5px var(--monaco-scrollbar-shadow);
+    }
+    /* 滚动条滑块 */
+    &::-webkit-scrollbar-thumb {
+        border-radius: 3px;
+        background: var(--monaco-scrollbarSlider-background);
+        box-shadow: inset 0 0 5px var(--monaco-scrollbar-shadow);
+        -webkit-box-shadow: inset 0 0 5px var(--monaco-scrollbar-shadow);
+
+        //TODO: 增加滚动条hover态展示
+    }
+
+    &-wrapper {
+        box-sizing: border-box;
+        width: 100%;
+        padding-right: 30px;
+        overflow: hidden;
+    }
+
+    &-item {
+        cursor: pointer;
+        height: 35px;
+        box-sizing: border-box;
+        padding: 0 5px 0 10px;
+        // min-width: 100px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-right: 1px;
+        background-color: var(--monaco-editor-background);
+        position: relative;
+
+        &-focused {
+            background-color: var(--monaco-list-focusBackground);
+            color: var(--monaco-list-focusForeground);
+        }
+
+        &:hover {
+            background-color: var(--monaco-list-hoverBackground);
+            color: var(--monaco-list-hoverForeground);
+        }
+
+        &-close {
+            position: relative;
+            padding: 5px 5px;
+            line-height: 10px;
+            &:hover {
+                background-color: var(--monaco-list-focusBackground);
+            }
+        }
+
+        &-editing {
+            position: absolute;
+            right: 10px;
+            top: 15px;
+            width: 7px;
+            height: 7px;
+            background-color: var(--monaco-list-hoverForeground);
+            border-radius: 50%;
+        }
+    }
+}
+
+.music-monaco-editor-modal-rightclick {
+    & .music-monaco-editor-modal-mask {
+        opacity: 0;
+    }
+}
+
+.music-monaco-editor-rightclick {
+    &-panel {
+        position: fixed;
+        background: var(--monaco-editorWidget-background);
+        padding: 5px 0;
+        font-size: 12px;
+        line-height: 30px;
+        min-width: 150px;
+        color: var(--monaco-editor-foreground);
+
+        &-item {
+            padding: 0 10px;
+            cursor: pointer;
+
+            &:hover {
+                color: var(--monaco-list-hoverForeground);
+                background: var(--monaco-list-focusBackground);
+            }
+        }
+    }
+}

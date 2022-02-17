@@ -1,0 +1,74 @@
+.music-monaco-editor-list {
+
+    &-wrapper {
+        width: 180px;
+        font-size: 14px;
+        line-height: 25px;
+        height: 100%;
+        background: var(--monaco-editor-background);
+        color: var(--monaco-editor-foreground);
+        overflow: scroll;
+        flex-shrink: 0;
+    }
+
+    &-split {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        height: 25px;
+        user-select: none;
+        cursor: pointer;
+        line-height: 25px;
+
+        & &-icon {
+            visibility: visible;
+        }
+
+        &-icon {
+            visibility: hidden;
+            font-size: 16px;
+            color: var(--monaco-editor-foreground);
+            margin-right: 4px;
+
+            &:hover {
+                color: var(--monaco-list-hoverForeground);
+            }
+        }
+    }
+
+    &-file-item {
+        user-select: none;
+
+        &-new {
+            flex: 1;
+            outline: none;
+            border: 1px solid var(--monaco-editor-wordHighlightBorder);
+
+            &:focus {
+                cursor: text;
+            }
+        }
+
+        &-row {
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            &:hover {
+                background-color: var(--monaco-list-hoverBackground);
+                color: var(--monaco-list-hoverForeground);
+            }
+
+            &:hover .music-monaco-editor-list-split-icon {
+                visibility: visible;
+            }
+
+            &-focused {
+                background-color: var(--monaco-list-focusBackground);
+                color: var(--monaco-list-focusForeground);
+            }
+        }
+    }
+}
