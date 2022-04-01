@@ -1,10 +1,10 @@
 import React from 'react';
 import './index.less';
-declare const _default: React.NamedExoticComponent<{
+export interface FileTreeIProps {
     defaultFiles: any;
     onPathChange: (key: string) => void;
-    title?: string | undefined;
-    currentPath?: string | undefined;
+    title?: string;
+    currentPath?: string;
     style?: any;
     onAddFile: (...args: any) => void;
     onDeleteFile: (...args: any) => void;
@@ -13,5 +13,9 @@ declare const _default: React.NamedExoticComponent<{
     onDeleteFolder: (path: string) => void;
     onEditFolderName: (path: string, name: string) => void;
     rootEl: HTMLElement | null;
-}>;
+}
+export interface FileTreeRefType {
+    refresh: (defaultFiles: any) => void;
+}
+declare const _default: React.MemoExoticComponent<React.ForwardRefExoticComponent<FileTreeIProps & React.RefAttributes<FileTreeRefType>>>;
 export default _default;

@@ -11,6 +11,7 @@ export declare function addSourceFolder(sourcetree: any, path: string, value?: s
 export declare function deleteSourceFolder(sourcetree: any, path: string): any;
 export declare function editSourceFolderName(sourcetree: any, path: string, name: string): any;
 export declare function createOrUpdateModel(path: string, value: string): void;
+export declare function initFiles(files: any): void;
 export declare function deleteModel(path: string): void;
 export declare const copyDataToClipBoard: (data: string, callback?: ((res: boolean) => void) | undefined) => void;
 export declare const worker: Promise<Worker>;

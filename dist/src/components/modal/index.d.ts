@@ -1,7 +1,7 @@
 import React from 'react';
 import './index.less';
 interface Props {
-    target?: HTMLElement | null;
+    getTarget?: () => HTMLElement | null;
     visible?: boolean;
     onClose?: (...args: any[]) => void;
     destroyOnClose?: boolean;

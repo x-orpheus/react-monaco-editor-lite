@@ -16,6 +16,7 @@ export interface MultiRefType {
     getAllValue: () => filelist;
     getSupportThemes: () => Array<string>;
     setTheme: (name: string) => void;
+    refresh: (files: filelist) => void;
 }
 export declare const MultiEditorComp: React.ForwardRefExoticComponent<MultiEditorIProps & React.RefAttributes<MultiRefType>>;
 export default MultiEditorComp;
