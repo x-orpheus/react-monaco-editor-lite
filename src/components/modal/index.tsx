@@ -5,7 +5,7 @@ import Button from '@components/button';
 import './index.less';
 
 interface Props {
-    target?: HTMLElement | null,
+    getTarget?: () => HTMLElement | null,
     visible?: boolean,
     onClose?: (...args: any[]) => void,
     destroyOnClose?: boolean,
@@ -20,7 +20,7 @@ const Modal:ModalInterface = (props: any) => {
     const elRef = useRef<HTMLDivElement>(document.createElement('div'));
 
     useEffect(() => {
-        const rootEl = props.target || document.body;
+        const rootEl = props.getTarget() || document.body;
         if (props.visible) {
             rootEl && rootEl.appendChild(elRef.current);
         } else {

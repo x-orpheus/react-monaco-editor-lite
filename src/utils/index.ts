@@ -257,6 +257,15 @@ export function createOrUpdateModel(path: string, value: string) {
     }
 }
 
+export function initFiles(files: any) {
+    Object.keys(files).forEach(key => {
+        const value = files[key];
+        if (typeof value === 'string') {
+            createOrUpdateModel(key, value);
+        }
+    });
+}
+
 // TODO:删除model
 export function deleteModel(path: string) {
     // model 是否存在

@@ -11,7 +11,7 @@ const Button:React.FC<{
     type = 'default',
     className = '',
     children,
-    onClick = () => {},
+    onClick = () => null,
     style
 }) => {
     return (
