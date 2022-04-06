@@ -1,3 +1,12 @@
+## [1.0.35](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.34...v1.0.35) (2022-04-06)
+
+
+### Bug Fixes
+
+* refresh path不会自动打开&修复背景色为空的bug ([af9cf1b](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/commits/af9cf1b69396ac7bab644cc7b989cf438b6b0d63))
+
+
+
 ## [1.0.34](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.33...v1.0.34) (2022-04-06)
 
 
