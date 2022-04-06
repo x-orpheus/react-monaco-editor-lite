@@ -1,3 +1,12 @@
+## [1.0.34](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.33...v1.0.34) (2022-04-06)
+
+
+### Features
+
+* 增加defaultPath支持，增加refresh时指定path功能 ([d53f76a](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/commits/d53f76ad5a658098bea7dd6ff12a1ae25106db6c))
+
+
+
 ## [1.0.33](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.32...v1.0.33) (2022-04-06)
 
 
