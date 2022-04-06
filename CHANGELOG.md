@@ -1,3 +1,12 @@
+## [1.0.36](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.35...v1.0.36) (2022-04-06)
+
+
+### Features
+
+* add loc selection ([a38fd8a](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/commits/a38fd8ac12723ec4d0b67c87b1079c4ae528814d))
+
+
+
 ## [1.0.35](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.34...v1.0.35) (2022-04-06)
 
 
