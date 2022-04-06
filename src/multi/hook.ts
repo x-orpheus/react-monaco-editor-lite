@@ -83,7 +83,8 @@ export function useInit(
         [key: string]: string | null,
     }>,
     editorRef: React.MutableRefObject<monacoType.editor.IStandaloneCodeEditor | null>,
-    options: monacoType.editor.IStandaloneEditorConstructionOptions) {
+    options: monacoType.editor.IStandaloneEditorConstructionOptions,
+    disableEslint?: boolean) {
     useEffect(() => {
         initFiles(filesRef.current);
     }, [filesRef]);
@@ -99,13 +100,15 @@ export function useInit(
 
     useEffect(() => {
         worker.then(res => res.onmessage = function (event) {
-            const { markers, version } = event.data;
-            const model = editorRef.current?.getModel();
-            if (model && model.getVersionId() === version) {
-                window.monaco.editor.setModelMarkers(model, 'eslint', markers);
+            if (!disableEslint) {
+                const { markers, version } = event.data;
+                const model = editorRef.current?.getModel();
+                if (model && model.getVersionId() === version) {
+                    window.monaco.editor.setModelMarkers(model, 'eslint', markers);
+                }
             }
         });
-    }, [editorRef]);
+    }, [editorRef, disableEslint]);
 }
 
 export function useEditor(

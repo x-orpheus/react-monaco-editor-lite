@@ -11,11 +11,13 @@ const Setting: React.FC<{
     autoPrettier?: boolean,
     onAutoPrettierChange?: (e: any) => void,
     defaultTheme?: string,
+    disablePrettier?: boolean,
 }> = ({
     getTarget,
     autoPrettier,
     onAutoPrettierChange,
-    defaultTheme = 'OneDarkPro'
+    defaultTheme = 'OneDarkPro',
+    disablePrettier = false,
 }) => {
     const [visible, setVisible] = useState(false);
     const [theme, setTheme] = useState(defaultTheme);
@@ -54,18 +56,22 @@ const Setting: React.FC<{
                         </div>
                     </div>
                     <div className="music-monaco-editor-setting-content">
-                        <div className="music-monaco-editor-input-row">
-                            <div className="music-monaco-editor-input-name">
-                                prettier
-                            </div>
-                            <div className="music-monaco-editor-input-value">
-                                <input
-                                    defaultChecked={autoPrettier}
-                                    type="checkbox"
-                                    onChange={onAutoPrettierChange}/>
-                                <label>prettier on save</label>
-                            </div>
-                        </div>
+                        {
+                            disablePrettier ? null : (
+                                <div className="music-monaco-editor-input-row">
+                                    <div className="music-monaco-editor-input-name">
+                                        prettier
+                                    </div>
+                                    <div className="music-monaco-editor-input-value">
+                                        <input
+                                            defaultChecked={autoPrettier}
+                                            type="checkbox"
+                                            onChange={onAutoPrettierChange}/>
+                                        <label>prettier on save</label>
+                                    </div>
+                                </div>
+                            )
+                        }
                         <div className="music-monaco-editor-input-row">
                             <div className="music-monaco-editor-input-name">
                                 主题选择

@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { startUp } from '@utils/initEditor';
 import Editor, { MultiEditorIProps, MultiRefType } from './Editor';
 import './index.less';
-
-startUp();
 
 export const MultiEditor = React.forwardRef<MultiRefType, MultiEditorIProps>((props, ref) => {
     const [, setCount] = useState(0);

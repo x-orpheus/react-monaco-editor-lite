@@ -32,6 +32,7 @@ export interface FileTreeIProps {
     onDeleteFolder: (path: string) => void,
     onEditFolderName: (path: string, name: string) => void,
     rootEl: HTMLElement | null,
+    disableFileOps?: boolean,
 }
 
 export interface FileTreeRefType {
@@ -50,7 +51,8 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(({
     onAddFolder,
     onDeleteFolder,
     onEditFolderName,
-    rootEl
+    rootEl,
+    disableFileOps = false,
 } ,ref) => {
     const [collpase, setCollpase] = useState(false);
 
@@ -152,23 +154,30 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(({
             <div className="music-monaco-editor-list-split" onClick={handleCollapse}>
                 <Arrow collpase={collpase} />
                 <span style={{ flex: 1 }}>Files</span>
-                <AddFileIcon
-                    onClick={(e:Event) => {
-                        e.stopPropagation();
-                        addFile('/');
-                    }}
-                    className="music-monaco-editor-list-split-icon" />
-                <AddFolderIcon
-                    onClick={(e:Event) => {
-                        e.stopPropagation();
-                        addFolder('/');
-                    }}
-                    className="music-monaco-editor-list-split-icon" />
+                {
+                    disableFileOps ? null: (
+                        <>
+                            <AddFileIcon
+                                onClick={(e:Event) => {
+                                    e.stopPropagation();
+                                    addFile('/');
+                                }}
+                                className="music-monaco-editor-list-split-icon" />
+                            <AddFolderIcon
+                                onClick={(e:Event) => {
+                                    e.stopPropagation();
+                                    addFolder('/');
+                                }}
+                                className="music-monaco-editor-list-split-icon" />
+                        </>
+                    )
+                }
             </div>
             {
                 !collpase && (
                 <div className="music-monaco-editor-list-files">
                     <File
+                        disableFileOps={disableFileOps}
                         onEditFileName={editFileName}
                         onEditFolderName={editFolderName}
                         onDeleteFile={deleteFile}

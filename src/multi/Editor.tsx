@@ -19,6 +19,12 @@ export interface filelist {
     [key: string]: string | null,
 }
 export interface MultiEditorIProps {
+    ideConfig?: {
+        disableFileOps?: boolean,
+        disableEslint?: boolean,
+        disableSetting?: boolean,
+        disablePrettier?: boolean,
+    },
     defaultPath?: string,
     defaultTheme?: string,
     onPathChange?: (key: string) => void,
@@ -43,6 +49,12 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
     onValueChange,
     defaultFiles = {},
     onFileChange,
+    ideConfig = {
+        disableFileOps: false,
+        disableEslint: false,
+        disableSetting: false,
+        disablePrettier: false,
+    },
     options,
 }, ref) => {
     const onPathChangeRef = useVarRef(onPathChange);
@@ -70,7 +82,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
     const curValueRef = useRef('');
 
     const [autoPrettierRef, handleSetAutoPrettier, handleFromat] = usePrettier(editorRef);
-    useInit(filesRef, editorRef, options);
+    useInit(filesRef, editorRef, options, ideConfig.disableEslint);
     const [styles, handleMoveStart, handleMove, handleMoveEnd] = useDragLine(180);
 
     const restoreModel = useCallback((path: string) => {
@@ -162,7 +174,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
     const editorNodeRef = useEditor(editorRef, optionsRef, openOrFocusPath);
 
     const saveFile = useCallback(() => {
-        if (autoPrettierRef.current) {
+        if (autoPrettierRef.current && !ideConfig.disablePrettier) {
             handleFromat()?.then(() => {
                 setOpenedFiles((pre) => pre.map(v => {
                     if (v.path === curPathRef.current) {
@@ -181,7 +193,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
             }));
             filesRef.current[curPathRef.current] = curValueRef.current;
         }
-    }, [handleFromat, autoPrettierRef]);
+    }, [handleFromat, autoPrettierRef, ideConfig.disablePrettier]);
 
     const onCloseFile = useCallback((path: string) => {
         setOpenedFiles((pre) => {
@@ -440,6 +452,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
             onMouseUp={handleMoveEnd}
             className="music-monaco-editor">
             <FileList
+                disableFileOps={ideConfig.disableFileOps}
                 ref={filelistRef}
                 rootEl={rootRef.current}
                 onEditFileName={editFileName}
@@ -480,15 +493,24 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                     )
                 }
             </div>
-            <Prettier
-                onClick={handleFromat}
-                className="music-monaco-editor-prettier" />
-            <Setting
-                defaultTheme={defaultTheme}
-                getTarget={() => rootRef.current}
-                autoPrettier={autoPrettierRef.current}
-                onAutoPrettierChange={handleSetAutoPrettier}
-            />
+            {
+                ideConfig.disablePrettier ? null : (
+                    <Prettier
+                        onClick={handleFromat}
+                        className="music-monaco-editor-prettier" />
+                )
+            }
+            {
+                ideConfig.disableSetting ? null : (
+                    <Setting
+                        disablePrettier={ideConfig.disablePrettier}
+                        defaultTheme={defaultTheme}
+                        getTarget={() => rootRef.current}
+                        autoPrettier={autoPrettierRef.current}
+                        onAutoPrettierChange={handleSetAutoPrettier}
+                    />
+                )
+            }
         </div>
     )
 });
