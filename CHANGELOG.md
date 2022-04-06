@@ -1,3 +1,12 @@
+## [1.0.31](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.30...v1.0.31) (2022-04-06)
+
+
+### Bug Fixes
+
+* tabsize ([61ac5e2](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/commits/61ac5e2215bf71ae48dfa76b02feb1f2799b9ad6))
+
+
+
 ## [1.0.30](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.30-beta.0...v1.0.30) (2022-04-06)
 
 
