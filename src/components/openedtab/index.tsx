@@ -154,7 +154,7 @@ const TabItem: React.FC<{
                 className: 'music-monaco-editor-modal-rightclick'
             });
         });
-    }, [handleClose, onCloseOtherFiles, file.path]);
+    }, [handleClose, onCloseOtherFiles, file.path, rootEl]);
 
     let closeVisible = true;
     if (file.status === 'editing' && !hoverRight) {

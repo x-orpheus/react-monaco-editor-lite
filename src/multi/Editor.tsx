@@ -428,7 +428,34 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
         }
     }, [handlePathChange, addFolder]);
 
-    const refreshFiles = useCallback((files: filelist, path?: string) => {
+    const decorcations = useRef<any>(null);
+
+    const locModel = useCallback((loc) => {
+        const { start, end } = loc;
+        console.log(loc);
+        decorcations.current = editorRef.current?.deltaDecorations(decorcations.current || [], [
+        {
+            range: new window.monaco.Range(start.line, start.column, end.line, end.column),
+            options: { className: 'music-monaco-editor-highlight', isWholeLine: true },
+        },
+        ]);
+        editorRef.current?.revealLineInCenter(start.line);
+    }, [])
+
+    const refreshFiles = useCallback((
+        files: filelist,
+        path?: string,
+        loc?: {
+            start: {
+                line: number,
+                column: number,
+            },
+            end: {
+                line: number,
+                column: number,
+            }
+        }
+    ) => {
         // 初始化文件列表
         initFiles(files);
         // 删除多余文件
@@ -451,13 +478,14 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
         setCurPath((pre) => {
             if (path && files[path]) {
                 handlePathChange(path);
+                loc && locModel(loc);
                 return path;
             }
             return files[pre] ? pre : '';
         });
         // 更新文件列表
         filelistRef.current.refresh(files);
-    }, [deleteFile, handlePathChange]);
+    }, [deleteFile, handlePathChange, locModel]);
 
     useImperativeHandle(ref, () => ({
         getValue: (path: string) => filesRef.current[path],

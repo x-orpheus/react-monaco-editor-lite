@@ -93,7 +93,16 @@ const App = () => {
     return (
         <div>
             <div onClick={() => console.log(editorRef.current) }>ref api</div>
-            <div onClick={() => console.log(editorRef.current.refresh({'/cc.ts': '11111'}, '/cc.ts')) }>getAllValue</div>
+            <div onClick={() => console.log(editorRef.current.refresh(files, '/style.less', {
+                start: {
+                    line: 29,
+                    column: 1,
+                },
+                end: {
+                    line: 40,
+                    column: 1,
+                }
+            })) }>getAllValue</div>
             {/* <div onClick={sendMessage}>send postmessage</div> */}
             <div onClick={() => setColors(themes['OneDarkPro'].colors)}>refresh theme color</div>
             <select
