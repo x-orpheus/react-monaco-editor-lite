@@ -251,9 +251,9 @@ export function createOrUpdateModel(path: string, value: string) {
             config[type] || type,
             new window.monaco.Uri().with({ path, scheme: 'music' })
         );
-        model.updateOptions({
-            tabSize: 4,
-        });
+        // model.updateOptions({
+        //     tabSize: 4,
+        // });
     }
 }
 
