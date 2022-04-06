@@ -48,20 +48,6 @@ const Select:SelectInterface = ({
         }
     }, []);
 
-    useEffect(() => {
-        function hide() {
-            setVisible(false);
-        }
-        if (visible) {
-            document.body.addEventListener('click', hide);
-        } else {
-            document.body.removeEventListener('click', hide);
-        }
-        return () => {
-            document.body.removeEventListener('click', hide);
-        }
-    }, [visible]);
-
     const handleSelect = useCallback((data) => {
         console.log('data', data, onChange);
         setData(data);
