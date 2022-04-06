@@ -108,6 +108,7 @@ const App = () => {
                 Object.keys(files).length > 0 && (
                     <div style={{ width: '800px', height: '600px' }}>
                         <Editor
+                            defaultTheme='AyuLight'
                             ideConfig={{
                                 disableFileOps: true,
                                 disablePrettier: true,
@@ -115,7 +116,7 @@ const App = () => {
                             }}
                             onFileSave={(key: string, value: string) => console.log(key, value)}
                             // ref={editorRef}
-                            // defaultPath="/fn.js"
+                            defaultPath="/cc.ts"
                             defaultFiles={files}
                             // value={value}
                             // path={path}

@@ -40,7 +40,7 @@ export interface MultiRefType {
     getAllValue: () => filelist,
     getSupportThemes: () => Array<string>,
     setTheme: (name: string) => void,
-    refresh: (files: filelist) => void,
+    refresh: (files: filelist, path?: string) => void,
 }
 
 export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>(({
@@ -175,6 +175,14 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
             openOrFocusPath(path);
         }
     }, [restoreModel, openOrFocusPath]);
+
+    useEffect(() => {
+        setTimeout(() => {
+            if (defaultPath) {
+                handlePathChange(defaultPath);
+            }
+        });
+    }, [defaultPath, handlePathChange]);
 
     const editorNodeRef = useEditor(editorRef, optionsRef, openOrFocusPath);
 
@@ -420,7 +428,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
         }
     }, [handlePathChange, addFolder]);
 
-    const refreshFiles = useCallback((files: filelist) => {
+    const refreshFiles = useCallback((files: filelist, path?: string) => {
         // 初始化文件列表
         initFiles(files);
         // 删除多余文件
@@ -440,7 +448,12 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
             status: 'saved',
         })));
         // 重置当前tab
-        setCurPath(pre => files[pre] ? pre : '');
+        setCurPath((pre) => {
+            if (path && files[path]) {
+                return path;
+            }
+            return files[pre] ? pre : '';
+        });
         // 更新文件列表
         filelistRef.current.refresh(files);
     }, [deleteFile]);
