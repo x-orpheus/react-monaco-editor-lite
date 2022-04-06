@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from '@components/modal';
 import Select from '@components/select';
 import Close from '@components/icons/close';
@@ -10,12 +10,21 @@ const Setting: React.FC<{
     getTarget?: () => HTMLElement | null,
     autoPrettier?: boolean,
     onAutoPrettierChange?: (e: any) => void,
+    defaultTheme?: string,
 }> = ({
     getTarget,
     autoPrettier,
     onAutoPrettierChange,
+    defaultTheme = 'OneDarkPro'
 }) => {
     const [visible, setVisible] = useState(false);
+    const [theme, setTheme] = useState(defaultTheme);
+
+    useEffect(() => {
+        configTheme(defaultTheme);
+    // eslint-disable-next-line
+    }, []);
+
     return (
         <React.Fragment>
             <div
@@ -62,7 +71,13 @@ const Setting: React.FC<{
                                 主题选择
                             </div>
                             <div className="music-monaco-editor-input-value">
-                                <Select defaultValue="OneDarkPro" onChange={(v) => configTheme(v.value)}>
+                                <Select
+                                    getContainer={getTarget}
+                                    defaultValue={theme}
+                                    onChange={(v) => {
+                                        setTheme(v.value);
+                                        configTheme(v.value);
+                                    }}>
                                     {
                                         THEMES.map(theme => (
                                             <Select.Menu label={theme} value={theme} key={theme} />

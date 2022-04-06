@@ -10,7 +10,7 @@ instance.className = "music-monaco-editor-select-items";
 interface SelectInterface extends React.FC<{
     defaultValue?: any,
     onChange?: (value: any) => void,
-    getContainer?: () => HTMLElement,
+    getContainer?: () => HTMLElement | null,
     children?: React.ReactNode,
 }> {
     Menu: typeof Menu
@@ -25,6 +25,7 @@ const Select:SelectInterface = ({
     const [visible, setVisible] = useState(false);
     const [data, setData] = useState({ value: defaultValue, label: ''});
     const targetRef = useRef<HTMLDivElement>(null);
+    const container = (getContainer && getContainer()) || document.body;
 
     useEffect(() => {
         if (!children) return;
@@ -38,15 +39,15 @@ const Select:SelectInterface = ({
                 }
             }
         }
-    }, [defaultValue]);
+    }, [defaultValue, children]);
 
     useEffect(() => {
         return () => {
-            if (document.body.contains(instance)) {
-                document.body.removeChild(instance);
+            if (container.contains(instance)) {
+                container.removeChild(instance);
             }
         }
-    }, []);
+    }, [container]);
 
     const handleSelect = useCallback((data) => {
         console.log('data', data, onChange);

@@ -47,6 +47,7 @@ export const themes: {
 } = {};
 
 export async function configTheme(name: string) {
+    const root = document.getElementById('music-monaco-editor-root');
     let theme = themes[name];
     if (!theme) {
         theme = JSON.parse(await (await fetch(`${ASSETSPATH}themes/${name}.json`)).text());
@@ -58,7 +59,7 @@ export async function configTheme(name: string) {
     const prefix = '--monaco-';
 
     Object.keys(theme.colors).forEach(v => {
-        document.documentElement.style.setProperty(`${prefix}${v.replace('.', '-')}`, theme.colors[v] || themes.OneDarkPro.colors[v] || 'rgba(0, 0, 0, 0)');
+        root?.style.setProperty(`${prefix}${v.replace('.', '-')}`, theme.colors[v] || themes.OneDarkPro.colors[v] || 'rgba(0, 0, 0, 0)');
     })
 
     // 设置主题
@@ -109,8 +110,6 @@ function configMonaco() {
         });
         // 加载textmate语义解析webassembly文件
         await loadWASM(`${ASSETSPATH}onigasm.wasm`);
-        //
-        configTheme('OneDarkPro');
 
         addExtraLib();
     };
@@ -158,8 +157,8 @@ export const startUp = () => {
     loadScript('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.1/min/vs/loader.min.js', () => {
         window.require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.1/min/vs' } });
 
-        window.require(['vs/editor/editor.main'], function () {
-        });
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        window.require(['vs/editor/editor.main'], () => {});
         window.define('prettier', [
                 'https://unpkg.com/prettier@2.5.1/standalone.js',
                 'https://unpkg.com/prettier@2.5.1/parser-babel.js',

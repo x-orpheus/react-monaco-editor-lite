@@ -20,6 +20,7 @@ export interface filelist {
 }
 export interface MultiEditorIProps {
     defaultPath?: string,
+    defaultTheme?: string,
     onPathChange?: (key: string) => void,
     onValueChange?: (v: string) => void,
     onFileChange?: (key: string, value: string) => void,
@@ -37,6 +38,7 @@ export interface MultiRefType {
 
 export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>(({
     defaultPath,
+    defaultTheme = 'OneDarkPro',
     onPathChange,
     onValueChange,
     defaultFiles = {},
@@ -482,6 +484,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                 onClick={handleFromat}
                 className="music-monaco-editor-prettier" />
             <Setting
+                defaultTheme={defaultTheme}
                 getTarget={() => rootRef.current}
                 autoPrettier={autoPrettierRef.current}
                 onAutoPrettierChange={handleSetAutoPrettier}

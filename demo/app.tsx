@@ -108,6 +108,7 @@ const App = () => {
                 Object.keys(files).length > 0 && (
                     <div style={{ width: '800px', height: '600px' }}>
                         <Editor
+                            // defaultTheme='EvaLight'
                             // ref={editorRef}
                             // defaultPath="/fn.js"
                             defaultFiles={files}

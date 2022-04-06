@@ -5,7 +5,7 @@ const Position:React.FC<{
     instance: HTMLElement,
     children?: React.ReactNode,
     targetRef: React.RefObject<HTMLElement>,
-    getContainer?: () => HTMLElement,
+    getContainer?: () => HTMLElement | null,
     onNotVisibleArea?: () => void,
 }> = ({
     instance,
@@ -17,21 +17,24 @@ const Position:React.FC<{
     const container = getContainer && getContainer() || document.body;
 
     useEffect(() => {
-        document.body.appendChild(instance);
+        container.appendChild(instance);
 
         return () => {
-            if (document.body.contains(instance)) {
-                document.body.removeChild(instance);
+            if (container.contains(instance)) {
+                container.removeChild(instance);
             }
         }
-    }, [instance]);
+    }, [instance, container]);
 
     useEffect(() => {
         function setInstanceStyle() {
             const { top, left, height, width } = targetRef.current!.getBoundingClientRect();
+            const { top: top1, left: left1 } = container.getBoundingClientRect();
+            // console.log(top1, left1, height1, width1);
+            console.log(container.scrollTop, container);
             const style = {
-                top: document.documentElement.scrollTop + top + height + 1 + 'px',
-                left: document.documentElement.scrollLeft + left + 'px',
+                top: container.scrollTop + (top - top1) + height + 1 + 'px',
+                left: container.scrollLeft + (left - left1) + 'px',
             }
             instance.style.top = style.top;
             instance.style.left = style.left;
@@ -56,7 +59,7 @@ const Position:React.FC<{
         return () => {
             container.removeEventListener('scroll', handleScroll);
         }
-    }, [targetRef]);
+    }, [targetRef, container]);
 
     return ReactDom.createPortal(children, instance);
 };
