@@ -30,6 +30,7 @@ export interface MultiEditorIProps {
     onPathChange?: (key: string) => void,
     onValueChange?: (v: string) => void,
     onFileChange?: (key: string, value: string) => void,
+    onFileSave?: (key: string, value: string) => void,
     defaultFiles?: filelist,
     options: monacoType.editor.IStandaloneEditorConstructionOptions
 }
@@ -49,6 +50,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
     onValueChange,
     defaultFiles = {},
     onFileChange,
+    onFileSave,
     ideConfig = {
         disableFileOps: false,
         disableEslint: false,
@@ -60,6 +62,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
     const onPathChangeRef = useVarRef(onPathChange);
     const onValueChangeRef = useVarRef(onValueChange);
     const onFileChangeRef = useVarRef(onFileChange);
+    const onFileSaveRef = useVarRef(onFileSave);
     const optionsRef = useVarRef(options);
 
     const rootRef = useRef(null);
@@ -107,6 +110,8 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                 // 聚焦editor
                 editorRef.current?.focus();
                 let timer: any = null;
+                const v = model.getValue();
+                curValueRef.current = v;
                 valueLisenerRef.current = model.onDidChangeContent(() => {
                     const v = model.getValue();
                     setOpenedFiles((pre) => pre.map(v => {
@@ -183,6 +188,9 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                     return v;
                 }));
                 filesRef.current[curPathRef.current] = curValueRef.current;
+                if (onFileSaveRef.current) {
+                    onFileSaveRef.current(curPathRef.current, curValueRef.current);
+                }
             });
         } else {
             setOpenedFiles((pre) => pre.map(v => {
@@ -192,8 +200,11 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                 return v;
             }));
             filesRef.current[curPathRef.current] = curValueRef.current;
+            if (onFileSaveRef.current) {
+                onFileSaveRef.current(curPathRef.current, curValueRef.current);
+            }
         }
-    }, [handleFromat, autoPrettierRef, ideConfig.disablePrettier]);
+    }, [handleFromat, autoPrettierRef, ideConfig.disablePrettier, onFileSaveRef]);
 
     const onCloseFile = useCallback((path: string) => {
         setOpenedFiles((pre) => {

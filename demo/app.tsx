@@ -113,6 +113,7 @@ const App = () => {
                                 disablePrettier: true,
                                 disableEslint: true,
                             }}
+                            onFileSave={(key: string, value: string) => console.log(key, value)}
                             // ref={editorRef}
                             // defaultPath="/fn.js"
                             defaultFiles={files}
