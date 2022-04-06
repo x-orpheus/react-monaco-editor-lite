@@ -93,7 +93,7 @@ const App = () => {
     return (
         <div>
             <div onClick={() => console.log(editorRef.current) }>ref api</div>
-            <div onClick={() => console.log(editorRef.current.refresh({'/cc.ts': '11111'})) }>getAllValue</div>
+            <div onClick={() => console.log(editorRef.current.refresh({'/cc.ts': '11111'}, '/cc.ts')) }>getAllValue</div>
             {/* <div onClick={sendMessage}>send postmessage</div> */}
             <div onClick={() => setColors(themes['OneDarkPro'].colors)}>refresh theme color</div>
             <select
@@ -108,15 +108,15 @@ const App = () => {
                 Object.keys(files).length > 0 && (
                     <div style={{ width: '800px', height: '600px' }}>
                         <Editor
-                            defaultTheme='AyuLight'
+                            defaultTheme='EvaLight'
                             ideConfig={{
                                 disableFileOps: true,
                                 disablePrettier: true,
                                 disableEslint: true,
                             }}
                             onFileSave={(key: string, value: string) => console.log(key, value)}
-                            // ref={editorRef}
-                            defaultPath="/cc.ts"
+                            ref={editorRef}
+                            defaultPath="/app/index.jsx"
                             defaultFiles={files}
                             // value={value}
                             // path={path}

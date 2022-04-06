@@ -450,13 +450,14 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
         // 重置当前tab
         setCurPath((pre) => {
             if (path && files[path]) {
+                handlePathChange(path);
                 return path;
             }
             return files[pre] ? pre : '';
         });
         // 更新文件列表
         filelistRef.current.refresh(files);
-    }, [deleteFile]);
+    }, [deleteFile, handlePathChange]);
 
     useImperativeHandle(ref, () => ({
         getValue: (path: string) => filesRef.current[path],

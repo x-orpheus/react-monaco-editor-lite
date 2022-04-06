@@ -114,7 +114,7 @@ const TabItem: React.FC<{
         setTimeout(() => {
             Modal.create({
                 title: '是否确认删除？',
-                // target: rootEl,
+                target: rootEl,
                 onOk: (close: () => void) => {
                     close();
                 },
