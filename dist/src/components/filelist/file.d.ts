@@ -1,5 +1,6 @@
 /// <reference types="react" />
 declare const File: React.FC<{
+    disableFileOps?: boolean;
     file: any;
     onPathChange: (key: string) => void;
     root: boolean;

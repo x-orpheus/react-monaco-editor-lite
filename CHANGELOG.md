@@ -1,3 +1,19 @@
+## [1.0.30](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.30-beta.0...v1.0.30) (2022-04-06)
+
+
+### Bug Fixes
+
+* 主题色css变量改到ide根元素而非html上 ([b5a9678](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/commits/b5a9678605d072ad6ea0c0c7e04ece44ff5b352e))
+* 主题选择bug ([0575387](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/commits/05753870f37d83b75d8e9c2cb1152dcde5c744ab))
+
+
+### Features
+
+* 增加eslint, prettier, fileops以及setting的可配置开关 ([27a235c](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/commits/27a235c493e7eb6a6c40df768db67696dee9af76))
+* 增加文件保存回调 ([9595c09](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/commits/9595c09f06c08d6d8d0026dacac7c7229446bfc1))
+
+
+
 ## [1.0.30-beta.0](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.29...v1.0.30-beta.0) (2022-04-01)
 
 

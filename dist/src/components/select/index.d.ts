@@ -4,7 +4,7 @@ import './index.less';
 interface SelectInterface extends React.FC<{
     defaultValue?: any;
     onChange?: (value: any) => void;
-    getContainer?: () => HTMLElement;
+    getContainer?: () => HTMLElement | null;
     children?: React.ReactNode;
 }> {
     Menu: typeof Menu;

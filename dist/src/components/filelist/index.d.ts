@@ -13,6 +13,7 @@ export interface FileTreeIProps {
     onDeleteFolder: (path: string) => void;
     onEditFolderName: (path: string, name: string) => void;
     rootEl: HTMLElement | null;
+    disableFileOps?: boolean;
 }
 export interface FileTreeRefType {
     refresh: (defaultFiles: any) => void;
