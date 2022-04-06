@@ -1,3 +1,12 @@
+## [1.0.32](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.31...v1.0.32) (2022-04-06)
+
+
+### Features
+
+* 删除debug consile ([571c4e0](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/commits/571c4e078bbc138f8b7b98212996befff3fdfa87))
+
+
+
 ## [1.0.31](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.30...v1.0.31) (2022-04-06)
 
 
