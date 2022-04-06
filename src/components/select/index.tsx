@@ -50,7 +50,6 @@ const Select:SelectInterface = ({
     }, [container]);
 
     const handleSelect = useCallback((data) => {
-        console.log('data', data, onChange);
         setData(data);
         onChange && onChange(data);
         setVisible(false);

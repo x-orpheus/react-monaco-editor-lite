@@ -30,8 +30,6 @@ const Position:React.FC<{
         function setInstanceStyle() {
             const { top, left, height, width } = targetRef.current!.getBoundingClientRect();
             const { top: top1, left: left1 } = container.getBoundingClientRect();
-            // console.log(top1, left1, height1, width1);
-            console.log(container.scrollTop, container);
             const style = {
                 top: container.scrollTop + (top - top1) + height + 1 + 'px',
                 left: container.scrollLeft + (left - left1) + 'px',
