@@ -68,7 +68,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
     const rootRef = useRef(null);
     const filelistRef = useRef<any>(null);
     const editorRef = useRef<monacoType.editor.IStandaloneCodeEditor | null>(null);
-    const prePath = useRef<string | null>(defaultPath || '');
+    const prePath = useRef<string | null>('');
     const filesRef = useRef(defaultFiles);
     const valueLisenerRef = useRef<monacoType.IDisposable>();
     const editorStatesRef = useRef(new Map());
@@ -96,13 +96,14 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
         if (path !== prePath.current && prePath.current) {
             editorStates.set(prePath.current, editorRef.current?.saveViewState());
         }
-        if (valueLisenerRef.current && valueLisenerRef.current.dispose) {
-            valueLisenerRef.current.dispose();
-        }
         if (model && editorRef.current) {
             editorRef.current.setModel(model);
             // 如果path改变，那么恢复上一次的状态
             if (path !== prePath.current) {
+                // 取消上次的监听
+                if (valueLisenerRef.current && valueLisenerRef.current.dispose) {
+                    valueLisenerRef.current.dispose();
+                }
                 const editorState = editorStates.get(path);
                 if (editorState) {
                     editorRef.current?.restoreViewState(editorState);
@@ -148,6 +149,11 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
             }));
             prePath.current = path;
             return model;
+        } else {
+            // 如果当前model不存在，那么取消监听
+            if (valueLisenerRef.current && valueLisenerRef.current.dispose) {
+                valueLisenerRef.current.dispose();
+            }
         }
         return false;
     }, [onFileChangeRef, onValueChangeRef]);
@@ -432,7 +438,6 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
 
     const locModel = useCallback((loc) => {
         const { start, end } = loc;
-        console.log(loc);
         decorcations.current = editorRef.current?.deltaDecorations(decorcations.current || [], [
         {
             range: new window.monaco.Range(start.line, start.column, end.line, end.column),
@@ -476,12 +481,13 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
         })));
         // 重置当前tab
         setCurPath((pre) => {
+            let res = files[pre] ? pre : '';
             if (path && files[path]) {
-                handlePathChange(path);
-                loc && locModel(loc);
-                return path;
+                res = path;
             }
-            return files[pre] ? pre : '';
+            handlePathChange(res);
+            loc && locModel(loc);
+            return res;
         });
         // 更新文件列表
         filelistRef.current.refresh(files);
