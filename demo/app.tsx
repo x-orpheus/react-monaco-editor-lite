@@ -120,8 +120,8 @@ const App = () => {
                             defaultTheme='EvaLight'
                             ideConfig={{
                                 disableFileOps: true,
-                                disablePrettier: true,
-                                disableEslint: true,
+                                // disablePrettier: true,
+                                // disableEslint: true,
                             }}
                             onFileSave={(key: string, value: string) => console.log(key, value)}
                             ref={editorRef}

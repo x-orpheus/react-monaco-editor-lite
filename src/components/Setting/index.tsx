@@ -78,11 +78,11 @@ const Setting: React.FC<{
                             </div>
                             <div className="music-monaco-editor-input-value">
                                 <Select
+                                    value={theme}
                                     getContainer={getTarget}
-                                    defaultValue={theme}
                                     onChange={(v) => {
-                                        setTheme(v.value);
-                                        configTheme(v.value);
+                                        setTheme(v);
+                                        configTheme(v);
                                     }}>
                                     {
                                         THEMES.map(theme => (

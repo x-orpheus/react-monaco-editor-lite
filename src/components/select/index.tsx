@@ -8,10 +8,11 @@ const instance = document.createElement('div');
 instance.className = "music-monaco-editor-select-items";
 
 interface SelectInterface extends React.FC<{
-    defaultValue?: any,
-    onChange?: (value: any) => void,
+    defaultValue?: string,
+    onChange?: (value: string) => void,
     getContainer?: () => HTMLElement | null,
     children?: React.ReactNode,
+    value?: string,
 }> {
     Menu: typeof Menu
 }
@@ -20,8 +21,13 @@ const Select:SelectInterface = ({
     defaultValue,
     onChange = () => ({}),
     getContainer,
-    children
+    children,
+    value: valueFromProps,
 }) => {
+    const isControlled = typeof valueFromProps !== 'undefined';
+    const [internalValue, setInternalValue] = useState(defaultValue || '');
+    const value = isControlled ? valueFromProps : internalValue;
+
     const [visible, setVisible] = useState(false);
     const [data, setData] = useState({ value: defaultValue, label: ''});
     const targetRef = useRef<HTMLDivElement>(null);
@@ -33,13 +39,13 @@ const Select:SelectInterface = ({
         for (let i = 0; i < childs.length; i++) {
             const child = childs[i];
             if (React.isValidElement(child)) {
-                if (child.props.value === defaultValue) {
+                if (child.props.value === value) {
                     setData(child.props);
                     break;
                 }
             }
         }
-    }, [defaultValue, children]);
+    }, [value, children]);
 
     useEffect(() => {
         return () => {
@@ -50,10 +56,13 @@ const Select:SelectInterface = ({
     }, [container]);
 
     const handleSelect = useCallback((data) => {
+        if (!isControlled) {
+            setInternalValue(data.value);
+        }
         setData(data);
-        onChange && onChange(data);
         setVisible(false);
-    }, [onChange]);
+        onChange && onChange(data.value);
+    }, [onChange, isControlled]);
 
     return (
         <React.Fragment>
