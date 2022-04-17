@@ -138,6 +138,7 @@ const App = () => {
                                 }
                             }}
                             onFileSave={(key: string, value: string) => console.log(key, value)}
+                            onRenameFile={(...args) => console.log(args)}
                             ref={editorRef}
                             defaultPath="/app/index.jsx"
                             defaultFiles={files}

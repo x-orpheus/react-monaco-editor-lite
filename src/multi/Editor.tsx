@@ -10,7 +10,13 @@ import OpenedTab from '@components/openedtab';
 import FileList from '@components/filelist';
 import Modal from '@components/modal';
 import Prettier from '@components/prettier';
-import { worker, createOrUpdateModel, deleteModel, initFiles } from '@utils';
+import {
+    worker,
+    createOrUpdateModel,
+    deleteModel,
+    initFiles,
+    getOldNewPath
+} from '@utils';
 import { THEMES } from '@utils/consts';
 import { configTheme } from '@utils/initEditor';
 import Setting from '@components/Setting';
@@ -44,6 +50,7 @@ export interface MultiEditorIProps {
     onValueChange?: (v: string) => void,
     onFileChange?: (key: string, value: string) => void,
     onFileSave?: (key: string, value: string) => void,
+    onRenameFile?: (oldpath: string, newpath: string,) => void,
     defaultFiles?: filelist,
     options: monacoType.editor.IStandaloneEditorConstructionOptions,
     title?: string,
@@ -65,6 +72,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
     defaultFiles = {},
     onFileChange,
     onFileSave,
+    onRenameFile,
     ideConfig = {
         disableFileOps: {},
         disableFolderOps: {},
@@ -383,11 +391,16 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
         // 神奇的延时，此处不加延时，monaco会抛错
         setTimeout(() => {
             deleteFile(path);
-            // TODO:使用正则替换，减少开销
-            const newPath = path.split('/').slice(0, -1).concat(name).join('/');
-            addFile(newPath, value);
+            const {
+                oldpath,
+                newpath
+            } = getOldNewPath(path, name);
+            addFile(newpath, value);
+            if (onRenameFile) {
+                onRenameFile(oldpath, newpath);
+            }
         }, 50);
-    }, [deleteFile, addFile]);
+    }, [deleteFile, addFile, onRenameFile]);
 
     const addFolder = useCallback((path: string) => {
         let hasChild = false;
