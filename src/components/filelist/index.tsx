@@ -5,7 +5,6 @@ import React, {
 } from 'react';
 import AddFileIcon from '@components/icons/addfile';
 import AddFolderIcon from '@components/icons/addfolder';
-import Arrow from '@components/icons/arrow';
 import Modal from '@components/modal';
 import {
     generateFileTree,
@@ -32,7 +31,16 @@ export interface FileTreeIProps {
     onDeleteFolder: (path: string) => void,
     onEditFolderName: (path: string, name: string) => void,
     rootEl: HTMLElement | null,
-    disableFileOps?: boolean,
+    disableFileOps?: {
+        add?: boolean,
+        delete?: boolean,
+        rename?: boolean,
+    },
+    disableFolderOps?: {
+        add?: boolean,
+        delete?: boolean,
+        rename?: boolean,
+    },
 }
 
 export interface FileTreeRefType {
@@ -42,7 +50,7 @@ export interface FileTreeRefType {
 const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(({
     defaultFiles,
     onPathChange,
-    title = 'monaco-base-editor',
+    title,
     currentPath = '',
     style,
     onAddFile,
@@ -52,10 +60,9 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(({
     onDeleteFolder,
     onEditFolderName,
     rootEl,
-    disableFileOps = false,
+    disableFileOps = {},
+    disableFolderOps = {},
 } ,ref) => {
-    const [collpase, setCollpase] = useState(false);
-
     const [filetree, setFiletree] = useState(() => generateFileTree(defaultFiles));
 
     useImperativeHandle(ref, () => ({
@@ -142,57 +149,50 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(({
         setFiletree(tree);
     }, [filetree, onAddFolder]);
 
-    const handleCollapse = useCallback(() => {
-        setCollpase(pre => !pre);
-    }, []);
-
     return (
         <div className="music-monaco-editor-list-wrapper" style={style}>
-            <div className="music-monaco-editor-list-title">
-                {title}
-            </div>
-            <div className="music-monaco-editor-list-split" onClick={handleCollapse}>
-                <Arrow collpase={collpase} />
-                <span style={{ flex: 1 }}>Files</span>
-                {
-                    disableFileOps ? null: (
-                        <>
-                            <AddFileIcon
-                                onClick={(e:Event) => {
-                                    e.stopPropagation();
-                                    addFile('/');
-                                }}
-                                className="music-monaco-editor-list-split-icon" />
-                            <AddFolderIcon
-                                onClick={(e:Event) => {
-                                    e.stopPropagation();
-                                    addFolder('/');
-                                }}
-                                className="music-monaco-editor-list-split-icon" />
-                        </>
-                    )
-                }
-            </div>
             {
-                !collpase && (
-                <div className="music-monaco-editor-list-files">
-                    <File
-                        disableFileOps={disableFileOps}
-                        onEditFileName={editFileName}
-                        onEditFolderName={editFolderName}
-                        onDeleteFile={deleteFile}
-                        onDeleteFolder={deleteFolder}
-                        onAddFile={addFile}
-                        onAddFolder={addFolder}
-                        onConfirmAddFile={handleConfirmAddFile}
-                        onConfirmAddFolder={handleConfirmAddFolder}
-                        currentPath={currentPath}
-                        root
-                        file={filetree}
-                        onPathChange={onPathChange} />
-                </div>
+                title && (
+                    <div className="music-monaco-editor-list-title">
+                        <span style={{ flex: 1 }}>{title}</span>
+                        {
+                            disableFileOps ? null: (
+                                <>
+                                    <AddFileIcon
+                                        onClick={(e:Event) => {
+                                            e.stopPropagation();
+                                            addFile('/');
+                                        }}
+                                        className="music-monaco-editor-list-title-icon" />
+                                    <AddFolderIcon
+                                        onClick={(e:Event) => {
+                                            e.stopPropagation();
+                                            addFolder('/');
+                                        }}
+                                        className="music-monaco-editor-list-title-icon" />
+                                </>
+                            )
+                        }
+                    </div>
                 )
             }
+            <div className="music-monaco-editor-list-files">
+                <File
+                    disableFileOps={disableFileOps}
+                    disableFolderOps={disableFolderOps}
+                    onEditFileName={editFileName}
+                    onEditFolderName={editFolderName}
+                    onDeleteFile={deleteFile}
+                    onDeleteFolder={deleteFolder}
+                    onAddFile={addFile}
+                    onAddFolder={addFolder}
+                    onConfirmAddFile={handleConfirmAddFile}
+                    onConfirmAddFolder={handleConfirmAddFolder}
+                    currentPath={currentPath}
+                    root
+                    file={filetree}
+                    onPathChange={onPathChange} />
+            </div>
         </div>
     )
 });

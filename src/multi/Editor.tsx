@@ -15,15 +15,28 @@ import { THEMES } from '@utils/consts';
 import { configTheme } from '@utils/initEditor';
 import Setting from '@components/Setting';
 import { useDragLine, usePrettier, useInit, useEditor, useVarRef } from './hook';
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const noop = () => {};
 export interface filelist {
     [key: string]: string | null,
 }
 export interface MultiEditorIProps {
     ideConfig?: {
-        disableFileOps?: boolean,
+        disableFileOps?: {
+            add?: boolean,
+            rename?: boolean,
+            delete?: boolean,
+        },
+        disableFolderOps?: {
+            add?: boolean,
+            rename?: boolean,
+            delete?: boolean,
+        },
         disableEslint?: boolean,
         disableSetting?: boolean,
         disablePrettier?: boolean,
+        saveWhenBlur?: boolean,
     },
     defaultPath?: string,
     defaultTheme?: string,
@@ -32,7 +45,8 @@ export interface MultiEditorIProps {
     onFileChange?: (key: string, value: string) => void,
     onFileSave?: (key: string, value: string) => void,
     defaultFiles?: filelist,
-    options: monacoType.editor.IStandaloneEditorConstructionOptions
+    options: monacoType.editor.IStandaloneEditorConstructionOptions,
+    title?: string,
 }
 
 export interface MultiRefType {
@@ -52,12 +66,15 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
     onFileChange,
     onFileSave,
     ideConfig = {
-        disableFileOps: false,
+        disableFileOps: {},
+        disableFolderOps: {},
         disableEslint: false,
         disableSetting: false,
         disablePrettier: false,
+        saveWhenBlur: false,
     },
     options,
+    title,
 }, ref) => {
     const onPathChangeRef = useVarRef(onPathChange);
     const onValueChangeRef = useVarRef(onValueChange);
@@ -109,7 +126,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                     editorRef.current?.restoreViewState(editorState);
                 }
                 // 聚焦editor
-                editorRef.current?.focus();
+                // editorRef.current?.focus();
                 let timer: any = null;
                 const v = model.getValue();
                 curValueRef.current = v;
@@ -190,24 +207,25 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
         });
     }, [defaultPath, handlePathChange]);
 
-    const editorNodeRef = useEditor(editorRef, optionsRef, openOrFocusPath);
-
-    const saveFile = useCallback(() => {
+    const saveFile = useCallback((path?: string, model?: monacoType.editor.ITextModel) => {
         if (autoPrettierRef.current && !ideConfig.disablePrettier) {
+            const realpath = path || curPathRef.current;
             handleFromat()?.then(() => {
                 setOpenedFiles((pre) => pre.map(v => {
-                    if (v.path === curPathRef.current) {
+                    if (v.path === realpath) {
                         v.status = 'saved';
                     }
                     return v;
                 }));
-                filesRef.current[curPathRef.current] = curValueRef.current;
+                const val = model?.getValue() || '';
+                filesRef.current[realpath] = val;
                 if (onFileSaveRef.current) {
-                    onFileSaveRef.current(curPathRef.current, curValueRef.current);
+                    onFileSaveRef.current(realpath, val);
                 }
             });
         } else {
             setOpenedFiles((pre) => pre.map(v => {
+                console.log(curPathRef.current, curValueRef.current);
                 if (v.path === curPathRef.current) {
                     v.status = 'saved';
                 }
@@ -219,6 +237,8 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
             }
         }
     }, [handleFromat, autoPrettierRef, ideConfig.disablePrettier, onFileSaveRef]);
+
+    const editorNodeRef = useEditor(editorRef, optionsRef, openOrFocusPath, ideConfig.saveWhenBlur ? saveFile : noop);
 
     const onCloseFile = useCallback((path: string) => {
         setOpenedFiles((pre) => {
@@ -511,7 +531,9 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
             onMouseUp={handleMoveEnd}
             className="music-monaco-editor">
             <FileList
+                title={title}
                 disableFileOps={ideConfig.disableFileOps}
+                disableFolderOps={ideConfig.disableFolderOps}
                 ref={filelistRef}
                 rootEl={rootRef.current}
                 onEditFileName={editFileName}
@@ -521,7 +543,6 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                 onDeleteFolder={deleteFolder}
                 onEditFolderName={editFolderName}
                 style={styles}
-                title="web editor"
                 currentPath={curPath}
                 defaultFiles={defaultFiles}
                 onPathChange={handlePathChange} />

@@ -1,5 +1,4 @@
 .music-monaco-editor-list {
-
     &-wrapper {
         width: 180px;
         font-size: 14px;
@@ -9,9 +8,11 @@
         color: var(--monaco-editor-foreground);
         overflow: scroll;
         flex-shrink: 0;
+        padding: 5px 0 0 10px;
+        box-sizing: border-box;
     }
 
-    &-split {
+    &-title {
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -20,10 +21,23 @@
         cursor: pointer;
         line-height: 25px;
 
-        & &-icon {
-            visibility: visible;
+        &-icon {
+            visibility: hidden;
+            font-size: 16px;
+            color: var(--monaco-editor-foreground);
+            margin-right: 4px;
+
+            &:hover {
+                color: var(--monaco-list-hoverForeground);
+            }
         }
 
+        &:hover &-icon {
+            visibility: visible;
+        }
+    }
+
+    &-split {
         &-icon {
             visibility: hidden;
             font-size: 16px;
@@ -50,6 +64,7 @@
         }
 
         &-row {
+            height: 25px;
             cursor: pointer;
             user-select: none;
             display: flex;

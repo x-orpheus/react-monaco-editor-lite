@@ -115,6 +115,7 @@ export function useEditor(
     editorRef: React.MutableRefObject<monacoType.editor.IStandaloneCodeEditor | null>,
     optionsRef: React.MutableRefObject<monacoType.editor.IEditorConstructionOptions>,
     openOrFocusPath: (path: string) => void,
+    saveFile: ((path?: string, model?: monacoType.editor.ITextModel) => void) | (() => void),
 ) {
     const editorNodeRef = useRef<HTMLDivElement>(null);
 
@@ -139,12 +140,19 @@ export function useEditor(
             return result; // always return the base result
         };
 
+        editorRef.current.onDidBlurEditorText(() => {
+            const model = editorRef.current?.getModel() || undefined;
+            const path = model?.uri.path;
+            saveFile(path, model);
+        })
+
         return () => {
             // 销毁实例
             if (editorRef.current) {
                 editorRef.current.dispose();
             }
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [openOrFocusPath, editorRef, optionsRef]);
 
     return editorNodeRef;

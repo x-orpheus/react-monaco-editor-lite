@@ -20,6 +20,8 @@ const filesName = [
     '/app/index.jsx',
     '/app/index.css',
     '/app/button.jsx',
+    '/src/index.jsx',
+    '/src/components/index.jsx',
     // '/app.js',
     // '/cc.js',
     '/app.ts',
@@ -117,21 +119,28 @@ const App = () => {
                 Object.keys(files).length > 0 && (
                     <div style={{ width: '800px', height: '600px' }}>
                         <Editor
-                            defaultTheme='EvaLight'
+                            title="tango project"
+                            // defaultTheme='EvaLight'
                             ideConfig={{
-                                disableFileOps: true,
+                                // disableFileOps: true,
                                 // disablePrettier: true,
                                 // disableEslint: true,
+                                saveWhenBlur: true,
+                                disableFileOps: {
+                                    add: true,
+                                    delete: true,
+                                    rename: false,
+                                },
+                                disableFolderOps: {
+                                    add: false,
+                                    delete: false,
+                                    rename: false,
+                                }
                             }}
                             onFileSave={(key: string, value: string) => console.log(key, value)}
                             ref={editorRef}
                             defaultPath="/app/index.jsx"
                             defaultFiles={files}
-                            // value={value}
-                            // path={path}
-                            // onPathChange={handlePathChange}
-                            // onValueChange={handleChange}
-                            // onFileChange={handleFileChange}
                             options={{
                                 fontSize: 14,
                                 automaticLayout: true,

@@ -7,7 +7,16 @@ import AddFileIcon from '@components/icons/addfile';
 import AddFolderIcon from '@components/icons/addfolder';
 
 const File: React.FC<{
-    disableFileOps?: boolean;
+    disableFileOps?: {
+        add?: boolean,
+        delete?: boolean,
+        rename?: boolean,
+    },
+    disableFolderOps?: {
+        add?: boolean,
+        delete?: boolean,
+        rename?: boolean,
+    },
     file: any,
     onPathChange: (key: string) => void,
     root: boolean,
@@ -21,7 +30,8 @@ const File: React.FC<{
     onDeleteFolder: (...args: any[]) => void,
     onEditFolderName: (...args: any[]) => void,
 }> = ({
-    disableFileOps = false,
+    disableFileOps = {},
+    disableFolderOps = {},
     file,
     onPathChange,
     currentPath = '',
@@ -150,21 +160,20 @@ const File: React.FC<{
                         <>
                             <span style={{ flex: 1 }}>{file.name}</span>
                             {
-                                disableFileOps ? null : (
-                                    <>
-                                        <EditIcon
-                                            onClick={(e:Event) => {
-                                                e.stopPropagation();
-                                                setEditing(true);
-                                            }}
-                                            className="music-monaco-editor-list-split-icon" />
-                                        <DeleteIcon
-                                            onClick={(e:Event) => {
-                                                e.stopPropagation();
-                                                onDeleteFile(file.path);
-                                            }}
-                                            className="music-monaco-editor-list-split-icon" />
-                                    </>
+                                disableFileOps.rename ? null : <EditIcon
+                                    onClick={(e:Event) => {
+                                        e.stopPropagation();
+                                        setEditing(true);
+                                    }}
+                                    className="music-monaco-editor-list-split-icon" />
+                            }
+                            {
+                                disableFileOps.delete ? null : (<DeleteIcon
+                                    onClick={(e:Event) => {
+                                        e.stopPropagation();
+                                        onDeleteFile(file.path);
+                                    }}
+                                    className="music-monaco-editor-list-split-icon" />
                                 )
                             }
                         </>
@@ -200,35 +209,45 @@ const File: React.FC<{
                                 <>
                                     <span style={{ flex: 1 }}>{file.name}</span>
                                     {
-                                        disableFileOps ? null : (
-                                            <>
-                                                <EditIcon
-                                                    onClick={(e:Event) => {
-                                                        e.stopPropagation();
-                                                        setEditing(true);
-                                                    }}
-                                                    className="music-monaco-editor-list-split-icon" />
-                                                <DeleteIcon
-                                                    onClick={(e:Event) => {
-                                                        e.stopPropagation();
-                                                        onDeleteFolder(file.path);
-                                                    }}
-                                                    className="music-monaco-editor-list-split-icon" />
-                                                <AddFileIcon
-                                                    onClick={(e:Event) => {
-                                                        e.stopPropagation();
-                                                        setShowChild(true);
-                                                        onAddFile(file.path + '/');
-                                                    }}
-                                                    className="music-monaco-editor-list-split-icon" />
-                                                <AddFolderIcon
-                                                    onClick={(e:Event) => {
-                                                        e.stopPropagation();
-                                                        setShowChild(true);
-                                                        onAddFolder(file.path + '/');
-                                                    }}
-                                                    className="music-monaco-editor-list-split-icon" />
-                                            </>
+                                        disableFolderOps.rename ? null : (
+                                            <EditIcon
+                                                onClick={(e:Event) => {
+                                                    e.stopPropagation();
+                                                    setEditing(true);
+                                                }}
+                                                className="music-monaco-editor-list-split-icon" />
+                                        )
+                                    }
+                                    {
+                                        disableFolderOps.delete ? null : (
+                                            <DeleteIcon
+                                                onClick={(e:Event) => {
+                                                    e.stopPropagation();
+                                                    onDeleteFolder(file.path);
+                                                }}
+                                                className="music-monaco-editor-list-split-icon" />
+                                        )
+                                    }
+                                    {
+                                        disableFileOps.add ? null : (
+                                            <AddFileIcon
+                                                onClick={(e:Event) => {
+                                                    e.stopPropagation();
+                                                    setShowChild(true);
+                                                    onAddFile(file.path + '/');
+                                                }}
+                                                className="music-monaco-editor-list-split-icon" />
+                                        )
+                                    }
+                                    {
+                                        disableFolderOps.add ? null : (
+                                            <AddFolderIcon
+                                                onClick={(e:Event) => {
+                                                    e.stopPropagation();
+                                                    setShowChild(true);
+                                                    onAddFolder(file.path + '/');
+                                                }}
+                                                className="music-monaco-editor-list-split-icon" />
                                         )
                                     }
                                 </>
@@ -255,6 +274,7 @@ const File: React.FC<{
                             keys.map(item => (
                                 <File
                                     disableFileOps={disableFileOps}
+                                    disableFolderOps={disableFolderOps}
                                     onEditFileName={onEditFileName}
                                     onEditFolderName={onEditFolderName}
                                     onDeleteFile={onDeleteFile}
