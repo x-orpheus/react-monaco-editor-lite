@@ -11,6 +11,7 @@ const fileTypeMap = (fileType: string): string => {
         js: 'js',
         tsx: 'reactts',
         jsx: 'reactjs',
+        md: 'markdown',
     }
     return config[type] ? `file_type_${config[type]}` : fileType;
 }

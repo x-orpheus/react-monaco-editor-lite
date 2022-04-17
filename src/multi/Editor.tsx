@@ -233,7 +233,6 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
             });
         } else {
             setOpenedFiles((pre) => pre.map(v => {
-                console.log(curPathRef.current, curValueRef.current);
                 if (v.path === curPathRef.current) {
                     v.status = 'saved';
                 }
@@ -584,7 +583,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                             <img
                                 src="//p5.music.126.net/obj/wo3DlcOGw6DClTvDisK1/5759801316/fb85/e193/a256/03a81ea60cf94212bbc814f2c82b6940.png"
                                 className="music-monaco-editor-area-empty-icon" />
-                            <div>web editor</div>
+                            <div>{title}</div>
                         </div>
                     )
                 }
