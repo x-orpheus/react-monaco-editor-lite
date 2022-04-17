@@ -5,10 +5,20 @@ export interface filelist {
 }
 export interface MultiEditorIProps {
     ideConfig?: {
-        disableFileOps?: boolean;
+        disableFileOps?: {
+            add?: boolean;
+            rename?: boolean;
+            delete?: boolean;
+        };
+        disableFolderOps?: {
+            add?: boolean;
+            rename?: boolean;
+            delete?: boolean;
+        };
         disableEslint?: boolean;
         disableSetting?: boolean;
         disablePrettier?: boolean;
+        saveWhenBlur?: boolean;
     };
     defaultPath?: string;
     defaultTheme?: string;
@@ -16,8 +26,10 @@ export interface MultiEditorIProps {
     onValueChange?: (v: string) => void;
     onFileChange?: (key: string, value: string) => void;
     onFileSave?: (key: string, value: string) => void;
+    onRenameFile?: (oldpath: string, newpath: string) => void;
     defaultFiles?: filelist;
     options: monacoType.editor.IStandaloneEditorConstructionOptions;
+    title?: string;
 }
 export interface MultiRefType {
     getValue: (path: string) => string | null;

@@ -2,6 +2,7 @@ import React from 'react';
 import './index.less';
 export interface FileTreeIProps {
     defaultFiles: any;
+    getAllFiles: () => any;
     onPathChange: (key: string) => void;
     title?: string;
     currentPath?: string;
@@ -13,7 +14,16 @@ export interface FileTreeIProps {
     onDeleteFolder: (path: string) => void;
     onEditFolderName: (path: string, name: string) => void;
     rootEl: HTMLElement | null;
-    disableFileOps?: boolean;
+    disableFileOps?: {
+        add?: boolean;
+        delete?: boolean;
+        rename?: boolean;
+    };
+    disableFolderOps?: {
+        add?: boolean;
+        delete?: boolean;
+        rename?: boolean;
+    };
 }
 export interface FileTreeRefType {
     refresh: (defaultFiles: any) => void;

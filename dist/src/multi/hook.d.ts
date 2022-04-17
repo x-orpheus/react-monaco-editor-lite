@@ -16,5 +16,5 @@ export declare function usePrettier(editorRef: React.MutableRefObject<monacoType
 export declare function useInit(filesRef: React.MutableRefObject<{
     [key: string]: string | null;
 }>, editorRef: React.MutableRefObject<monacoType.editor.IStandaloneCodeEditor | null>, options: monacoType.editor.IStandaloneEditorConstructionOptions, disableEslint?: boolean): void;
-export declare function useEditor(editorRef: React.MutableRefObject<monacoType.editor.IStandaloneCodeEditor | null>, optionsRef: React.MutableRefObject<monacoType.editor.IEditorConstructionOptions>, openOrFocusPath: (path: string) => void): React.RefObject<HTMLDivElement>;
+export declare function useEditor(editorRef: React.MutableRefObject<monacoType.editor.IStandaloneCodeEditor | null>, optionsRef: React.MutableRefObject<monacoType.editor.IEditorConstructionOptions>, openOrFocusPath: (path: string) => void, saveFile: ((path?: string, model?: monacoType.editor.ITextModel) => void) | (() => void)): React.RefObject<HTMLDivElement>;
 export declare const useVarRef: (param: any) => React.MutableRefObject<any>;

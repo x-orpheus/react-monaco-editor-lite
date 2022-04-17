@@ -1,3 +1,14 @@
+## [1.0.39](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.38...v1.0.39) (2022-04-17)
+
+
+### Features
+
+* 增加失焦保存，增加openedtab同名子目录展示，调整部分样式 ([ddaef6a](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/commits/ddaef6ad178ba7aacfaa7c5db508a1d1c4fe84e9))
+* 增加重命名时重复名称校验 ([9d1c378](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/commits/9d1c378529264172b2acba64c7aefed90ce8e9ac))
+* 增加onFileRename回调 ([8074bfb](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/commits/8074bfba190b1ad5d1009296230e5d83cb5f84a1))
+
+
+
 ## [1.0.38](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.37...v1.0.38) (2022-04-11)
 
 

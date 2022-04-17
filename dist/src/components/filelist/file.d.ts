@@ -1,6 +1,16 @@
 /// <reference types="react" />
 declare const File: React.FC<{
-    disableFileOps?: boolean;
+    getAllFiles: () => any;
+    disableFileOps?: {
+        add?: boolean;
+        delete?: boolean;
+        rename?: boolean;
+    };
+    disableFolderOps?: {
+        add?: boolean;
+        delete?: boolean;
+        rename?: boolean;
+    };
     file: any;
     onPathChange: (key: string) => void;
     root: boolean;

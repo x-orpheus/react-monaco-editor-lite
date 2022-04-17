@@ -1,10 +1,11 @@
 import React from 'react';
 import './index.less';
+declare type Files = Array<{
+    status?: string;
+    path: string;
+}>;
 declare const OpenedTab: React.FC<{
-    openedFiles: Array<{
-        status?: string;
-        path: string;
-    }>;
+    openedFiles: Files;
     onPathChange?: (key: string) => void;
     currentPath?: string;
     onCloseFile: (path: string) => void;

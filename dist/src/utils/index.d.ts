@@ -10,6 +10,10 @@ export declare function editSourceFileName(sourcetree: any, path: string, name: 
 export declare function addSourceFolder(sourcetree: any, path: string, value?: string): any;
 export declare function deleteSourceFolder(sourcetree: any, path: string): any;
 export declare function editSourceFolderName(sourcetree: any, path: string, name: string): any;
+export declare function getOldNewPath(oldpath: string, newname: string): {
+    oldpath: string;
+    newpath: string;
+};
 export declare function createOrUpdateModel(path: string, value: string): void;
 export declare function initFiles(files: any): void;
 export declare function deleteModel(path: string): void;
