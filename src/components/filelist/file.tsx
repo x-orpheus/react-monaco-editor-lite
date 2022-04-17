@@ -5,8 +5,10 @@ import DeleteIcon from '@components/icons/delete';
 import EditIcon from '@components/icons/edit';
 import AddFileIcon from '@components/icons/addfile';
 import AddFolderIcon from '@components/icons/addfolder';
+import { getOldNewPath } from '@utils';
 
 const File: React.FC<{
+    getAllFiles: () => any,
     disableFileOps?: {
         add?: boolean,
         delete?: boolean,
@@ -30,6 +32,7 @@ const File: React.FC<{
     onDeleteFolder: (...args: any[]) => void,
     onEditFolderName: (...args: any[]) => void,
 }> = ({
+    getAllFiles,
     disableFileOps = {},
     disableFolderOps = {},
     file,
@@ -57,15 +60,24 @@ const File: React.FC<{
         onPathChange(key);
     }, [onPathChange]);
 
-    const handleBlur = useCallback((e: any) => {
+    const [showError, setShowError] = useState('');
+
+    const handleBlur = useCallback(() => {
+        setShowError('');
         const name = nameRef.current?.textContent;
         if (editing) {
             setEditing(false);
             if (file.name !== name) {
                 if (file._isDirectory) {
                     onEditFolderName(file.path, name);
-                } else {
-                    onEditFileName(file.path, name);
+                } else if (name) {
+                    const {
+                        newpath,
+                    } = getOldNewPath(file.path, name);
+                    const files = getAllFiles();
+                    if (!files[newpath]) {
+                        onEditFileName(file.path, name);
+                    }
                 }
             }
         } else {
@@ -82,6 +94,7 @@ const File: React.FC<{
             }
         }
     }, [
+        getAllFiles,
         editing,
         file,
         onEditFileName,
@@ -90,10 +103,28 @@ const File: React.FC<{
         onEditFolderName,
     ]);
 
+    const handleChange = useCallback(() => {
+        const name = nameRef.current?.textContent;
+        if (!name) {
+            return setShowError('文件名不能为空');
+        }
+        if (file.name === name) {
+            return setShowError('');
+        }
+        const {
+            newpath,
+        } = getOldNewPath(file.path, name);
+        const files = getAllFiles();
+        if (files[newpath]) {
+            return setShowError('文件名已存在');
+        }
+        setShowError('');
+    }, [getAllFiles, file]);
+
     const handleKeyDown = useCallback((e: any) => {
         if (e.keyCode === 13) {
             e.preventDefault();
-            handleBlur(e);
+            handleBlur();
         }
     }, [handleBlur]);
 
@@ -178,16 +209,21 @@ const File: React.FC<{
                             }
                         </>
                     ) : (
-                        <div
-                            onClick={(e: any) => {
-                                e.stopPropagation();
-                            }}
-                            spellCheck={false}
-                            onKeyDown={handleKeyDown}
-                            onBlur={handleBlur}
-                            ref={nameRef}
-                            className="music-monaco-editor-list-file-item-new"
-                            contentEditable />
+                        <>
+                            <div
+                                onClick={(e: any) => {
+                                    e.stopPropagation();
+                                }}
+                                onInput={handleChange}
+                                spellCheck={false}
+                                onKeyDown={handleKeyDown}
+                                onBlur={handleBlur}
+                                ref={nameRef}
+                                className={`music-monaco-editor-list-file-item-new
+                                ${showError ? 'music-monaco-editor-list-file-item-new-error' : ''}`}
+                                contentEditable>
+                            </div>
+                        </>
                     )
                 }
             </div>
@@ -273,6 +309,7 @@ const File: React.FC<{
                         {
                             keys.map(item => (
                                 <File
+                                    getAllFiles={getAllFiles}
                                     disableFileOps={disableFileOps}
                                     disableFolderOps={disableFolderOps}
                                     onEditFileName={onEditFileName}

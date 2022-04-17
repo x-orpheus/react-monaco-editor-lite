@@ -54,12 +54,17 @@
         user-select: none;
 
         &-new {
+            position: relative;
             flex: 1;
             outline: none;
             border: 1px solid var(--monaco-editor-wordHighlightBorder);
 
             &:focus {
                 cursor: text;
+            }
+
+            &-error {
+                border: 1px solid #F44747;
             }
         }
 
@@ -70,6 +75,7 @@
             display: flex;
             flex-direction: row;
             align-items: center;
+            position: relative;
 
             &:hover {
                 background-color: var(--monaco-list-hoverBackground);

@@ -20,6 +20,7 @@ import './index.less';
 
 export interface FileTreeIProps {
     defaultFiles: any,
+    getAllFiles: () => any,
     onPathChange: (key: string) => void,
     title?: string,
     currentPath?: string,
@@ -49,6 +50,7 @@ export interface FileTreeRefType {
 
 const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(({
     defaultFiles,
+    getAllFiles,
     onPathChange,
     title,
     currentPath = '',
@@ -178,6 +180,7 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(({
             }
             <div className="music-monaco-editor-list-files">
                 <File
+                    getAllFiles={getAllFiles}
                     disableFileOps={disableFileOps}
                     disableFolderOps={disableFolderOps}
                     onEditFileName={editFileName}

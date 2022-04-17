@@ -513,9 +513,11 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
         filelistRef.current.refresh(files);
     }, [deleteFile, handlePathChange, locModel]);
 
+    const getAllFiles = useCallback(() => filesRef.current, []);
+
     useImperativeHandle(ref, () => ({
         getValue: (path: string) => filesRef.current[path],
-        getAllValue: () => filesRef.current,
+        getAllValue: getAllFiles,
         getSupportThemes: () => THEMES,
         setTheme: (name) => configTheme(name),
         refresh: refreshFiles,
@@ -531,6 +533,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
             onMouseUp={handleMoveEnd}
             className="music-monaco-editor">
             <FileList
+                getAllFiles={getAllFiles}
                 title={title}
                 disableFileOps={ideConfig.disableFileOps}
                 disableFolderOps={ideConfig.disableFolderOps}

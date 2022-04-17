@@ -211,6 +211,18 @@ export function editSourceFolderName(sourcetree: any, path:string, name: string)
     return copy;
 }
 
+export function getOldNewPath(oldpath: string, newname: string) {
+    const paths = oldpath.split('/');
+    paths.splice(-1);
+    paths.push(newname);
+    const newpath = paths.join('/');
+
+    return {
+        oldpath,
+        newpath,
+    }
+}
+
 export function createOrUpdateModel(path: string, value: string) {
     // model 是否存在
     let model = window.monaco.editor
