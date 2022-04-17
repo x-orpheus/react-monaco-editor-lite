@@ -1,3 +1,12 @@
+## [1.0.40](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.39...v1.0.40) (2022-04-17)
+
+
+### Features
+
+* 调整间距，增加title属性配置 ([c296e1e](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/commits/c296e1ea8e431e41333f76b61c6d38dee5922ad6))
+
+
+
 ## [1.0.39](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.38...v1.0.39) (2022-04-17)
 
 
