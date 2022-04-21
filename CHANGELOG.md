@@ -1,3 +1,12 @@
+## [1.0.44](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.43...v1.0.44) (2022-04-21)
+
+
+### Bug Fixes
+
+* refresh 重复调用bug ([0d784a2](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/commits/0d784a2cff3f3fec73f9bc822b435d9e215d92fa))
+
+
+
 ## [1.0.43](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.42...v1.0.43) (2022-04-21)
 
 
