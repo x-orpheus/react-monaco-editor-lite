@@ -1,3 +1,12 @@
+## [1.0.43](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.42...v1.0.43) (2022-04-21)
+
+
+### Bug Fixes
+
+* onclosefile ([939a733](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/commits/939a7334a9fdc4681530217206dac2efc3180163))
+
+
+
 ## [1.0.42](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.41...v1.0.42) (2022-04-21)
 
 
