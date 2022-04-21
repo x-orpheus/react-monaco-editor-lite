@@ -91,6 +91,23 @@ const App = () => {
     // useEffect(() => {
     //     window.addEventListener('message', res => console.log(res));
     // }, []);
+    const [activePath, setActivePath] = useState('/style.md');
+
+    useEffect(() => {
+        console.log(files);
+        if (editorRef.current) {
+            editorRef.current.refresh(files, activePath, {
+                start: {
+                    line: 29,
+                    column: 1,
+                },
+                end: {
+                    line: 40,
+                    column: 1,
+                }
+            });
+        }
+    });
 
     return (
         <div>
@@ -137,8 +154,13 @@ const App = () => {
                                     rename: false,
                                 }
                             }}
+                            onPathChange={(path) => { console.log(path); setActivePath(path); }}
                             onFileSave={(key: string, value: string) => console.log(key, value)}
-                            onRenameFile={(...args) => console.log(args)}
+                            onRenameFile={(...args) => {
+                                files[args[1]] = files[args[0]];
+                                setActivePath(args[1]);
+                                delete files[args[0]];
+                            }}
                             ref={editorRef}
                             defaultPath="/app/index.jsx"
                             defaultFiles={files}

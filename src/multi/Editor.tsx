@@ -94,7 +94,9 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
     const filelistRef = useRef<any>(null);
     const editorRef = useRef<monacoType.editor.IStandaloneCodeEditor | null>(null);
     const prePath = useRef<string | null>('');
-    const filesRef = useRef(defaultFiles);
+    const filesRef = useRef({
+        ...defaultFiles
+    });
     const valueLisenerRef = useRef<monacoType.IDisposable>();
     const editorStatesRef = useRef(new Map());
 
@@ -369,33 +371,28 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
     const addFile = useCallback((path: string, value?: string) => {
         createOrUpdateModel(path, value || '');
         filesRef.current[path] = value || '';
-        // 神奇的延时，此处不加延时，monaco会抛错
-        setTimeout(() => {
-            // 自动打开新建的文件
-            handlePathChange(path);
-        }, 50);
+        handlePathChange(path);
     }, [handlePathChange]);
 
     const deleteFile = useCallback((path: string) => {
-        deleteModel(path);
-        delete filesRef.current[path];
         onCloseFile(path);
+        setTimeout(() => {
+            deleteModel(path);
+        }, 50);
+        delete filesRef.current[path];
     }, [onCloseFile]);
 
     const editFileName = useCallback((path: string, name: string) => {
         const value = filesRef.current[path] || '';
-        // 神奇的延时，此处不加延时，monaco会抛错
-        setTimeout(() => {
-            deleteFile(path);
-            const {
-                oldpath,
-                newpath
-            } = getOldNewPath(path, name);
-            addFile(newpath, value);
-            if (onRenameFile) {
-                onRenameFile(oldpath, newpath);
-            }
-        }, 50);
+        deleteFile(path);
+        const {
+            oldpath,
+            newpath
+        } = getOldNewPath(path, name);
+        addFile(newpath, value);
+        if (onRenameFile) {
+            onRenameFile(oldpath, newpath);
+        }
     }, [deleteFile, addFile, onRenameFile]);
 
     const addFolder = useCallback((path: string) => {
@@ -502,7 +499,9 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
             }
         });
         // 保存新的打开文件列表
-        filesRef.current = files;
+        filesRef.current = {
+            ...files
+        };
         // 重置openedTab
         setOpenedFiles((pre) => pre.filter(v => files[v.path]).map(v => ({
             ...v,
