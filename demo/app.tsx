@@ -95,7 +95,7 @@ const App = () => {
     return (
         <div>
             <div onClick={() => console.log(editorRef.current) }>ref api</div>
-            <div onClick={() => console.log(editorRef.current.refresh(files, '/style.less', {
+            <div onClick={() => console.log(editorRef.current.refresh(files, '/style.md', {
                 start: {
                     line: 29,
                     column: 1,

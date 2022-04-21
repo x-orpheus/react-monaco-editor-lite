@@ -508,16 +508,15 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
             ...v,
             status: 'saved',
         })));
-        // 重置当前tab
-        setCurPath((pre) => {
-            let res = files[pre] ? pre : '';
+        if (path !== curPathRef.current) {
+            // 重置当前tab
+            let res = files[curPathRef.current] ? curPathRef.current : '';
             if (path && files[path]) {
                 res = path;
             }
             handlePathChange(res);
-            loc && locModel(loc);
-            return res;
-        });
+        }
+        loc && locModel(loc);
         // 更新文件列表
         filelistRef.current.refresh(files);
     }, [deleteFile, handlePathChange, locModel]);
