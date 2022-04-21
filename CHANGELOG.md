@@ -1,3 +1,12 @@
+## [1.0.42](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.41...v1.0.42) (2022-04-21)
+
+
+### Bug Fixes
+
+* button color ([758fa59](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/commits/758fa591222f82290656b2766d2e24fe8deb1e74))
+
+
+
 ## [1.0.41](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.40...v1.0.41) (2022-04-21)
 
 
