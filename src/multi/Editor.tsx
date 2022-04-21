@@ -248,37 +248,34 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
     const editorNodeRef = useEditor(editorRef, optionsRef, openOrFocusPath, ideConfig.saveWhenBlur ? saveFile : noop);
 
     const onCloseFile = useCallback((path: string) => {
-        setOpenedFiles((pre) => {
-            let targetPath = '';
-            if (pre.length) {
-                const res =  pre.filter((v, index) => {
-                    if (v.path === path) {
-                        if (index === 0) {
-                            if (pre[index + 1]) {
-                                targetPath = pre[index + 1].path;
-                            }
-                        } else {
-                            targetPath = pre[index - 1].path;
+        let targetPath = '';
+        if (openedFiles.length) {
+            const res =  openedFiles.filter((v, index) => {
+                if (v.path === path) {
+                    if (index === 0) {
+                        if (openedFiles[index + 1]) {
+                            targetPath = openedFiles[index + 1].path;
                         }
+                    } else {
+                        targetPath = openedFiles[index - 1].path;
                     }
-                    return v.path !== path
-                });
-                // 目标文件是当前文件，且存在下一激活文件时，执行model及path切换的逻辑
-                if (targetPath && curPathRef.current === path) {
-                    restoreModel(targetPath);
-                    setCurPath(targetPath);
                 }
-                if (res.length === 0) {
-                    restoreModel('');
-                    setCurPath('');
-                    prePath.current = '';
-                }
-                return res;
+                return v.path !== path
+            });
+            // 目标文件是当前文件，且存在下一激活文件时，执行model及path切换的逻辑
+            if (targetPath && curPathRef.current === path) {
+                restoreModel(targetPath);
+                setCurPath(targetPath);
             }
-            return pre;
-        });
+            if (res.length === 0) {
+                restoreModel('');
+                setCurPath('');
+                prePath.current = '';
+            }
+            setOpenedFiles(res);
+        }
 
-    }, [restoreModel]);
+    }, [restoreModel, openedFiles]);
 
     const closeOtherFiles = useCallback((path: string) => {
         const unSavedFiles = openedFiles.filter(v => v.status === 'editing');
