@@ -13,7 +13,7 @@ const TabItem: React.FC<{
     onPathChange?: (key: string) => void,
     currentPath?: string,
     onCloseFile: (key: string) => void,
-    rootEl: HTMLElement | null,
+    rootEl: React.MutableRefObject<null>,
     onSaveFile: (path: string) => void,
     onAbortSave: (path: string) => void,
     onCloseOtherFiles: (path: string) => void,
@@ -74,7 +74,7 @@ const TabItem: React.FC<{
             setTimeout(() => {
                 Modal.confirm({
                     title: '是否要保存对本文件的修改',
-                    target: rootEl,
+                    target: rootEl.current,
                     okText: '保存',
                     cancelText: '不保存',
                     onCancel: (close: () => void) => {
@@ -110,7 +110,7 @@ const TabItem: React.FC<{
         setTimeout(() => {
             Modal.create({
                 title: '是否确认删除？',
-                target: rootEl,
+                target: rootEl.current,
                 onOk: (close: () => void) => {
                     close();
                 },

@@ -120,7 +120,7 @@ const App = () => {
                     <div style={{ width: '800px', height: '600px' }}>
                         <Editor
                             title="tango project"
-                            // defaultTheme='EvaLight'
+                            defaultTheme='GithubLightDefault'
                             ideConfig={{
                                 // disableFileOps: true,
                                 // disablePrettier: true,

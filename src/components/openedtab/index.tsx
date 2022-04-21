@@ -41,7 +41,7 @@ const OpenedTab: React.FC<{
     onPathChange?: (key: string) => void,
     currentPath?: string,
     onCloseFile: (path: string) => void,
-    rootEl: HTMLElement | null,
+    rootEl: React.MutableRefObject<null>,
     onSaveFile: (path: string) => void,
     onAbortSave: (path: string) => void,
     onCloseOtherFiles: (path: string) => void,

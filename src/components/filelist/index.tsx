@@ -31,7 +31,7 @@ export interface FileTreeIProps {
     onAddFolder: (...args: any) => void,
     onDeleteFolder: (path: string) => void,
     onEditFolderName: (path: string, name: string) => void,
-    rootEl: HTMLElement | null,
+    rootEl: React.MutableRefObject<null>,
     disableFileOps?: {
         add?: boolean,
         delete?: boolean,
@@ -77,7 +77,7 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(({
 
     const deleteFile = useCallback((path: string) => {
         Modal.confirm({
-            target: rootEl,
+            target: rootEl.current,
             okText: '删除',
             onOk: (close: () => void) => {
                 setFiletree(deleteSourceFile(filetree, path));
@@ -117,7 +117,7 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(({
 
     const deleteFolder = useCallback((path: string) => {
         Modal.confirm({
-            target: rootEl,
+            target: rootEl.current,
             okText: '删除',
             onOk: (close: () => void) => {
                 setFiletree(deleteSourceFolder(filetree, path));

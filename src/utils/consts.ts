@@ -2,42 +2,44 @@
 export const ASSETSPATH: string = _ASSETSPATH;
 
 const DARKTHEMES = [
-    'AtlanticNight',
-    'Nebula',
-    'ShadesOfPurple',
-    'AtomOneDark',
-    'NoctisAzureus',
-    'AuroraX', // bad
-    'Hopscotch',
-    'NoctisBordo',
-    'SnazzyOperator',
-    'NoctisLux',
-    'SublimeMaterialThemeDark',
-    'HybridNext',
-    'OneDarkPro',
-    'SynthWave84',
-    'KimbieDark',
-    'OneMonokai',
-    'TokyoNightStorm',
-    'CodeSandBox',
-    'Lucario',
-    'Panda',
-    'TomorrowNightBlue',
-    'Darktooth',
-    'MonokaiDimmed',
-    'ReUI',
-    'Twilight',
-    'MonokaiPro',
-    'RemedyDark',
+    'GithubDarkDefault',
+    // 'AtlanticNight',
+    // 'Nebula',
+    // 'ShadesOfPurple',
+    // 'AtomOneDark',
+    // 'NoctisAzureus',
+    // 'AuroraX', // bad
+    // 'Hopscotch',
+    // 'NoctisBordo',
+    // 'SnazzyOperator',
+    // 'NoctisLux',
+    // 'SublimeMaterialThemeDark',
+    // 'HybridNext',
+    // 'OneDarkPro',
+    // 'SynthWave84',
+    // 'KimbieDark',
+    // 'OneMonokai',
+    // 'TokyoNightStorm',
+    // 'CodeSandBox',
+    // 'Lucario',
+    // 'Panda',
+    // 'TomorrowNightBlue',
+    // 'Darktooth',
+    // 'MonokaiDimmed',
+    // 'ReUI',
+    // 'Twilight',
+    // 'MonokaiPro',
+    // 'RemedyDark',
 ]
 
 const LIGHTTHEMES = [
-    'EvaLight',
-    'FlatUI',
-    'SnazzyLight', // bad
-    'AyuLight',
-    'BlulocoLight', // bad
-    'HorlaLightTheme', // bad
+    'GithubLightDefault',
+    // 'EvaLight',
+    // 'FlatUI',
+    // 'SnazzyLight', // bad
+    // 'AyuLight',
+    // 'BlulocoLight', // bad
+    // 'HorlaLightTheme', // bad
 ]
 
 export const THEMES = DARKTHEMES.concat(LIGHTTHEMES);
