@@ -13,7 +13,7 @@ export interface FileTreeIProps {
     onAddFolder: (...args: any) => void;
     onDeleteFolder: (path: string) => void;
     onEditFolderName: (path: string, name: string) => void;
-    rootEl: HTMLElement | null;
+    rootEl: React.MutableRefObject<null>;
     disableFileOps?: {
         add?: boolean;
         delete?: boolean;

@@ -1,3 +1,12 @@
+## [1.0.41](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.40...v1.0.41) (2022-04-21)
+
+
+### Features
+
+* 修改主题为githubdark, githublight ([944f406](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/commits/944f406a745a786a8aadca77407491cac44b949e))
+
+
+
 ## [1.0.40](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.39...v1.0.40) (2022-04-17)
 
 
