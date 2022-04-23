@@ -157,9 +157,13 @@ const App = () => {
                             onPathChange={(path) => { console.log(path); setActivePath(path); }}
                             onFileSave={(key: string, value: string) => console.log(key, value)}
                             onRenameFile={(...args) => {
-                                files[args[1]] = files[args[0]];
+                                setFiles((pre) => {
+                                    const res = {...pre};
+                                    res[args[1]] = res[args[0]];
+                                    delete res[args[0]];
+                                    return res;
+                                });
                                 setActivePath(args[1]);
-                                delete files[args[0]];
                             }}
                             ref={editorRef}
                             defaultPath="/app/index.jsx"

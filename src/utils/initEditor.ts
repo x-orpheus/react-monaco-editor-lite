@@ -47,7 +47,6 @@ export const themes: {
 } = {};
 
 export async function configTheme(name: string) {
-    const root = document.getElementById('music-monaco-editor-root');
     let theme = themes[name];
     if (!theme) {
         theme = JSON.parse(await (await fetch(`${ASSETSPATH}themes/${name}.json`)).text());
@@ -58,10 +57,24 @@ export async function configTheme(name: string) {
 
     const prefix = '--monaco-';
 
-    Object.keys(theme.colors).forEach(v => {
-        root?.style.setProperty(`${prefix}${v.replace('.', '-')}`, theme.colors[v] || themes.OneDarkPro.colors[v] || 'rgba(0, 0, 0, 0)');
-    })
+    let style = document.getElementById('monaco-editor-theme-style');
 
+    if (!style) {
+        style = document.createElement('style');
+        style.id = 'monaco-editor-theme-style';
+        document.getElementsByTagName('head')[0].appendChild(style);
+    }
+
+    let res = '#music-monaco-editor-root {';
+
+    Object.keys(theme.colors).forEach(v => {
+        res += `${prefix}${v.replace('.', '-')}: ${theme.colors[v] || 'rgba(0, 0, 0, 0)'};`;
+    });
+
+    res += '}';
+
+    style.innerHTML = res;
+    
     // 设置主题
     window.monaco.editor.setTheme(name);
 }
