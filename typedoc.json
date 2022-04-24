@@ -1,3 +1,4 @@
 {
-    "entryPoints": ["./src/multi/Editor.tsx", "./src/single/Editor.tsx"]
+    "entryPoints": ["./src/multi/Editor.tsx", "./src/single/Editor.tsx"],
+    "plugin": ["typedoc-plugin-markdown"]
 }
