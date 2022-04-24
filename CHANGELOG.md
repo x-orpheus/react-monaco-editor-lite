@@ -1,3 +1,13 @@
+## [1.0.47](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.46...v1.0.47) (2022-04-24)
+
+
+### Features
+
+* add md api doc ([4de1347](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/commits/4de13475368db99caa39a2248090cc114d499466))
+* typedoc html ([e219b84](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/commits/e219b846fb6a0246e7ab1678f83b9e64997f0d70))
+
+
+
 ## [1.0.46](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.45...v1.0.46) (2022-04-24)
 
 
