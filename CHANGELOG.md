@@ -1,3 +1,12 @@
+## [1.0.49](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.48...v1.0.49) (2022-05-05)
+
+
+### Bug Fixes
+
+* 替换公网cdn链接 ([474f496](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/commits/474f49618d68deb64e6820587513dcc75f86e456))
+
+
+
 ## [1.0.48](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.47...v1.0.48) (2022-05-05)
 
 
