@@ -5,14 +5,14 @@
 ### 安装
 
 ```
-nenpm install @music/base-editor
+nenpm install react-monaco-editor-lite
 ```
 
 ### 使用
 
 ```js
 
-import { MultiEditor } from '@music/base-editor';
+import { MultiEditor } from 'react-monaco-editor-lite';
 
 function IDE() {
     const defaultFiles = {
