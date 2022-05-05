@@ -1,3 +1,12 @@
+## [1.0.48](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.47...v1.0.48) (2022-05-05)
+
+
+### Features
+
+* 样式优化 ([e64f258](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/commits/e64f2587c6235b1d7312d74e9e64135a8a6d5f22))
+
+
+
 ## [1.0.47](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.46...v1.0.47) (2022-04-24)
 
 
