@@ -1,0 +1,5 @@
+{
+    "entryPoints": ["./src/multi/Editor.tsx", "./src/single/Editor.tsx"],
+    "plugin": [],
+    "out": "./public/docs"
+}

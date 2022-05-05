@@ -1,0 +1,95 @@
+.music-monaco-editor-list {
+    &-wrapper {
+        width: 180px;
+        font-size: 14px;
+        line-height: 28px;
+        height: 100%;
+        background: var(--monaco-editor-background);
+        color: var(--monaco-editor-foreground);
+        overflow: scroll;
+        flex-shrink: 0;
+        padding: 5px 0 0 10px;
+        box-sizing: border-box;
+    }
+
+    &-title {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        height: 28px;
+        user-select: none;
+        cursor: pointer;
+        line-height: 28px;
+
+        &-icon {
+            visibility: hidden;
+            font-size: 16px;
+            color: var(--monaco-editor-foreground);
+            margin-right: 4px;
+
+            &:hover {
+                color: var(--monaco-list-hoverForeground);
+            }
+        }
+
+        &:hover &-icon {
+            visibility: visible;
+        }
+    }
+
+    &-split {
+        &-icon {
+            visibility: hidden;
+            font-size: 16px;
+            color: var(--monaco-editor-foreground);
+            margin-right: 4px;
+
+            &:hover {
+                color: var(--monaco-list-hoverForeground);
+            }
+        }
+    }
+
+    &-file-item {
+        user-select: none;
+
+        &-new {
+            position: relative;
+            flex: 1;
+            outline: none;
+            border: 1px solid var(--monaco-editor-wordHighlightBorder);
+
+            &:focus {
+                cursor: text;
+            }
+
+            &-error {
+                border: 1px solid #F44747;
+            }
+        }
+
+        &-row {
+            height: 28px;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            position: relative;
+
+            &:hover {
+                background-color: var(--monaco-list-hoverBackground);
+                color: var(--monaco-list-hoverForeground);
+            }
+
+            &:hover .music-monaco-editor-list-split-icon {
+                visibility: visible;
+            }
+
+            &-focused {
+                background-color: var(--monaco-list-focusBackground);
+                color: var(--monaco-list-focusForeground);
+            }
+        }
+    }
+}
