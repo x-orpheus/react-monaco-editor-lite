@@ -91,4 +91,4 @@ export default IDE;
 
 ### 组件参数及方法
 
-查看此[文档](./docs/modules.html)
+查看此[文档](./docs/index.html)

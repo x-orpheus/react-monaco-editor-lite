@@ -37,6 +37,7 @@
     &-drag {
         width: 5px;
         background: var(--monaco-editor-background);
+        border-right: 1px solid var(--monaco-activityBar-border);
         height: 100%;
         cursor: col-resize;
         flex-shrink: 0;
@@ -99,10 +100,11 @@
         &-header {
             position: relative;
             height: 28px;
+            line-height: 28px;
             width: 100%;
             background: var(--monaco-activityBarBadge-background);
             color: var(--monaco-activityBarBadge-foreground);
-            border-radius: 5px 5px 0 0;
+            border-radius: 8px 8px 0 0;
             box-sizing: border-box;
             padding-left: 10px;
 
