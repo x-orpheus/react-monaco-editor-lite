@@ -1,3 +1,18 @@
+## [1.0.52](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.51...v1.0.52) (2022-05-05)
+
+
+### Bug Fixes
+
+* readme ([4198d98](https://github.com/x-orpheus/react-monaco-editor-lite/commit/4198d98173cc9d84e74f87919ef749f478660f62))
+
+
+### Features
+
+* 增加demo ([87f67e8](https://github.com/x-orpheus/react-monaco-editor-lite/commit/87f67e89084ce818c2d894cc6f25e59d0b68a7fa))
+* change assetpath ([b1a9f3c](https://github.com/x-orpheus/react-monaco-editor-lite/commit/b1a9f3cbc35d709b52116105a1957818ef9f4b87))
+
+
+
 ## [1.0.51](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.50...v1.0.51) (2022-05-05)
 
 
