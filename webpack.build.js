@@ -41,7 +41,7 @@ module.exports = {
             process: 'process/browser',
         }),
         new webpack.DefinePlugin({
-            _ASSETSPATH: JSON.stringify('https://st.music.163.com/g/monaco-editor/'),
+            _ASSETSPATH: JSON.stringify('https://s5.music.126.net/static_public/6194df158463e8444a55b9d8_6194df158463e8444a55b9da/'),
         })
     ],
     resolve: {
