@@ -1,3 +1,12 @@
+## [1.0.50](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.49...v1.0.50) (2022-05-05)
+
+
+### Features
+
+* change package name ([9a0a5bc](https://github.com/x-orpheus/react-monaco-editor-lite/commit/9a0a5bcd01979d86fd3fa57d38f50dee410ae091))
+
+
+
 ## [1.0.49](https://g.hz.netease.com/NeteaseMusicUI/cloud-ide/monaco-editor-playground/compare/v1.0.48...v1.0.49) (2022-05-05)
 
 
