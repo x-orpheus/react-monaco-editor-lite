@@ -91,4 +91,4 @@ export default IDE;
 
 ### 组件参数及方法
 
-查看此[文档](./docs/index.html)
+查看此[文档](https://x-orpheus.github.io/react-monaco-editor-lite/public/docs/index.html)

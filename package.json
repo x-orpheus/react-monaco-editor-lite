@@ -7,9 +7,10 @@
   "scripts": {
     "webpack": "webpack",
     "build": "webpack --config webpack.build.js",
+    "build:demo": "webpack --config webpack.build.demo.js",
     "start": "webpack serve",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "preversion": "npm run build && npm run doc",
+    "preversion": "npm run build && npm run doc && npm run build:demo",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s && node replace.js && git add .",
     "postversion": "git push && git push origin --tags",
     "doc": "typedoc --options typedoc.json"

@@ -1,4 +1,4 @@
-importScripts('https://st.qa.igame.163.com/g/monaco-editor/eslint.js');
+importScripts('https://s5.music.126.net/static_public/6194df158463e8444a55b9d8_6194df158463e8444a55b9da/eslint.js');
 
 // 本配置照搬云音乐eslint配置，见https://g.hz.netease.com/cloudmusic-frontend/lint/elint-preset
 const baseRuleChange = {
