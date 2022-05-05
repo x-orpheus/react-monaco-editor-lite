@@ -1,5 +1,5 @@
 {
-  "name": "@music/base-editor",
+  "name": "react-monaco-editor-lite",
   "version": "1.0.49",
   "description": "",
   "main": "dist/index.bundle.js",
