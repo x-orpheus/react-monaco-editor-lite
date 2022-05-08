@@ -1,6 +1,7 @@
 // @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import EditorComp from './Editor';
+import './index.less';
 
 export const Editor = (props, ref) => {
     const [, setCount] = useState(0);
@@ -15,7 +16,15 @@ export const Editor = (props, ref) => {
     if (window.monaco) {
         return <EditorComp {...props} ref={ref} />;
     }
-    return (<div>loading</div>);
+
+    return (
+        <div
+            className="music-monaco-editor-loading">
+            <img
+                className="music-monaco-editor-loading-icon"
+                src="https://p6.music.126.net/obj/wo3DlcOGw6DClTvDisK1/9879093207/2dbb/873a/9e97/e817279537a0417d042f62fbb1b99eea.gif" />
+        </div>
+    );
 };
 
 export default React.forwardRef(Editor);
