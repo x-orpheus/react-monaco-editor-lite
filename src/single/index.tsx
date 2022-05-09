@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useEffect, useState } from 'react';
-import EditorComp from './Editor';
+import EditorComp, { SingleEditorIProps, SingleEditorRefType } from './Editor';
 import './index.less';
 
 export { SingleEditorIProps, SingleEditorRefType } from './Editor';
