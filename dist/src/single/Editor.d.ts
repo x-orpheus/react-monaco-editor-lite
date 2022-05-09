@@ -1,6 +1,6 @@
 import React from 'react';
 import * as monacoType from 'monaco-editor';
-export interface EditorIProps {
+export interface SingleEditorIProps {
     value?: string;
     defaultValue?: string;
     onChange?: (v: string) => void;
@@ -17,6 +17,9 @@ export interface EditorIProps {
     };
     options?: monacoType.editor.IStandaloneEditorConstructionOptions;
 }
+export interface SingleEditorRefType {
+    getEditor: () => monacoType.editor.IStandaloneCodeEditor;
+}
 export declare const INITIAL_OPTIONS: monacoType.editor.IStandaloneEditorConstructionOptions;
-export declare const Editor: React.FC<EditorIProps>;
-export default Editor;
+export declare const SingleEditor: React.ForwardRefExoticComponent<SingleEditorIProps & React.RefAttributes<SingleEditorRefType>>;
+export default SingleEditor;

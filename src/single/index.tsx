@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import EditorComp from './Editor';
 import './index.less';
 
-export { EditorIProps } from './Editor';
+export { SingleEditorIProps, SingleEditorRefType } from './Editor';
 
-export const SingleEditor = React.forwardRef((props, ref) => {
+export const SingleEditor = React.forwardRef<SingleEditorRefType, SingleEditorIProps>((props, ref) => {
     const [, setCount] = useState(0);
     useEffect(() => {
         const interval = setInterval(() => {

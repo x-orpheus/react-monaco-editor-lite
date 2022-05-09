@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import * as monacoType from 'monaco-editor';
 import { configTheme } from '@utils/initEditor';
-export interface EditorIProps {
+export interface SingleEditorIProps {
     value?: string,
     defaultValue?: string,
     onChange?: (v: string) => void,
@@ -17,6 +17,10 @@ export interface EditorIProps {
         }
     },
     options?: monacoType.editor.IStandaloneEditorConstructionOptions
+}
+
+export interface SingleEditorRefType {
+    getEditor: () => monacoType.editor.IStandaloneCodeEditor;
 }
 
 export const INITIAL_OPTIONS:monacoType.editor.IStandaloneEditorConstructionOptions = {
@@ -47,14 +51,14 @@ export const INITIAL_OPTIONS:monacoType.editor.IStandaloneEditorConstructionOpti
     },
 };
 
-export const Editor: React.FC<EditorIProps> = ({
+export const SingleEditor = React.forwardRef<SingleEditorRefType, SingleEditorIProps>(({
     value,
     defaultValue,
     onChange,
     onBlur,
     loc,
     options = {},
-}) => {
+}, ref) => {
     const editorRef = useRef<monacoType.editor.IStandaloneCodeEditor | null>(null);
     const editorNodeRef = useRef<HTMLDivElement>(null);
 
@@ -179,6 +183,8 @@ export const Editor: React.FC<EditorIProps> = ({
             ref={editorNodeRef}
             style={{ width: '100%', height: '100%' }} />
     )
-};
+});
 
-export default Editor;
+SingleEditor.displayName = 'SingleEditor';
+
+export default SingleEditor;
