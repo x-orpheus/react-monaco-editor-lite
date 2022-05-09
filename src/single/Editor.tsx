@@ -112,7 +112,7 @@ export const Editor: React.FC<EditorIProps> = ({
     // 更新高亮区域
     const decorcations = useRef<any>(null);
 
-    const locModel = useCallback((loc) => {
+    const locModel = useCallback((loc, forceCenter: boolean) => {
         if (loc) {
             const { start, end } = loc;
             decorcations.current = editorRef.current?.deltaDecorations(decorcations.current || [], [
@@ -121,13 +121,15 @@ export const Editor: React.FC<EditorIProps> = ({
                 options: { className: 'music-monaco-editor-highlight', isWholeLine: true },
               },
             ]);
-            // editorRef.current?.revealLineInCenter(start.line);
+            if (forceCenter) {
+                editorRef.current?.revealLineInCenter(start.line);
+            }
           }
     }, []);
 
     useEffect(() => {
         // 默认高亮用户选中的行
-        locModel(loc);
+        locModel(loc, false);
     }, [loc, locModel]);
 
     // 更新model 语言
@@ -167,7 +169,7 @@ export const Editor: React.FC<EditorIProps> = ({
             // if (viewState) {
             //     editorRef.current?.restoreViewState(viewState);
             // }
-            locModel(loc);
+            locModel(loc, true);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value, locModel]);
