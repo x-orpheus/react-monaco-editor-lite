@@ -5,10 +5,12 @@
 ### 安装
 
 ```
-nenpm install react-monaco-editor-lite
+npm install react-monaco-editor-lite
 ```
 
 ### 使用
+
+#### 多文件编辑器
 
 ```js
 
@@ -88,6 +90,55 @@ export function minus(a, b) {
 
 export default IDE;
 ```
+
+#### 单文件编辑器
+
+```js
+import { SingleEditor } from 'react-monaco-editor-lite';
+import React, { useState } from 'react';
+
+function SingleIDE() {
+    const [loc] = useState({
+        start: {
+            line: 3,
+            column: 1
+        },
+        end: {
+            line: 4,
+            column: 1
+        }
+    });
+    const [value, setValue] = useState(`
+export function add(a, b) {
+    return a + b;
+}
+
+export function minus(a, b) {
+    return a - b;
+}
+    `);
+    const onChange = (v) => {
+        setValue(v);
+    }
+
+    return (
+        <div style={{
+            width: '800px',
+            height: '800px',
+        }}>
+            <SingleEditor
+                value={value}
+                onChange={onChange}
+                loc={loc}
+                options={{
+                }} />
+        </div>
+    )
+};
+
+export default SingleIDE;
+```
+
 
 ### 组件参数及方法
 
