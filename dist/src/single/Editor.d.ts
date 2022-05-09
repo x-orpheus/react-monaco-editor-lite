@@ -1,11 +1,22 @@
 import React from 'react';
 import * as monacoType from 'monaco-editor';
 export interface EditorIProps {
-    defaultValue?: string;
     value?: string;
-    language?: string;
-    onValueChange?: (v: string) => void;
+    defaultValue?: string;
+    onChange?: (v: string) => void;
+    onBlur?: (v: string) => void;
+    loc?: {
+        start: {
+            line: number;
+            column: number;
+        };
+        end: {
+            line: number;
+            column: number;
+        };
+    };
     options?: monacoType.editor.IStandaloneEditorConstructionOptions;
 }
-export declare const EditorComp: React.FC<EditorIProps>;
-export default EditorComp;
+export declare const INITIAL_OPTIONS: monacoType.editor.IStandaloneEditorConstructionOptions;
+export declare const Editor: React.FC<EditorIProps>;
+export default Editor;

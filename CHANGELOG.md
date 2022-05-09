@@ -1,3 +1,18 @@
+## [1.0.53](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.52...v1.0.53) (2022-05-09)
+
+
+### Bug Fixes
+
+* loc ([ceb99dc](https://github.com/x-orpheus/react-monaco-editor-lite/commit/ceb99dcdf74fc36ac0f4150c24582e411a9755da))
+
+
+### Features
+
+* 完善单文件editor肝功能 ([3b83c73](https://github.com/x-orpheus/react-monaco-editor-lite/commit/3b83c73c17eed2f85b0a0246915b975e3090494f))
+* 增加类型导出 ([4d34575](https://github.com/x-orpheus/react-monaco-editor-lite/commit/4d345754d6677add47364781315bfddb48ab687e))
+
+
+
 ## [1.0.52](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.51...v1.0.52) (2022-05-05)
 
 
