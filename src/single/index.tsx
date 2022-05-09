@@ -5,7 +5,7 @@ import './index.less';
 
 export { EditorIProps } from './Editor';
 
-export const Editor = (props, ref) => {
+export const SingleEditor = React.forwardRef((props, ref) => {
     const [, setCount] = useState(0);
     useEffect(() => {
         const interval = setInterval(() => {
@@ -27,6 +27,8 @@ export const Editor = (props, ref) => {
                 src="https://p6.music.126.net/obj/wo3DlcOGw6DClTvDisK1/9879093207/2dbb/873a/9e97/e817279537a0417d042f62fbb1b99eea.gif" />
         </div>
     );
-};
+});
 
-export default React.forwardRef(Editor);
+SingleEditor.displayName = 'SingleEditor';
+
+export default SingleEditor;
