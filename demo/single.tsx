@@ -64,7 +64,6 @@ export const App = () => {
                     }
                     value={value}
                     // defaultValue={value}
-                    language="javascript"
                     onChange={handleChange}
                     onBlur={handleBlur}
                     options={{
