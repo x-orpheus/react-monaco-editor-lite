@@ -1,10 +1,13 @@
 import React from 'react';
 import * as monacoType from 'monaco-editor';
+export * from 'monaco-editor';
 export interface SingleEditorIProps {
     value?: string;
     defaultValue?: string;
     onChange?: (v: string) => void;
     onBlur?: (v: string) => void;
+    width?: string;
+    height?: string;
     loc?: {
         start: {
             line: number;
@@ -15,6 +18,7 @@ export interface SingleEditorIProps {
             column: number;
         };
     };
+    style?: React.CSSProperties;
     options?: monacoType.editor.IStandaloneEditorConstructionOptions;
 }
 export interface SingleEditorRefType {

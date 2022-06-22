@@ -1,6 +1,6 @@
 {
   "name": "react-monaco-editor-lite",
-  "version": "1.0.55",
+  "version": "1.0.56",
   "description": "",
   "main": "dist/index.bundle.js",
   "typings": "dist/src/index.d.ts",

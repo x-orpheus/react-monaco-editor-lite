@@ -1,3 +1,17 @@
+## [1.0.56](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.55...v1.0.56) (2022-06-22)
+
+
+### Bug Fixes
+
+* 补充单文件编辑器用法 ([9269af8](https://github.com/x-orpheus/react-monaco-editor-lite/commit/9269af8813b21a4a36039da75082e66aa9e903b3))
+
+
+### Features
+
+* 增加singleEditor高度样式可覆盖 ([0f4cab7](https://github.com/x-orpheus/react-monaco-editor-lite/commit/0f4cab7db1e9029146776ee85fa9ad33e5154c85))
+
+
+
 ## [1.0.55](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.54...v1.0.55) (2022-05-09)
 
 
