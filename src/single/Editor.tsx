@@ -53,6 +53,16 @@ export const INITIAL_OPTIONS:monacoType.editor.IStandaloneEditorConstructionOpti
     },
 };
 
+function getStringValue(value: any) {
+    if (typeof value === 'string') {
+        return value;
+    }
+    if (typeof value === 'number') {
+        return String(value);
+    }
+    return value;
+}
+
 export const SingleEditor = React.forwardRef<SingleEditorRefType, SingleEditorIProps>(({
     value,
     defaultValue,
@@ -82,7 +92,8 @@ export const SingleEditor = React.forwardRef<SingleEditorRefType, SingleEditorIP
             ...INITIAL_OPTIONS,
         });
         const model = window.monaco.editor.createModel(
-            valueRef.current || defaultValue || '',
+            // value如果是number， 会报错
+            getStringValue(valueRef.current) || getStringValue(defaultValue) || '',
             options?.language || 'javascript'
         );
         editorRef.current.setModel(model);
@@ -174,7 +185,7 @@ export const SingleEditor = React.forwardRef<SingleEditorRefType, SingleEditorIP
             //     ],
             //     () => null
             // );
-            model?.setValue(value || '');
+            model?.setValue(getStringValue(value) || '');
             // if (viewState) {
             //     editorRef.current?.restoreViewState(viewState);
             // }
