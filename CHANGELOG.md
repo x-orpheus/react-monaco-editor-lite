@@ -1,3 +1,12 @@
+## [1.0.58](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.57...v1.0.58) (2022-06-22)
+
+
+### Bug Fixes
+
+* number input ([8c90367](https://github.com/x-orpheus/react-monaco-editor-lite/commit/8c9036776d00702a186256c1eac1f2ab4d286851))
+
+
+
 ## [1.0.57](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.56...v1.0.57) (2022-06-22)
 
 
