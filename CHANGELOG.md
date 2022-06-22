@@ -1,3 +1,12 @@
+## [1.0.57](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.56...v1.0.57) (2022-06-22)
+
+
+### Bug Fixes
+
+* export bug ([67db6fe](https://github.com/x-orpheus/react-monaco-editor-lite/commit/67db6fe6998445a0b12401d6b30877d5565fbfd4))
+
+
+
 ## [1.0.56](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.55...v1.0.56) (2022-06-22)
 
 
