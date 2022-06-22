@@ -167,8 +167,8 @@ function configMonaco() {
 export const startUp = () => {
     if (execed) return;
     execed = true;
-    loadScript('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.1/min/vs/loader.min.js', () => {
-        window.require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.1/min/vs' } });
+    loadScript('https://g.alicdn.com/code/lib/monaco-editor/0.31.1/min/vs/loader.min.js', () => {
+        window.require.config({ paths: { vs: 'https://g.alicdn.com/code/lib/monaco-editor/0.31.1/min/vs' } });
 
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         window.require(['vs/editor/editor.main'], () => {});

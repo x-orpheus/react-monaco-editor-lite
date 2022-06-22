@@ -1,11 +1,15 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import * as monacoType from 'monaco-editor';
 import { configTheme } from '@utils/initEditor';
+
+export * from 'monaco-editor';
 export interface SingleEditorIProps {
     value?: string,
     defaultValue?: string,
     onChange?: (v: string) => void,
     onBlur?: (v: string) => void,
+    width?: string,
+    height?: string,
     loc?: {
         start: {
             line: number,
@@ -16,9 +20,9 @@ export interface SingleEditorIProps {
             column: number,
         }
     },
+    style?: React.CSSProperties,
     options?: monacoType.editor.IStandaloneEditorConstructionOptions
 }
-
 export interface SingleEditorRefType {
     getEditor: () => monacoType.editor.IStandaloneCodeEditor;
 }
@@ -56,7 +60,10 @@ export const SingleEditor = React.forwardRef<SingleEditorRefType, SingleEditorIP
     defaultValue,
     onChange,
     onBlur,
+    width = '100%',
+    height = '100%',
     loc,
+    style = {},
     options = {},
 }, ref) => {
     const editorRef = useRef<monacoType.editor.IStandaloneCodeEditor | null>(null);
@@ -181,7 +188,11 @@ export const SingleEditor = React.forwardRef<SingleEditorRefType, SingleEditorIP
     return (
         <div
             ref={editorNodeRef}
-            style={{ width: '100%', height: '100%' }} />
+            style={{
+                width,
+                height,
+                ...style,
+            }} />
     )
 });
 
