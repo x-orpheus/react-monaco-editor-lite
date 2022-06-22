@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import * as monacoType from 'monaco-editor';
 import { configTheme } from '@utils/initEditor';
-
-export * from 'monaco-editor';
 export interface SingleEditorIProps {
     value?: string,
     defaultValue?: string,

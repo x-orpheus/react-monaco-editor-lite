@@ -22,8 +22,6 @@ import { configTheme } from '@utils/initEditor';
 import Setting from '@components/Setting';
 import { useDragLine, usePrettier, useInit, useEditor, useVarRef } from './hook';
 
-export * from 'monaco-editor';
-
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
 export interface filelist {

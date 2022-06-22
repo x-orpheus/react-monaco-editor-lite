@@ -1,6 +1,5 @@
 import React from 'react';
 import * as monacoType from 'monaco-editor';
-export * from 'monaco-editor';
 export interface SingleEditorIProps {
     value?: string;
     defaultValue?: string;
