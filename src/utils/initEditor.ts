@@ -49,7 +49,7 @@ export const themes: {
 export async function configTheme(name: string) {
     let theme = themes[name];
     if (!theme) {
-        theme = JSON.parse(await (await fetch(`${ASSETSPATH}themes/${name}.json`)).text());
+        theme = JSON.parse(await (await fetch(`${ASSETSPATH}themes/${name}.json?v=0`)).text());
         themes[name] = theme;
         // 定义主题
         window.monaco.editor.defineTheme(name, theme);
