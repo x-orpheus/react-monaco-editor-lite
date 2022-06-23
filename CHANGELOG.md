@@ -1,3 +1,13 @@
+## [1.0.60](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.59...v1.0.60) (2022-06-23)
+
+
+### Bug Fixes
+
+* cdn cache ([0882f6c](https://github.com/x-orpheus/react-monaco-editor-lite/commit/0882f6c895a7bc2075294dc1ed128fe39f627062))
+* theme ([4ed6605](https://github.com/x-orpheus/react-monaco-editor-lite/commit/4ed660579deed50f875cb114ca82fc32d099375c))
+
+
+
 ## [1.0.59](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.58...v1.0.59) (2022-06-23)
 
 
