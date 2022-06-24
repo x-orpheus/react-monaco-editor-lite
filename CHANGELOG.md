@@ -1,3 +1,17 @@
+## [1.0.61](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.60...v1.0.61) (2022-06-24)
+
+
+### Bug Fixes
+
+* change onpathchange 时机 ([b69d738](https://github.com/x-orpheus/react-monaco-editor-lite/commit/b69d738f03d03aff40db0fc6597ee0ac0a2f2b9b))
+
+
+### Features
+
+* add vscode debug file ([2f7b5db](https://github.com/x-orpheus/react-monaco-editor-lite/commit/2f7b5db958af3b4e970a78a23c4255273ba49a04))
+
+
+
 ## [1.0.60](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.59...v1.0.60) (2022-06-23)
 
 

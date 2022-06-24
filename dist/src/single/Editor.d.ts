@@ -21,7 +21,7 @@ export interface SingleEditorIProps {
     options?: monacoType.editor.IStandaloneEditorConstructionOptions;
 }
 export interface SingleEditorRefType {
-    getEditor: () => monacoType.editor.IStandaloneCodeEditor;
+    getEditor: () => monacoType.editor.IStandaloneCodeEditor | null;
 }
 export declare const INITIAL_OPTIONS: monacoType.editor.IStandaloneEditorConstructionOptions;
 export declare const SingleEditor: React.ForwardRefExoticComponent<SingleEditorIProps & React.RefAttributes<SingleEditorRefType>>;
