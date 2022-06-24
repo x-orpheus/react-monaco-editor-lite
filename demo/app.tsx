@@ -63,7 +63,7 @@ const App = () => {
 
     // 设置当前文件路径和value
     const handlePathChange = useCallback((key: string) => {
-        // console.log(key);
+        console.log(key);
     }, []);
 
     // // 同步ide内容修改
@@ -99,19 +99,28 @@ const App = () => {
         if (editorRef.current) {
             editorRef.current.refresh(files, activePath, {
                 start: {
-                    line: 29,
+                    line: 1,
                     column: 1,
                 },
                 end: {
-                    line: 40,
+                    line: 5,
                     column: 1,
                 }
             });
         }
     });
 
+    const addFile = useCallback(() => {
+        setActivePath('/src/pages/new-page1.js');
+        setFiles(pre => ({
+            ...pre,
+            '/src/pages/new-page1.js': 'import React from "react"',
+        }));
+    }, []);
+
     return (
         <div>
+            <div onClick={addFile}>addFile</div>
             <div onClick={() => console.log(editorRef.current) }>ref api</div>
             <div onClick={() => console.log(editorRef.current.refresh(files, '/style.md', {
                 start: {

@@ -184,6 +184,16 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
         }
         return false;
     }, [onFileChangeRef, onValueChangeRef]);
+
+    const seCurPathAndNotify = useCallback((path: string) => {
+        if (path !== curPathRef.current) {
+            curPathRef.current = path;
+            if (onPathChangeRef.current && path) {
+                onPathChangeRef.current(path);
+            }
+            setCurPath(path);
+        }
+    }, [onPathChangeRef]);
     
     const openOrFocusPath = useCallback((path: string) => {
         setOpenedFiles(pre => {
@@ -199,8 +209,8 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                 return [...pre, { path: path }]
             }
         });
-        setCurPath(path);
-    }, []);
+        seCurPathAndNotify(path);
+    }, [seCurPathAndNotify]);
 
     const handlePathChange = useCallback((path: string) => {
         const model = restoreModel(path);
@@ -267,17 +277,17 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
             // 目标文件是当前文件，且存在下一激活文件时，执行model及path切换的逻辑
             if (targetPath && curPathRef.current === path) {
                 restoreModel(targetPath);
-                setCurPath(targetPath);
+                seCurPathAndNotify(targetPath);
             }
             if (res.length === 0) {
                 restoreModel('');
-                setCurPath('');
+                seCurPathAndNotify('');
                 prePath.current = '';
             }
             setOpenedFiles(res);
         }
 
-    }, [restoreModel, openedFiles]);
+    }, [restoreModel, openedFiles, seCurPathAndNotify]);
 
     const closeOtherFiles = useCallback((path: string) => {
         const unSavedFiles = openedFiles.filter(v => v.status === 'editing');
@@ -291,7 +301,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                     close();
                     setOpenedFiles(pre => pre.filter(p => p.path === path));
                     restoreModel(path);
-                    setCurPath(path);
+                    seCurPathAndNotify(path);
                     // 恢复文件的数值修改
                     unSavedFiles.forEach((v) => {
                         const value = filesRef.current[v.path] || '';
@@ -322,7 +332,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                     });
                     setOpenedFiles(pre => pre.filter(p => p.path === path));
                     restoreModel(path);
-                    setCurPath(path);
+                    seCurPathAndNotify(path);
                     prePath.current = path;
                 },
                 content: () => (
@@ -340,10 +350,10 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
         } else {
             setOpenedFiles(pre => pre.filter(p => p.path === path));
             restoreModel(path);
-            setCurPath(path);
+            seCurPathAndNotify(path);
             prePath.current = path;
         }
-    }, [restoreModel, openedFiles, autoPrettierRef]);
+    }, [restoreModel, openedFiles, autoPrettierRef, seCurPathAndNotify]);
 
     const abortFileChange = useCallback((path: string) => {
         const value = filesRef.current[path] || '';

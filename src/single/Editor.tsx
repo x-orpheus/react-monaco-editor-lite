@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useImperativeHandle } from 'react';
 import * as monacoType from 'monaco-editor';
 import { configTheme } from '@utils/initEditor';
 export interface SingleEditorIProps {
@@ -22,7 +22,7 @@ export interface SingleEditorIProps {
     options?: monacoType.editor.IStandaloneEditorConstructionOptions
 }
 export interface SingleEditorRefType {
-    getEditor: () => monacoType.editor.IStandaloneCodeEditor;
+    getEditor: () => monacoType.editor.IStandaloneCodeEditor | null;
 }
 
 export const INITIAL_OPTIONS:monacoType.editor.IStandaloneEditorConstructionOptions = {
@@ -85,6 +85,10 @@ export const SingleEditor = React.forwardRef<SingleEditorRefType, SingleEditorIP
     onBlurRef.current = onBlur;
 
     const modelRef = useRef<monacoType.editor.ITextModel | null>(null);
+
+    useImperativeHandle(ref, () => ({
+        getEditor: () => editorRef?.current,
+    }));
 
     useEffect(() => {
         editorRef.current = window.monaco.editor.create(editorNodeRef.current!, {
