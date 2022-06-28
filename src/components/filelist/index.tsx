@@ -156,7 +156,7 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(({
             {
                 title && (
                     <div className="music-monaco-editor-list-title">
-                        <span style={{ flex: 1 }}>{title}</span>
+                        <span style={{ flex: 1 }} className="music-monaco-editor-list-title-name">{title}</span>
                         {
                             disableFileOps ? null: (
                                 <>

@@ -177,6 +177,7 @@ const File: React.FC<{
         return (
             <div
                 data-src={file.path}
+                title={file.path}
                 onClick={handlePathChange}
                 key={file.path}
                 className={`music-monaco-editor-list-file-item-row ${currentPath === file.path ? 'music-monaco-editor-list-file-item-row-focused' : ''}`}>
@@ -189,7 +190,7 @@ const File: React.FC<{
                 {
                     (file.name && !editing) ? (
                         <>
-                            <span style={{ flex: 1 }}>{file.name}</span>
+                            <span style={{ flex: 1 }} className="music-monaco-editor-list-file-item-row-name">{file.name}</span>
                             {
                                 disableFileOps.rename ? null : <EditIcon
                                     onClick={(e:Event) => {
@@ -233,7 +234,7 @@ const File: React.FC<{
         <div className="music-monaco-editor-list-file-item">
             {
                 file._isDirectory && (
-                    <div onClick={handleClick} className="music-monaco-editor-list-file-item-row">
+                    <div onClick={handleClick} className="music-monaco-editor-list-file-item-row" title={file.path}>
                         <Arrow collpase={!showChild} />
                         <Icon
                             style={{
@@ -243,7 +244,7 @@ const File: React.FC<{
                         {
                             (file.name && !editing) ? (
                                 <>
-                                    <span style={{ flex: 1 }}>{file.name}</span>
+                                    <span style={{ flex: 1 }} className="music-monaco-editor-list-file-item-row-name">{file.name}</span>
                                     {
                                         disableFolderOps.rename ? null : (
                                             <EditIcon

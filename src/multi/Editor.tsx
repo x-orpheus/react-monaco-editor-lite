@@ -185,17 +185,17 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
         return false;
     }, [onFileChangeRef, onValueChangeRef]);
 
-    const seCurPathAndNotify = useCallback((path: string) => {
+    const seCurPathAndNotify = useCallback((path: string, notify = true,) => {
         if (path !== curPathRef.current) {
             curPathRef.current = path;
-            if (onPathChangeRef.current && path) {
+            if (onPathChangeRef.current && path && notify) {
                 onPathChangeRef.current(path);
             }
             setCurPath(path);
         }
     }, [onPathChangeRef]);
     
-    const openOrFocusPath = useCallback((path: string) => {
+    const openOrFocusPath = useCallback((path: string, notify = true) => {
         setOpenedFiles(pre => {
             let exist = false;
             pre.forEach(v => {
@@ -209,13 +209,13 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                 return [...pre, { path: path }]
             }
         });
-        seCurPathAndNotify(path);
+        seCurPathAndNotify(path, notify);
     }, [seCurPathAndNotify]);
 
-    const handlePathChange = useCallback((path: string) => {
+    const handlePathChange = useCallback((path: string, nofity = true) => {
         const model = restoreModel(path);
         if (model) {
-            openOrFocusPath(path);
+            openOrFocusPath(path, nofity);
         }
     }, [restoreModel, openOrFocusPath]);
 
@@ -372,11 +372,8 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
     }, [saveFile]);
 
     useEffect(() => {
-        if (onPathChangeRef.current && curPath) {
-            onPathChangeRef.current(curPath);
-        }
         curPathRef.current = curPath;
-    }, [curPath, onPathChangeRef]);
+    }, [curPath]);
 
     const addFile = useCallback((path: string, value?: string) => {
         createOrUpdateModel(path, value || '');
@@ -523,7 +520,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
             if (path && files[path]) {
                 res = path;
             }
-            handlePathChange(res);
+            handlePathChange(res, false);
         }
         loc && locModel(loc);
         // 更新文件列表

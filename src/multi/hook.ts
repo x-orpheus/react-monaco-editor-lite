@@ -32,7 +32,9 @@ export function useDragLine(num: number): [
 
     const handleMove = useCallback((e) => {
         if (dragStartRef.current.start) {
-            setFilelistWidth(dragStartRef.current.width + (e.pageX - dragStartRef.current.pageX));
+            const width = dragStartRef.current.width + (e.pageX - dragStartRef.current.pageX);
+            
+            setFilelistWidth(width > 140 ? width : 0);
         }
     }, []);
 

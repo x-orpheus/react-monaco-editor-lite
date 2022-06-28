@@ -32,6 +32,12 @@
             }
         }
 
+        &-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         &:hover &-icon {
             visibility: visible;
         }
@@ -89,6 +95,12 @@
             &-focused {
                 background-color: var(--monaco-list-focusBackground);
                 color: var(--monaco-list-focusForeground);
+            }
+
+            &-name {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
         }
     }
