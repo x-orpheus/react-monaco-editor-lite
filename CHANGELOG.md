@@ -1,3 +1,12 @@
+## [1.0.63](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.62...v1.0.63) (2022-06-28)
+
+
+### Bug Fixes
+
+* rerender ([cea0022](https://github.com/x-orpheus/react-monaco-editor-lite/commit/cea0022897c525e4d652a5a3eccae1c1664bb7fd))
+
+
+
 ## [1.0.62](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.61...v1.0.62) (2022-06-28)
 
 
