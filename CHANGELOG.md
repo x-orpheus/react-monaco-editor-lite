@@ -1,3 +1,12 @@
+## [1.0.62](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.61...v1.0.62) (2022-06-28)
+
+
+### Features
+
+* 优化拖拽逻辑 ([579e2af](https://github.com/x-orpheus/react-monaco-editor-lite/commit/579e2afc456a308c59f52d25ca488ca37afcc4d4))
+
+
+
 ## [1.0.61](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.60...v1.0.61) (2022-06-24)
 
 
