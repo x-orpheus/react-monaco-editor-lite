@@ -372,8 +372,11 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
     }, [saveFile]);
 
     useEffect(() => {
+        if (onPathChangeRef.current && curPath) {
+            onPathChangeRef.current(curPath);
+        }
         curPathRef.current = curPath;
-    }, [curPath]);
+    }, [curPath, onPathChangeRef]);
 
     const addFile = useCallback((path: string, value?: string) => {
         createOrUpdateModel(path, value || '');
@@ -520,7 +523,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
             if (path && files[path]) {
                 res = path;
             }
-            handlePathChange(res, false);
+            handlePathChange(res);
         }
         loc && locModel(loc);
         // 更新文件列表
