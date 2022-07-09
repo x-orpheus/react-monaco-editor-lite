@@ -92,7 +92,7 @@ const App = () => {
     // useEffect(() => {
     //     window.addEventListener('message', res => console.log(res));
     // }, []);
-    const [activePath, setActivePath] = useState('/style.md');
+    const [activePath, setActivePath] = useState('/index.js');
 
     useEffect(() => {
         console.log(files);
@@ -176,7 +176,7 @@ const App = () => {
                                 setActivePath(args[1]);
                             }}
                             ref={editorRef}
-                            defaultPath="/app/index.jsx"
+                            defaultPath={activePath}
                             defaultFiles={files}
                             options={{
                                 fontSize: 14,

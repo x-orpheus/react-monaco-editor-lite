@@ -103,7 +103,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
     const [openedFiles, setOpenedFiles] = useState<Array<{
         status?: string,
         path: string,
-    }>>(defaultPath ? [{
+    }>>(defaultPath && filesRef.current[defaultPath] ? [{
         path: defaultPath,
     }] : []);
 
