@@ -1,3 +1,12 @@
+## [1.0.64](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.63...v1.0.64) (2022-07-09)
+
+
+### Bug Fixes
+
+* empty defaultpath focus ([47e42b0](https://github.com/x-orpheus/react-monaco-editor-lite/commit/47e42b0c45930a06fe8a7f3baa7287bec34f32ae))
+
+
+
 ## [1.0.63](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.62...v1.0.63) (2022-06-28)
 
 
