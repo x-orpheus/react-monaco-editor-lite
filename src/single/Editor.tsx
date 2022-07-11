@@ -60,7 +60,7 @@ function getStringValue(value: any) {
     if (typeof value === 'number') {
         return String(value);
     }
-    return value;
+    return String(value);
 }
 
 export const SingleEditor = React.forwardRef<SingleEditorRefType, SingleEditorIProps>(({
@@ -122,6 +122,7 @@ export const SingleEditor = React.forwardRef<SingleEditorRefType, SingleEditorIP
             }
             sub.dispose();
             blurSub.dispose();
+            model.dispose();
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
