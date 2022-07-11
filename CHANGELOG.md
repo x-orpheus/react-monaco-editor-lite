@@ -1,3 +1,12 @@
+## [1.0.65](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.64...v1.0.65) (2022-07-11)
+
+
+### Bug Fixes
+
+* 增加单文件组件value 支持 ([a090aeb](https://github.com/x-orpheus/react-monaco-editor-lite/commit/a090aeb9cc79c69359a81fea7da02ef2fb9b9b6a))
+
+
+
 ## [1.0.64](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.63...v1.0.64) (2022-07-09)
 
 
