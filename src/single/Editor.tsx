@@ -54,11 +54,8 @@ export const INITIAL_OPTIONS:monacoType.editor.IStandaloneEditorConstructionOpti
 };
 
 function getStringValue(value: any) {
-    if (typeof value === 'string') {
+    if (typeof value === 'undefined') {
         return value;
-    }
-    if (typeof value === 'number') {
-        return String(value);
     }
     return String(value);
 }
