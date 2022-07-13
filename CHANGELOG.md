@@ -1,3 +1,12 @@
+## [1.0.66](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.65...v1.0.66) (2022-07-13)
+
+
+### Bug Fixes
+
+* getStringValue except undefined ([8fca849](https://github.com/x-orpheus/react-monaco-editor-lite/commit/8fca84997893b566051a6ce372741dae6e03d860))
+
+
+
 ## [1.0.65](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.64...v1.0.65) (2022-07-11)
 
 
