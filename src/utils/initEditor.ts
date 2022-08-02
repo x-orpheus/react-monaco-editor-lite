@@ -2,8 +2,10 @@ import { loadWASM } from 'onigasm';
 import { Registry } from 'monaco-textmate';
 import { wireTmGrammars } from 'monaco-editor-textmate';
 declare type monacoType = typeof import("monaco-editor");
+import tango from '@music/tango-boot';
+import * as t from '@music/tango-cms';
+import { setupTypeAcquisition } from './newata';
 import { ASSETSPATH } from './consts';
-// import config from './eslintconfig';
 declare global {
     interface Window {
         monaco: monacoType;
@@ -11,6 +13,7 @@ declare global {
         prettier: any;
         prettierPlugins: any;
         require: any,
+        ts: any,
     }
 }
 
@@ -80,38 +83,21 @@ export async function configTheme(name: string) {
 }
 
 async function addExtraLib() {
-    let res = await (await fetch(`${ASSETSPATH}@types/react/index.d.ts`)).text();
     window.monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
         allowJs: true,
         allowNonTsExtensions: true,
         allowSyntheticDefaultImports: true, // for use of import React from 'react' ranther than import * as React from 'react'
     })
-    window.monaco.languages.typescript.javascriptDefaults.addExtraLib(
-        res,
-        'music:/node_modules/@types/react/index.d.ts'
-    );
-    window.monaco.languages.typescript.typescriptDefaults.addExtraLib(
-        res,
-        'music:/node_modules/@types/react/index.d.ts'
-    );
-    res = await (await fetch(`${ASSETSPATH}@types/react/global.d.ts`)).text();
-    window.monaco.languages.typescript.javascriptDefaults.addExtraLib(
-        res,
-        'music:/node_modules/%40types/react/global.d.ts'
-    );
-    window.monaco.languages.typescript.typescriptDefaults.addExtraLib(
-        res,
-        'music:/node_modules/%40types/react/global.d.ts'
-    );
-    res = await (await fetch(`${ASSETSPATH}@types/react-dom/index.d.ts`)).text();
-    window.monaco.languages.typescript.javascriptDefaults.addExtraLib(
-        res,
-        'music:/node_modules/@types/react-dom/index.d.ts'
-    );
-    window.monaco.languages.typescript.typescriptDefaults.addExtraLib(
-        res,
-        'music:/node_modules/@types/react-dom/index.d.ts'
-    );
+}
+
+export function addGlobalExtraLib(code: string, _path: string) {
+    const path = "file://" + _path;
+    window.monaco.languages.typescript.javascriptDefaults.addExtraLib(code, path);
+    window.monaco.languages.typescript.typescriptDefaults.addExtraLib(code, path);
+    const uri = window.monaco.Uri.file(_path)
+    if (window.monaco.editor.getModel(uri) === null) {
+        window.monaco.editor.createModel(code, "javascript", uri)
+    }
 }
 
 function configMonaco() {
@@ -167,11 +153,36 @@ function configMonaco() {
 export const startUp = () => {
     if (execed) return;
     execed = true;
-    loadScript('https://g.alicdn.com/code/lib/monaco-editor/0.31.1/min/vs/loader.min.js', () => {
-        window.require.config({ paths: { vs: 'https://g.alicdn.com/code/lib/monaco-editor/0.31.1/min/vs' } });
+    loadScript('https://g.alicdn.com/code/lib/monaco-editor/0.33.0/min/vs/loader.min.js', () => {
+        window.require.config({ paths: { vs: 'https://g.alicdn.com/code/lib/monaco-editor/0.33.0/min/vs' } });
 
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         window.require(['vs/editor/editor.main'], () => {});
+        window.define('tsworker', ['vs/language/typescript/tsWorker'], (tsworker: any) => {
+            const ata = setupTypeAcquisition({
+                projectName: "My ATA Project",
+                typescript: window.ts,
+                // logger: console,
+                delegate: {
+                  receivedFile: (code: string, path: string) => {
+                    // console.log(path);
+                    addGlobalExtraLib(code, path);
+                    // Add code to your runtime at the path...
+                  },
+                  started: () => {
+                    // console.log("ATA start")
+                  },
+                  progress: (downloaded: number, total: number) => {
+                    console.log(`Got ${downloaded} out of ${total}`)
+                  },
+                  finished: (vfs: any) => {
+                    // console.log("ATA done", vfs)
+                  },
+                },
+            });
+            ata(`import danger from "@music/tango-boot";`);
+            return tsworker;
+        })
         window.define('prettier', [
                 'https://unpkg.com/prettier@2.5.1/standalone.js',
                 'https://unpkg.com/prettier@2.5.1/parser-babel.js',

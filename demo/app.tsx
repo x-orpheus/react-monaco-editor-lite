@@ -56,7 +56,7 @@ const App = () => {
             });
         });
         setTimeout(() => {
-            console.log(themes);
+            // console.log(themes);
             setColors(themes['GithubLightDefault'].colors);
         }, 5000);
     }, []);
@@ -95,7 +95,7 @@ const App = () => {
     const [activePath, setActivePath] = useState('/index.js');
 
     useEffect(() => {
-        console.log(files);
+        // console.log(files);
         if (editorRef.current) {
             editorRef.current.refresh(files, activePath, {
                 start: {
@@ -164,8 +164,8 @@ const App = () => {
                                     rename: false,
                                 }
                             }}
-                            onPathChange={(path) => { console.log(path); setActivePath(path); }}
-                            onFileSave={(key: string, value: string) => console.log(key, value)}
+                            onPathChange={(path) => { setActivePath(path); }}
+                            // onFileSave={(key: string, value: string) => console.log(key, value)}
                             onRenameFile={(...args) => {
                                 setFiles((pre) => {
                                     const res = {...pre};
