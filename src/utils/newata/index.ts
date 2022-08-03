@@ -16,16 +16,16 @@ type FileMeta = { state: 'loading' };
 export interface ATABootstrapConfig {
     /** A object you pass in to get callbacks */
     delegate: {
-      /** The callback which gets called when ATA decides a file needs to be written to your VFS  */
-      receivedFile?: (code: string, path: string) => void
-      /** A way to display progress */
-      progress?: (downloaded: number, estimatedTotal: number) => void
-      /** Note: An error message does not mean ATA has stopped! */
-      errorMessage?: (userFacingMessage: string, error: Error) => void
-      /** A callback indicating that ATA actually has work to do */
-      started?: () => void
-      /** The callback when all ATA has finished */
-      finished?: (files: Map<string, string>) => void
+        /** The callback which gets called when ATA decides a file needs to be written to your VFS  */
+        receivedFile?: (code: string, path: string) => void
+        /** A way to display progress */
+        progress?: (downloaded: number, estimatedTotal: number) => void
+        /** Note: An error message does not mean ATA has stopped! */
+        errorMessage?: (userFacingMessage: string, error: Error) => void
+        /** A callback indicating that ATA actually has work to do */
+        started?: () => void
+        /** The callback when all ATA has finished */
+        finished?: (files: Map<string, string>) => void
     }
     /** Passed to fetch as the user-agent */
     projectName: string
@@ -37,133 +37,174 @@ export interface ATABootstrapConfig {
     logger?: Logger
 }
 
-function isntNil<T>(value: T): value is NonNullable<T> {
-    return value !== null;
-  }
-
 export const setupTypeAcquisition = (config: ATABootstrapConfig) => {
     const moduleMap = new Map<string, ModuleMeta>()
     const FileMap = new Map<string, FileMeta>()
     const fsMap = new Map<string, string>()
-    const modulesToDownload:any[] = [];
+    const modulesToDownload: any[] = [];
     let curModule: {
         name: string,
         fspath: string,
         path: string,
         version: string,
     };
-  
+
     let estimatedToDownload = 0
     let estimatedDownloaded = 0
-  
-    return (initialSourceFile: string) => {
-      estimatedToDownload = 0
-      estimatedDownloaded = 0
-  
-      resolveDeps(initialSourceFile, 0, '').then(t => {
-        if (estimatedDownloaded > 0) {
-          config.delegate.finished?.(fsMap)
+
+    return async (initialSourceFile: string) => {
+        estimatedToDownload = 0
+        estimatedDownloaded = 0
+
+        for (let i = -1; i < modulesToDownload.length; i++) {
+            // console.log(modulesToDownload);
+            if (i < 0) {
+                await resolveDeps(initialSourceFile, 0, '');
+            } else {
+                const res = await dealNodeModules(modulesToDownload[i].module, config);
+                if (res) {
+                    curModule = res;
+                    // console.log(curModule);
+                    try {
+                        const dtsCode = await getDTSFileForModuleWithVersion(config, curModule.name, curModule.version, curModule.path);
+                        config.delegate.receivedFile?.(dtsCode, path.join('/node_modules', curModule.name, curModule.path));
+                        await resolveDeps(dtsCode, 0, path.join(curModule.path, '../'));
+                    } catch (e) {
+                        const dtsCode = await getDTSFileForModuleWithVersion(config, curModule.name, curModule.version, curModule.path.replace('.d.ts', '/index.d.ts'));
+                        config.delegate.receivedFile?.(dtsCode, path.join('/node_modules', curModule.name, curModule.path.replace('.d.ts', '/index.d.ts')));
+                        await resolveDeps(dtsCode, 0, path.join(curModule.path.replace('.d.ts', ''), '/'));
+                    }
+                }
+            }
         }
-      })
+
+        console.log(estimatedToDownload, estimatedDownloaded);
     }
 
     async function resolveDeps(initialSourceFile: string, depth: number, curPath: string) {
-        const depsToGet = getNewDependencies(config, moduleMap, initialSourceFile, curPath);
-
-        const nodemodulesPkg = depsToGet.filter(v => !v.relative);
+        const depsToGet = await getNewDependencies(config, initialSourceFile, curPath);
 
         const files = depsToGet.filter(v => v.relative);
 
-        const entries = (await Promise.all(nodemodulesPkg.map(v => dealNodeModules(v.module, config)))).filter(isntNil);
-
-        entries.forEach(dep => {
-            if (!moduleMap.get(dep.name)) {
-                moduleMap.set(dep.name, { state: 'loading', version: dep.version })
-                modulesToDownload.push(dep);
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (FileMap.has(path.join(curModule.name, file.path))) {
+                // console.log(path.join(curModule.name, file.path));
+                continue;
+            } else {
+                FileMap.set(path.join(curModule.name, file.path), { state: 'loading' });
             }
-        });
-    
-        console.log(files, entries, depth, curPath);
-
-        if (modulesToDownload.length >= 1 && files.length === 0) {
-            curModule = modulesToDownload.shift();
-            const dtsCode = await getDTSFileForModuleWithVersion(config, curModule.name, curModule.version, curModule.path);
-            await resolveDeps(dtsCode, depth + 1, path.join(curModule.path, '../'));
-        } else if (files.length > 0) {
-            await Promise.all(files.map(async file => {
+            estimatedToDownload++;
+            try {
                 const dtsCode = await getDTSFileForModuleWithVersion(config, curModule.name, curModule.version, file.path);
+                config.delegate.receivedFile?.(dtsCode, path.join('/node_modules', curModule.name, file.path));
                 await resolveDeps(dtsCode, depth + 1, path.join(file.path, '../'));
-            }))
-        } else {
-            return;
+            } catch (e) {
+                try {
+                    const dtsCode = await getDTSFileForModuleWithVersion(config, curModule.name, curModule.version, file.path.replace('.d.ts', '/index.d.ts'));
+                    config.delegate.receivedFile?.(dtsCode, path.join('/node_modules', curModule.name, file.path.replace('.d.ts', '/index.d.ts')));
+                    await resolveDeps(dtsCode, depth + 1, path.join(file.path.replace('.d.ts', ''), '/'));
+                } catch (e) {
+                    // console.log(e);
+                }
+            }
+            estimatedDownloaded++;
         }
     }
-}
 
-function getNewDependencies(config: ATABootstrapConfig, moduleMap: Map<string, ModuleMeta>, code: string, curPath: string) {
-    const refs = getReferencesForModule(config.typescript, code).map(ref => ({
-      ...ref,
-      module: mapModuleNameToModule(ref.module),
-    }))
-  
-    const modules = refs.filter(m => !moduleMap.has(m.module)).map(v => {
-        if (v.module.startsWith('.')) {
-            v.path = path.join(curPath, `${v.module}.d.ts`);
-            v.relative = true;
+    async function getNewDependencies(config: ATABootstrapConfig, code: string, curPath: string) {
+        const refs = getReferencesForModule(config.typescript, code).map(ref => ({
+            ...ref,
+            module: mapModuleNameToModule(ref.module),
+        }))
+
+        const nodemodulesPkg = refs.filter(v => !v.module.startsWith('.')).filter(v => !moduleMap.has(v.module));
+
+        for (let i = 0; i < nodemodulesPkg.length; i++) {
+            const v = nodemodulesPkg[i];
+            if (!moduleMap.has(v.module)) {
+                moduleMap.set(v.module, { state: 'loading', version: 'latest' })
+                modulesToDownload.push(v);
+            }
         }
-        return v;
-    })
-    return modules
+    
+        const modules = refs.filter(m => m.module.startsWith('.')).map(v => {
+            if (v.module.startsWith('.')) {
+                v.path = path.join(curPath, `${v.module}.d.ts`);
+                v.relative = true;
+            }
+            return v;
+        })
+
+        return modules
+    }
 }
 
 const getReferencesForModule = (ts: typeof import("typescript"), code: string) => {
     const meta = ts.preProcessFile(code)
-  
+
     // Ensure we don't try download TypeScript lib references
     // @ts-ignore - private but likely to never change
     const libMap: Map<string, string> = ts.libMap || new Map()
-  
+
     // TODO: strip /// <reference path='X' />?
-  
+
     const references = meta.referencedFiles
-      .concat(meta.importedFiles)
-      .concat(meta.libReferenceDirectives)
-      .filter(f => !f.fileName.endsWith(".d.ts"))
-      .filter(d => !libMap.has(d.fileName))
-  
+        .concat(meta.importedFiles)
+        .concat(meta.libReferenceDirectives)
+        .filter(f => !f.fileName.endsWith(".d.ts"))
+        .filter(d => !libMap.has(d.fileName))
+        .filter(d => ['hoist-non-react-statics'].indexOf(d.fileName) === -1)
+    
     return references.map(r => {
-      let version = undefined
-      if (!r.fileName.startsWith(".")) {
-        version = "latest"
-        const line = code.slice(r.end).split("\n")[0]!
-        if (line.includes("// types:")) version = line.split("// types: ")[1]!.trim()
-      }
-  
-      return {
-        module: r.fileName,
-        version,
-        relative: r.fileName.startsWith('.'),
-        path: '',
-      }
+        let version = undefined
+        if (!r.fileName.startsWith(".")) {
+            version = "latest"
+            const line = code.slice(r.end).split("\n")[0]!
+            if (line.includes("// types:")) version = line.split("// types: ")[1]!.trim()
+        }
+
+        let module = r.fileName;
+        if (!module.startsWith('@') && !module.startsWith('.')) {
+            module = module.split('/')[0];
+        } else if (module.startsWith('@')) {
+            module = module.split('/').slice(0, 2).join('/');
+        }
+
+        return {
+            module,
+            version,
+            relative: r.fileName.startsWith('.'),
+            path: '',
+        }
     })
 }
 
 async function dealNodeModules(moduleName: string, config: ATABootstrapConfig) {
-    let realName:string = moduleName;
+    let realName: string = moduleName;
     if (!moduleName.startsWith('@')) {
         realName = moduleName.split('/')[0];
+    } else if (realName.startsWith('@')) {
+        realName = realName.split('/').slice(0, 2).join('/');
     }
 
     let res;
     try {
         res = await getDTSFileForModuleWithVersion(config, realName, 'latest', '/package.json');
+        config.delegate.receivedFile?.(res, path.join('/node_modules', realName, 'package.json'));
+        res = JSON.parse(res);
     } catch (e) {
         res = 'error';
     }
 
-    if (res === 'error') {
+    let types = res.types || res.typings;
+
+    if (res === 'error' || !types) {
         try {
-            res = await getDTSFileForModuleWithVersion(config, `@types/${realName}`, 'latest', '/package.json');
+            realName = `@types/${realName}`;
+            res = await getDTSFileForModuleWithVersion(config, realName, 'latest', '/package.json');
+            config.delegate.receivedFile?.(res, path.join('/node_modules', realName, 'package.json'));
+            res = JSON.parse(res);
         } catch (e) {
             res = 'error';
         }
@@ -173,13 +214,13 @@ async function dealNodeModules(moduleName: string, config: ATABootstrapConfig) {
         return null;
     }
 
-    res = JSON.parse(res);
+    types = res.types || res.typings;
 
-    if (res.types) {
+    if (types) {
         return {
             name: realName,
-            fspath: path.join(realName, res.types),
-            path: path.join('/', res.types),
+            fspath: path.join(realName, types),
+            path: path.join('/', types),
             version: res.version,
         }
     }

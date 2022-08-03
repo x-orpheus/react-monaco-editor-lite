@@ -165,7 +165,6 @@ export const startUp = () => {
                 // logger: console,
                 delegate: {
                   receivedFile: (code: string, path: string) => {
-                    // console.log(path);
                     addGlobalExtraLib(code, path);
                     // Add code to your runtime at the path...
                   },
