@@ -382,12 +382,12 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
         }
     }, [saveFile]);
 
-    useEffect(() => {
-        if (onPathChangeRef.current && curPath) {
-            onPathChangeRef.current(curPath);
-        }
-        curPathRef.current = curPath;
-    }, [curPath, onPathChangeRef]);
+    // useEffect(() => {
+    //     if (onPathChangeRef.current && curPath) {
+    //         onPathChangeRef.current(curPath);
+    //     }
+    //     curPathRef.current = curPath;
+    // }, [curPath, onPathChangeRef]);
 
     const addFile = useCallback((path: string, value?: string) => {
         createOrUpdateModel(path, value || '');
