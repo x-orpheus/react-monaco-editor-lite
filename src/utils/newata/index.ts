@@ -57,22 +57,29 @@ export const setupTypeAcquisition = (config: ATABootstrapConfig) => {
         estimatedDownloaded = 0
 
         for (let i = -1; i < modulesToDownload.length; i++) {
-            // console.log(modulesToDownload);
             if (i < 0) {
+                // 初次使用输入文件作为依赖搜集的开始
                 await resolveDeps(initialSourceFile, 0, '');
             } else {
+                // 获取模块的package.json文件
                 const res = await dealNodeModules(modulesToDownload[i].module, config);
                 if (res) {
                     curModule = res;
                     // console.log(curModule);
                     try {
+                        // 读取 types 入口文件
                         const dtsCode = await getDTSFileForModuleWithVersion(config, curModule.name, curModule.version, curModule.path);
                         config.delegate.receivedFile?.(dtsCode, path.join('/node_modules', curModule.name, curModule.path));
+                        // 递归，从入口文件开始分析
                         await resolveDeps(dtsCode, 0, path.join(curModule.path, '../'));
                     } catch (e) {
-                        const dtsCode = await getDTSFileForModuleWithVersion(config, curModule.name, curModule.version, curModule.path.replace('.d.ts', '/index.d.ts'));
-                        config.delegate.receivedFile?.(dtsCode, path.join('/node_modules', curModule.name, curModule.path.replace('.d.ts', '/index.d.ts')));
-                        await resolveDeps(dtsCode, 0, path.join(curModule.path.replace('.d.ts', ''), '/'));
+                        // 如果有误，则情况是： path/path2.d.ts文件不存在，应该查找的为  path/path2/index.d.ts，如果还是不存在，则不处理
+                        try {
+                            const dtsCode = await getDTSFileForModuleWithVersion(config, curModule.name, curModule.version, curModule.path.replace('.d.ts', '/index.d.ts'));
+                            config.delegate.receivedFile?.(dtsCode, path.join('/node_modules', curModule.name, curModule.path.replace('.d.ts', '/index.d.ts')));
+                            await resolveDeps(dtsCode, 0, path.join(curModule.path.replace('.d.ts', ''), '/'));
+                        } catch(e) {
+                        }
                     }
                 }
             }

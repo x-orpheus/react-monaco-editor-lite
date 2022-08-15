@@ -94,21 +94,21 @@ const App = () => {
     // }, []);
     const [activePath, setActivePath] = useState('/index.js');
 
-    useEffect(() => {
-        // console.log(files);
-        if (editorRef.current) {
-            editorRef.current.refresh(files, activePath, {
-                start: {
-                    line: 1,
-                    column: 1,
-                },
-                end: {
-                    line: 5,
-                    column: 1,
-                }
-            });
-        }
-    });
+    // useEffect(() => {
+    //     // console.log(files);
+    //     if (editorRef.current) {
+    //         editorRef.current.refresh(files, activePath, {
+    //             start: {
+    //                 line: 1,
+    //                 column: 1,
+    //             },
+    //             end: {
+    //                 line: 5,
+    //                 column: 1,
+    //             }
+    //         });
+    //     }
+    // });
 
     const addFile = useCallback(() => {
         setActivePath('/src/pages/new-page1.js');
@@ -150,8 +150,8 @@ const App = () => {
                             defaultTheme='GithubLightDefault'
                             ideConfig={{
                                 // disableFileOps: true,
-                                // disablePrettier: true,
-                                // disableEslint: true,
+                                disablePrettier: true,
+                                disableEslint: true,
                                 saveWhenBlur: true,
                                 disableFileOps: {
                                     add: true,
