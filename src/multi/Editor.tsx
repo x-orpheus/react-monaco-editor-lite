@@ -230,13 +230,13 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
         }
     }, [restoreModel, openOrFocusPath]);
 
-    useEffect(() => {
-        setTimeout(() => {
-            if (defaultPath) {
-                handlePathChange(defaultPath);
-            }
-        });
-    }, [defaultPath, handlePathChange]);
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         if (defaultPath) {
+    //             handlePathChange(defaultPath);
+    //         }
+    //     });
+    // }, [defaultPath, handlePathChange]);
 
     const saveFile = useCallback((path?: string, model?: monacoType.editor.ITextModel) => {
         if (autoPrettierRef.current && !ideConfig.disablePrettier) {
