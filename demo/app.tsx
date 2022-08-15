@@ -150,8 +150,8 @@ const App = () => {
                             defaultTheme='GithubLightDefault'
                             ideConfig={{
                                 // disableFileOps: true,
-                                // disablePrettier: true,
-                                // disableEslint: true,
+                                disablePrettier: true,
+                                disableEslint: true,
                                 saveWhenBlur: true,
                                 disableFileOps: {
                                     add: true,

@@ -115,6 +115,9 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
     useInit(filesRef, editorRef, options, ideConfig.disableEslint);
     const [styles, handleMoveStart, handleMove, handleMoveEnd] = useDragLine(180);
 
+    const disableEslintRef = useRef(ideConfig.disableEslint);
+    disableEslintRef.current = ideConfig.disableEslint;
+
     const restoreModel = useCallback((path: string) => {
         const editorStates = editorStatesRef.current;
         const model = window.monaco.editor
@@ -161,19 +164,27 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                     if (timer) clearTimeout(timer);
                     timer = setTimeout(() => {
                         timer = null;
-                        worker.then(res => res.postMessage({
-                            code: model.getValue(),
-                            version: model.getVersionId(),
-                            path,
-                        }));
+                        worker.then(res => {
+                            if (!disableEslintRef.current) {
+                                res.postMessage({
+                                    code: model.getValue(),
+                                    version: model.getVersionId(),
+                                    path,
+                                })
+                            }
+                        });
                     }, 500);
                 })
             }
-            worker.then(res => res.postMessage({
-                code: model.getValue(),
-                version: model.getVersionId(),
-                path,
-            }));
+            worker.then(res => {
+                if (!disableEslintRef.current) {
+                    res.postMessage({
+                        code: model.getValue(),
+                        version: model.getVersionId(),
+                        path,
+                    });
+                }
+            });
             prePath.current = path;
             return model;
         } else {

@@ -323,3 +323,11 @@ export const worker = new Promise<Worker>(async (resolve) => {
     }));
     resolve(new Worker(localWorkerUrl));
 });
+
+// 
+export const setMonacoSyntasValidation = (disable: boolean) => {
+    window.monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+        noSemanticValidation: disable,
+        noSyntaxValidation: disable,
+    });
+}

@@ -117,10 +117,6 @@ async function addExtraLib() {
 function configMonaco() {
     const init = async () => {
         window.monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true);
-        window.monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
-            noSemanticValidation: true,
-            noSyntaxValidation: true,
-        });
         // 加载textmate语义解析webassembly文件
         await loadWASM(`${ASSETSPATH}onigasm.wasm`);
 
