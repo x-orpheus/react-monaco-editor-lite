@@ -1,1 +1,1 @@
-import './single';
+import './app';

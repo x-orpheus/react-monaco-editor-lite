@@ -19,3 +19,4 @@ export declare function initFiles(files: any): void;
 export declare function deleteModel(path: string): void;
 export declare const copyDataToClipBoard: (data: string, callback?: ((res: boolean) => void) | undefined) => void;
 export declare const worker: Promise<Worker>;
+export declare const setMonacoSyntasValidation: (disable: boolean) => void;

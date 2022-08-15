@@ -1,3 +1,12 @@
+## [1.0.67](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.66...v1.0.67) (2022-08-15)
+
+
+### Features
+
+* add syntax check ([88edac8](https://github.com/x-orpheus/react-monaco-editor-lite/commit/88edac8f4a96074588fb4e8c9650039b3613ffa4))
+
+
+
 ## [1.0.66](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.65...v1.0.66) (2022-07-13)
 
 
