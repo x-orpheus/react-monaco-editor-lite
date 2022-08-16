@@ -1,3 +1,12 @@
+## [1.0.69-beta.2](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.69-beta.1...v1.0.69-beta.2) (2022-08-16)
+
+
+### Bug Fixes
+
+* init ([136b364](https://github.com/x-orpheus/react-monaco-editor-lite/commit/136b3644230b5e538471a02fde5af1596aed01c0))
+
+
+
 ## [1.0.69-beta.1](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.69-beta.0...v1.0.69-beta.1) (2022-08-16)
 
 
