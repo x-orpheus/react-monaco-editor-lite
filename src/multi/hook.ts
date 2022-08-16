@@ -1,6 +1,6 @@
 import React, { useRef, useState, useCallback, useMemo, useEffect } from 'react';
 import * as monacoType from 'monaco-editor';
-import { initFiles, worker } from '@utils';
+import { initFiles, worker, setMonacoSyntasValidation } from '@utils';
 import { configTheme } from '@utils/initEditor';
 
 export function useDragLine(num: number): [
@@ -86,10 +86,15 @@ export function useInit(
     }>,
     editorRef: React.MutableRefObject<monacoType.editor.IStandaloneCodeEditor | null>,
     options: monacoType.editor.IStandaloneEditorConstructionOptions,
+    handlePathChange: (path: string, nofity?: boolean) => void,
+    defaultPath?: string,
     disableEslint?: boolean) {
     useEffect(() => {
         initFiles(filesRef.current);
-    }, [filesRef]);
+        if (defaultPath) {
+            handlePathChange(defaultPath || '');
+        }
+    }, []);
 
     useEffect(() => {
         if (editorRef.current) {
@@ -101,6 +106,9 @@ export function useInit(
     }, [options, editorRef]);
 
     useEffect(() => {
+        if (disableEslint) {
+            setMonacoSyntasValidation(false);
+        }
         worker.then(res => res.onmessage = function (event) {
             if (!disableEslint) {
                 const { markers, version } = event.data;

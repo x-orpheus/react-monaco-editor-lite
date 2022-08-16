@@ -92,7 +92,7 @@ const App = () => {
     // useEffect(() => {
     //     window.addEventListener('message', res => console.log(res));
     // }, []);
-    const [activePath, setActivePath] = useState('/index.js');
+    const [activePath, setActivePath] = useState('/app.ts');
 
     // useEffect(() => {
     //     // console.log(files);

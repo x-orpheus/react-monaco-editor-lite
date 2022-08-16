@@ -112,8 +112,10 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
     const curValueRef = useRef('');
 
     const [autoPrettierRef, handleSetAutoPrettier, handleFromat] = usePrettier(editorRef);
-    useInit(filesRef, editorRef, options, ideConfig.disableEslint);
     const [styles, handleMoveStart, handleMove, handleMoveEnd] = useDragLine(180);
+
+    const disableEslintRef = useRef(ideConfig.disableEslint);
+    disableEslintRef.current = ideConfig.disableEslint;
 
     const restoreModel = useCallback((path: string) => {
         const editorStates = editorStatesRef.current;
@@ -161,19 +163,27 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                     if (timer) clearTimeout(timer);
                     timer = setTimeout(() => {
                         timer = null;
-                        worker.then(res => res.postMessage({
-                            code: model.getValue(),
-                            version: model.getVersionId(),
-                            path,
-                        }));
+                        worker.then(res => {
+                            if (!disableEslintRef.current) {
+                                res.postMessage({
+                                    code: model.getValue(),
+                                    version: model.getVersionId(),
+                                    path,
+                                })
+                            }
+                        });
                     }, 500);
                 })
             }
-            worker.then(res => res.postMessage({
-                code: model.getValue(),
-                version: model.getVersionId(),
-                path,
-            }));
+            worker.then(res => {
+                if (!disableEslintRef.current) {
+                    res.postMessage({
+                        code: model.getValue(),
+                        version: model.getVersionId(),
+                        path,
+                    });
+                }
+            });
             prePath.current = path;
             return model;
         } else {
@@ -219,13 +229,15 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
         }
     }, [restoreModel, openOrFocusPath]);
 
+    useInit(filesRef, editorRef, options, handlePathChange, defaultPath, ideConfig.disableEslint);
+
     useEffect(() => {
         setTimeout(() => {
             if (defaultPath) {
                 handlePathChange(defaultPath);
             }
         });
-    }, [defaultPath, handlePathChange]);
+    }, []);
 
     const saveFile = useCallback((path?: string, model?: monacoType.editor.ITextModel) => {
         if (autoPrettierRef.current && !ideConfig.disablePrettier) {
@@ -371,12 +383,12 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
         }
     }, [saveFile]);
 
-    useEffect(() => {
-        if (onPathChangeRef.current && curPath) {
-            onPathChangeRef.current(curPath);
-        }
-        curPathRef.current = curPath;
-    }, [curPath, onPathChangeRef]);
+    // useEffect(() => {
+    //     if (onPathChangeRef.current && curPath) {
+    //         onPathChangeRef.current(curPath);
+    //     }
+    //     curPathRef.current = curPath;
+    // }, [curPath, onPathChangeRef]);
 
     const addFile = useCallback((path: string, value?: string) => {
         createOrUpdateModel(path, value || '');
