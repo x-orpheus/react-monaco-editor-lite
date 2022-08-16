@@ -1,3 +1,14 @@
+## [1.0.68](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.67...v1.0.68) (2022-08-16)
+
+
+### Features
+
+* 去除冗余更新 ([96f3554](https://github.com/x-orpheus/react-monaco-editor-lite/commit/96f3554c1aee8de4438ae5af71e3f6af88ba0431))
+* 去除onpathchange冗余更新 ([01ecae9](https://github.com/x-orpheus/react-monaco-editor-lite/commit/01ecae9ccb53c6ed40cf68c6bdb0373c8465e8d2))
+* 优化 ref 取值 ([330ee38](https://github.com/x-orpheus/react-monaco-editor-lite/commit/330ee385eb532b96f56f77aa3afa92997d088a9a))
+
+
+
 ## [1.0.67](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.66...v1.0.67) (2022-08-15)
 
 
