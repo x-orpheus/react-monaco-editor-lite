@@ -1,3 +1,7 @@
+## [1.0.69](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.69-beta.2...v1.0.69) (2022-08-16)
+
+
+
 ## [1.0.69-beta.2](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.69-beta.1...v1.0.69-beta.2) (2022-08-16)
 
 
