@@ -534,7 +534,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
             if (path && files[path]) {
                 res = path;
             }
-            handlePathChange(res, false);
+            handlePathChange(res);
         }
         loc && locModel(loc);
         // 更新文件列表
