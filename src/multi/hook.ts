@@ -86,10 +86,15 @@ export function useInit(
     }>,
     editorRef: React.MutableRefObject<monacoType.editor.IStandaloneCodeEditor | null>,
     options: monacoType.editor.IStandaloneEditorConstructionOptions,
+    handlePathChange: (path: string, nofity?: boolean) => void,
+    defaultPath?: string,
     disableEslint?: boolean) {
     useEffect(() => {
         initFiles(filesRef.current);
-    }, [filesRef]);
+        if (defaultPath) {
+            handlePathChange(defaultPath || '');
+        }
+    }, []);
 
     useEffect(() => {
         if (editorRef.current) {

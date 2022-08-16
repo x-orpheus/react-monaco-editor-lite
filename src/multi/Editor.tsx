@@ -112,7 +112,6 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
     const curValueRef = useRef('');
 
     const [autoPrettierRef, handleSetAutoPrettier, handleFromat] = usePrettier(editorRef);
-    useInit(filesRef, editorRef, options, ideConfig.disableEslint);
     const [styles, handleMoveStart, handleMove, handleMoveEnd] = useDragLine(180);
 
     const disableEslintRef = useRef(ideConfig.disableEslint);
@@ -230,13 +229,15 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
         }
     }, [restoreModel, openOrFocusPath]);
 
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         if (defaultPath) {
-    //             handlePathChange(defaultPath);
-    //         }
-    //     });
-    // }, [defaultPath, handlePathChange]);
+    useInit(filesRef, editorRef, options, handlePathChange, defaultPath, ideConfig.disableEslint);
+
+    useEffect(() => {
+        setTimeout(() => {
+            if (defaultPath) {
+                handlePathChange(defaultPath);
+            }
+        });
+    }, []);
 
     const saveFile = useCallback((path?: string, model?: monacoType.editor.ITextModel) => {
         if (autoPrettierRef.current && !ideConfig.disablePrettier) {
