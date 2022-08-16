@@ -165,7 +165,10 @@ export function useEditor(
 
 export const useVarRef = (param: any) => {
     const varRef = useRef<any>(param);
-    varRef.current = useMemo(() => param, [param]);
+
+    useEffect(() => {
+        varRef.current = param;
+    }, [param]);
 
     return varRef;
 }
