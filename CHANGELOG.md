@@ -1,3 +1,12 @@
+## [1.0.70](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.69...v1.0.70) (2022-08-25)
+
+
+### Bug Fixes
+
+* prettier save not sync ([404288a](https://github.com/x-orpheus/react-monaco-editor-lite/commit/404288ae86ebfcf3de36d47469b3b12a04488602))
+
+
+
 ## [1.0.69](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.69-beta.2...v1.0.69) (2022-08-16)
 
 
