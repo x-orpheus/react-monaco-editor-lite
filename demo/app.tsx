@@ -131,8 +131,8 @@ const App = () => {
                     line: 40,
                     column: 1,
                 }
-            })) }>getAllValue</div>
-            {/* <div onClick={sendMessage}>send postmessage</div> */}
+            })) }>refresh</div>
+            <div onClick={() => { console.log(editorRef.current.getAllValue()); }}>real getAllvalue</div>
             <div onClick={() => setColors(themes['OneDarkPro'].colors)}>refresh theme color</div>
             <select
                 name="theme"
@@ -146,26 +146,28 @@ const App = () => {
                 Object.keys(files).length > 0 && (
                     <div style={{ width: '800px', height: '600px' }}>
                         <Editor
-                            title="tango project"
+                            // title="tango project"
                             defaultTheme='GithubLightDefault'
                             ideConfig={{
                                 // disableFileOps: true,
-                                disablePrettier: true,
-                                disableEslint: true,
-                                saveWhenBlur: true,
-                                disableFileOps: {
-                                    add: true,
-                                    delete: true,
-                                    rename: false,
-                                },
-                                disableFolderOps: {
-                                    add: false,
-                                    delete: false,
-                                    rename: false,
-                                }
+                                // disablePrettier: true,
+                                // disableEslint: true,
+                                // saveWhenBlur: true,
+                                // disableFileOps: {
+                                //     add: true,
+                                //     delete: true,
+                                //     rename: false,
+                                // },
+                                // disableFolderOps: {
+                                //     add: false,
+                                //     delete: false,
+                                //     rename: false,
+                                // }
                             }}
-                            onPathChange={(path) => { console.log(path); setActivePath(path); }}
-                            onFileSave={(key: string, value: string) => console.log(key, value)}
+                            onPathChange={(path) => { setActivePath(path); }}
+                            // onFileSave={(key: string, value: string) => {
+                            //     console.log(editorRef.current.getAllValue());
+                            // }}
                             onRenameFile={(...args) => {
                                 setFiles((pre) => {
                                     const res = {...pre};

@@ -249,7 +249,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                     }
                     return v;
                 }));
-                const val = model?.getValue() || '';
+                const val = model?.getValue() || curValueRef.current;
                 filesRef.current[realpath] = val;
                 if (onFileSaveRef.current) {
                     onFileSaveRef.current(realpath, val);
