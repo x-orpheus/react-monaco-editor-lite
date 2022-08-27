@@ -124,6 +124,26 @@
             padding: 10px 10px 10px 30px;
             overflow-y: scroll;
         }
+
+        /* 滚动槽 */
+        &-content::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        &-content::-webkit-scrollbar-track {
+            background: var(--monaco-editor-background);
+            box-shadow: inset 0 0 5px var(--monaco-scrollbar-shadow);
+            -webkit-box-shadow: inset 0 0 5px var(--monaco-scrollbar-shadow);
+        }
+        /* 滚动条滑块 */
+        &-content::-webkit-scrollbar-thumb {
+            border-radius: 3px;
+            background: var(--monaco-scrollbarSlider-background);
+            box-shadow: inset 0 0 5px var(--monaco-scrollbar-shadow);
+            -webkit-box-shadow: inset 0 0 5px var(--monaco-scrollbar-shadow);
+
+            //TODO: 增加滚动条hover态展示
+        }
     }
 
     &-prettier {

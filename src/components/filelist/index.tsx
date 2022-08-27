@@ -13,7 +13,8 @@ import {
     editSourceFileName,
     addSourceFolder,
     deleteSourceFolder,
-    editSourceFolderName
+    editSourceFolderName,
+    getOldNewPath
 } from '@utils/index';
 import File from './file';
 import './index.less';
@@ -102,14 +103,20 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(({
     const handleConfirmAddFile = useCallback((file: any) => {
         let tree:any = {};
         if (file.name) {
-            tree = deleteSourceFile(filetree, file.path);
-            tree = addSourceFile(tree, file.path + file.name);
-            onAddFile(file.path + file.name);
+            const { newpath } = getOldNewPath(file.path, file.name);
+            const files = getAllFiles();
+            if (files[newpath] || files[newpath] === '') {
+                tree = deleteSourceFile(filetree, file.path);
+            } else {
+                tree = deleteSourceFile(filetree, file.path);
+                tree = addSourceFile(tree, file.path + file.name);
+                onAddFile(file.path + file.name);
+            }
         } else {
             tree = deleteSourceFile(filetree, file.path);
         }
         setFiletree(tree);
-    }, [filetree, onAddFile]);
+    }, [filetree, onAddFile, getAllFiles]);
 
     const addFolder = useCallback((path: string) => {
         setFiletree(addSourceFolder(filetree, path));
@@ -142,9 +149,27 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(({
     const handleConfirmAddFolder = useCallback((file: any) => {
         let tree:any = {};
         if (file.name) {
-            tree = deleteSourceFolder(filetree, file.path);
-            tree = addSourceFolder(tree, file.path + file.name);
-            onAddFolder(file.path + file.name);
+            const {
+                newpath,
+            } = getOldNewPath(file.path, file.name);
+            const filenames = Object.keys(getAllFiles());
+            let exist = false;
+            for (let i = 0; i < filenames.length; i++) {
+                if (newpath === filenames[i]) {
+                    exist = true;
+                    break;
+                } else if (filenames[i].startsWith(newpath + '/')) {
+                    exist = true;
+                    break;
+                }
+            }
+            if (exist) {
+                tree = deleteSourceFolder(filetree, file.path);
+            } else {
+                tree = deleteSourceFolder(filetree, file.path);
+                tree = addSourceFolder(tree, file.path + file.name);
+                onAddFolder(file.path + file.name);
+            }
         } else {
             tree = deleteSourceFolder(filetree, file.path);
         }
@@ -158,21 +183,23 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(({
                     <div className="music-monaco-editor-list-title">
                         <span style={{ flex: 1 }} className="music-monaco-editor-list-title-name">{title}</span>
                         {
-                            disableFileOps ? null: (
-                                <>
-                                    <AddFileIcon
-                                        onClick={(e:Event) => {
-                                            e.stopPropagation();
-                                            addFile('/');
-                                        }}
-                                        className="music-monaco-editor-list-title-icon" />
-                                    <AddFolderIcon
-                                        onClick={(e:Event) => {
-                                            e.stopPropagation();
-                                            addFolder('/');
-                                        }}
-                                        className="music-monaco-editor-list-title-icon" />
-                                </>
+                            disableFileOps.add ?  null : (
+                                <AddFileIcon
+                                    onClick={(e:Event) => {
+                                        e.stopPropagation();
+                                        addFile('/');
+                                    }}
+                                    className="music-monaco-editor-list-title-icon" />
+                            )
+                        }
+                        {   
+                            disableFolderOps.add ? null : (
+                                <AddFolderIcon
+                                    onClick={(e:Event) => {
+                                        e.stopPropagation();
+                                        addFolder('/');
+                                    }}
+                                    className="music-monaco-editor-list-title-icon" />
                             )
                         }
                     </div>

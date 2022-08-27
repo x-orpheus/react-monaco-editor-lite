@@ -96,18 +96,18 @@ const App = () => {
 
     useEffect(() => {
         console.log(files);
-        if (editorRef.current) {
-            editorRef.current.refresh(files, activePath, {
-                start: {
-                    line: 1,
-                    column: 1,
-                },
-                end: {
-                    line: 5,
-                    column: 1,
-                }
-            });
-        }
+        // if (editorRef.current) {
+        //     editorRef.current.refresh(files, activePath, {
+        //         start: {
+        //             line: 1,
+        //             column: 1,
+        //         },
+        //         end: {
+        //             line: 5,
+        //             column: 1,
+        //         }
+        //     });
+        // }
     });
 
     const addFile = useCallback(() => {
@@ -144,9 +144,9 @@ const App = () => {
             </select>
             {
                 Object.keys(files).length > 0 && (
-                    <div style={{ width: '800px', height: '600px' }}>
+                    <div style={{ width: '800px', height: '300px' }}>
                         <Editor
-                            // title="tango project"
+                            title="tango project"
                             defaultTheme='GithubLightDefault'
                             ideConfig={{
                                 // disableFileOps: true,

@@ -114,9 +114,13 @@ const File: React.FC<{
         const {
             newpath,
         } = getOldNewPath(file.path, name);
-        const files = getAllFiles();
-        if (files[newpath]) {
-            return setShowError('文件名已存在');
+        const filenames = Object.keys(getAllFiles());
+        for (let i = 0; i < filenames.length; i++) {
+            if (newpath === filenames[i]) {
+                return setShowError('文件名已存在');
+            } else if (filenames[i].startsWith(newpath + '/')) {
+                return setShowError('文件名已存在');
+            }
         }
         setShowError('');
     }, [getAllFiles, file]);
@@ -293,11 +297,13 @@ const File: React.FC<{
                                     onClick={(e: any) => {
                                         e.stopPropagation();
                                     }}
+                                    onInput={handleChange}
                                     spellCheck={false}
                                     onKeyDown={handleKeyDown}
                                     onBlur={handleBlur}
                                     ref={nameRef}
-                                    className="music-monaco-editor-list-file-item-new"
+                                    className={`music-monaco-editor-list-file-item-new
+                                        ${showError ? 'music-monaco-editor-list-file-item-new-error' : ''}`}
                                     contentEditable />
                             )
                         }
