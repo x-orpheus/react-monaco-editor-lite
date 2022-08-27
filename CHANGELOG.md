@@ -1,3 +1,12 @@
+## [1.0.71](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.70...v1.0.71) (2022-08-27)
+
+
+### Features
+
+* 增加根目录添加文件、添加文件夹 ([93c7bb3](https://github.com/x-orpheus/react-monaco-editor-lite/commit/93c7bb31b456f0166bd9de4bf5edbd24d3767a63))
+
+
+
 ## [1.0.70](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.69...v1.0.70) (2022-08-25)
 
 
