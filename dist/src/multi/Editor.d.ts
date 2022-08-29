@@ -25,6 +25,7 @@ export interface MultiEditorIProps {
     defaultTheme?: string;
     onPathChange?: (key: string) => void;
     onValueChange?: (v: string, path: string) => void;
+    onRenameFile?: (oldpath: string, newpath: string) => void;
     onFileChange?: (type: FileChangeType, info?: {
         path?: string;
         value?: string;

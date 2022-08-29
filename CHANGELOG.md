@@ -1,3 +1,12 @@
+## [1.0.75](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.74...v1.0.75) (2022-08-29)
+
+
+### Bug Fixes
+
+* 恢复 onRenameFile api ([02c0c44](https://github.com/x-orpheus/react-monaco-editor-lite/commit/02c0c448074afdbec4f707100b74508de8e7442b))
+
+
+
 ## [1.0.74](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.73...v1.0.74) (2022-08-29)
 
 
