@@ -110,7 +110,9 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(({
             } else {
                 tree = deleteSourceFile(filetree, file.path);
                 tree = addSourceFile(tree, file.path + file.name);
-                onAddFile(file.path + file.name);
+                setTimeout(() => {
+                    onAddFile(file.path + file.name);
+                }, 500);
             }
         } else {
             tree = deleteSourceFile(filetree, file.path);

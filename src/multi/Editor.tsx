@@ -15,7 +15,8 @@ import {
     createOrUpdateModel,
     deleteModel,
     initFiles,
-    getOldNewPath
+    getOldNewPath,
+    filterNull
 } from '@utils';
 import { THEMES } from '@utils/consts';
 import { configTheme } from '@utils/initEditor';
@@ -24,6 +25,8 @@ import { useDragLine, usePrettier, useInit, useEditor, useVarRef } from './hook'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
+
+export type FileChangeType = 'addFile' | 'addFoler' | 'deleteFile' | 'deleteFolder' | 'renameFile' | 'renameFolder';
 export interface filelist {
     [key: string]: string | null,
 }
@@ -47,10 +50,16 @@ export interface MultiEditorIProps {
     defaultPath?: string,
     defaultTheme?: string,
     onPathChange?: (key: string) => void,
-    onValueChange?: (v: string) => void,
-    onFileChange?: (key: string, value: string) => void,
+    onValueChange?: (v: string, path: string) => void,
+    onFileChange?: (type: FileChangeType, info?: {
+        path?: string, 
+        value?: string,
+        filename?: string,
+        newpath?: string,
+        newvalue?: string,
+        newfilename?: string,
+    }) => void,
     onFileSave?: (key: string, value: string) => void,
-    onRenameFile?: (oldpath: string, newpath: string,) => void,
     defaultFiles?: filelist,
     options: monacoType.editor.IStandaloneEditorConstructionOptions,
     title?: string,
@@ -72,7 +81,6 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
     defaultFiles = {},
     onFileChange,
     onFileSave,
-    onRenameFile,
     ideConfig = {
         disableFileOps: {},
         disableFolderOps: {},
@@ -150,13 +158,9 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                         }
                         return v;
                     }));
-                    // filesRef.current[path] = v;
-                    if (onFileChangeRef.current) {
-                        onFileChangeRef.current(path, v);
-                    }
                     curValueRef.current = v;
                     if (onValueChangeRef.current) {
-                        onValueChangeRef.current(v);
+                        onValueChangeRef.current(v, path);
                     }
 
                     // eslint解析需要消抖，延迟500ms消抖即可
@@ -193,7 +197,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
             }
         }
         return false;
-    }, [onFileChangeRef, onValueChangeRef]);
+    }, [onValueChangeRef]);
 
     const seCurPathAndNotify = useCallback((path: string, notify = true,) => {
         if (path !== curPathRef.current) {
@@ -390,34 +394,48 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
     //     curPathRef.current = curPath;
     // }, [curPath, onPathChangeRef]);
 
-    const addFile = useCallback((path: string, value?: string) => {
+    const addFile = useCallback((path: string, value?: string, notify = true) => {
         createOrUpdateModel(path, value || '');
         filesRef.current[path] = value || '';
         handlePathChange(path);
-    }, [handlePathChange]);
+        if (notify && onFileChangeRef.current) {
+            onFileChangeRef.current('addFile', {
+                path,
+                value: '',
+            })
+        }
+    }, [handlePathChange, onFileChangeRef]);
 
-    const deleteFile = useCallback((path: string) => {
+    const deleteFile = useCallback((path: string, notify = true) => {
         onCloseFile(path);
         setTimeout(() => {
             deleteModel(path);
         }, 50);
         delete filesRef.current[path];
-    }, [onCloseFile]);
+        if (onFileChangeRef.current && notify) {
+            onFileChangeRef.current('deleteFile', {
+                path,
+            });
+        }
+    }, [onCloseFile, onFileChangeRef]);
 
     const editFileName = useCallback((path: string, name: string) => {
         const value = filesRef.current[path] || '';
-        deleteFile(path);
+        deleteFile(path, false);
         const {
             oldpath,
             newpath
         } = getOldNewPath(path, name);
-        addFile(newpath, value);
-        if (onRenameFile) {
-            onRenameFile(oldpath, newpath);
+        addFile(newpath, value, false);
+        if (onFileChangeRef.current) {
+            onFileChangeRef.current('renameFile', {
+                path: oldpath,
+                newpath: newpath,
+            });
         }
-    }, [deleteFile, addFile, onRenameFile]);
+    }, [deleteFile, addFile, onFileChangeRef]);
 
-    const addFolder = useCallback((path: string) => {
+    const addFolder = useCallback((path: string, notify = true) => {
         let hasChild = false;
         Object.keys(filesRef.current).forEach(p => {
             if (p.startsWith(path + '/')) {
@@ -427,7 +445,12 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
         if (!hasChild) {
             filesRef.current[path] = null;
         }
-    }, []);
+        if (onFileChangeRef.current && notify) {
+            onFileChangeRef.current('addFolder', {
+                path,
+            });
+        }
+    }, [onFileChangeRef]);
 
     const deleteFolder = useCallback((path: string) => {
         // 删除目录引用
@@ -437,11 +460,16 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
             if (p.startsWith(path + '/')) {
                 const value = filesRef.current[p];
                 if (typeof value === 'string') {
-                    deleteFile(p);
+                    deleteFile(p, false);
                 }
             }
         });
-    }, [deleteFile]);
+        if (onFileChangeRef.current) {
+            onFileChangeRef.current('deleteFolder', {
+                path,
+            });
+        }
+    }, [deleteFile, onFileChangeRef]);
 
     const editFolderName = useCallback((path: string, name: string) => {
         const paths = (path || '/').slice(1).split('/');
@@ -449,7 +477,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
         // 删除文件夹引用
         delete filesRef.current[path];
         // 新建文件夹引用
-        addFolder(newPath);
+        addFolder(newPath, false);
         // 删除子路径下的子文件和文件夹
         Object.keys(filesRef.current).forEach(p => {
             if (p.startsWith(path + '/')) {
@@ -480,7 +508,13 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                 handlePathChange(curPathRef.current.replace(path + '/', newPath + '/'));
             }, 50);
         }
-    }, [handlePathChange, addFolder]);
+        if (onFileChangeRef.current) {
+            onFileChangeRef.current('renameFolder', {
+                path,
+                newPath,
+            });
+        }
+    }, [handlePathChange, addFolder, onFileChangeRef]);
 
     const decorcations = useRef<any>(null);
 
@@ -542,7 +576,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
         filelistRef.current.refresh(files);
     }, [deleteFile, handlePathChange, locModel]);
 
-    const getAllFiles = useCallback(() => filesRef.current, []);
+    const getAllFiles = useCallback(() => filterNull(filesRef.current), []);
 
     useImperativeHandle(ref, () => ({
         getValue: (path: string) => filesRef.current[path],

@@ -331,3 +331,13 @@ export const setMonacoSyntasValidation = (disable: boolean) => {
         noSyntaxValidation: disable,
     });
 }
+
+export const filterNull = (obj: { [key: string]: string | null } = {}) => {
+    const newobj: { [key: string]: string | null } = {};
+    Object.keys(obj).forEach(key => {
+        if (obj[key] !== null) {
+            newobj[key] = obj[key];
+        }
+    })
+    return newobj;
+}

@@ -149,34 +149,38 @@ const App = () => {
                             title="tango project"
                             defaultTheme='GithubLightDefault'
                             ideConfig={{
-                                // disableFileOps: true,
-                                // disablePrettier: true,
-                                // disableEslint: true,
-                                // saveWhenBlur: true,
-                                // disableFileOps: {
-                                //     add: true,
-                                //     delete: true,
-                                //     rename: false,
-                                // },
-                                // disableFolderOps: {
-                                //     add: false,
-                                //     delete: false,
-                                //     rename: false,
-                                // }
+                                saveWhenBlur: true,
                             }}
-                            onPathChange={(path) => { setActivePath(path); }}
+                            // ideConfig={{
+                            //     // disableFileOps: true,
+                            //     // disablePrettier: true,
+                            //     // disableEslint: true,
+                            //     // saveWhenBlur: true,
+                            //     // disableFileOps: {
+                            //     //     add: true,
+                            //     //     delete: true,
+                            //     //     rename: false,
+                            //     // },
+                            //     // disableFolderOps: {
+                            //     //     add: false,
+                            //     //     delete: false,
+                            //     //     rename: false,
+                            //     // }
+                            // }}
+                            // onPathChange={(path) => { setActivePath(path); }}
                             // onFileSave={(key: string, value: string) => {
                             //     console.log(editorRef.current.getAllValue());
                             // }}
-                            onRenameFile={(...args) => {
-                                setFiles((pre) => {
-                                    const res = {...pre};
-                                    res[args[1]] = res[args[0]];
-                                    delete res[args[0]];
-                                    return res;
-                                });
-                                setActivePath(args[1]);
-                            }}
+                            onFileChange={(...args) => console.log(args)}
+                            // onRenameFile={(...args) => {
+                            //     setFiles((pre) => {
+                            //         const res = {...pre};
+                            //         res[args[1]] = res[args[0]];
+                            //         delete res[args[0]];
+                            //         return res;
+                            //     });
+                            //     setActivePath(args[1]);
+                            // }}
                             ref={editorRef}
                             defaultPath={activePath}
                             defaultFiles={files}

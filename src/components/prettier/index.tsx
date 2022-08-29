@@ -9,19 +9,22 @@ const Prettier = (props: any) => {
             function provideDocumentFormattingEdits(model: any) {
                 const p = window.require('prettier');
                 if (!p.prettier) return;
-                const text = p.prettier.format(model.getValue(), {
-                    filepath: model.uri.path,
-                    plugins: p.prettierPlugins,
-                    singleQuote: true,
-                    tabWidth: 4,
-                });
-            
-                return [
-                    {
-                    range: model.getFullModelRange(),
-                    text,
-                    },
-                ];
+                try {
+                    const text = p.prettier.format(model.getValue(), {
+                        filepath: model.uri.path,
+                        plugins: p.prettierPlugins,
+                        singleQuote: true,
+                        tabWidth: 4,
+                    });
+                    return [
+                        {
+                        range: model.getFullModelRange(),
+                        text,
+                        },
+                    ];
+                } catch (e) {
+                    console.log(new Error('prettier format error'));
+                }
             }
             window.monaco.languages.registerDocumentFormattingEditProvider('javascript', {
                 provideDocumentFormattingEdits
