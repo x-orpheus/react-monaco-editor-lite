@@ -1,3 +1,12 @@
+## [1.0.73](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.72...v1.0.73) (2022-08-29)
+
+
+### Features
+
+* 增加filechangetype 导出 ([1822c40](https://github.com/x-orpheus/react-monaco-editor-lite/commit/1822c40ecdeed9b1de22ca377d2dc274b4fd7945))
+
+
+
 ## [1.0.72](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.71...v1.0.72) (2022-08-29)
 
 
