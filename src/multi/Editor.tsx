@@ -51,6 +51,7 @@ export interface MultiEditorIProps {
     defaultTheme?: string,
     onPathChange?: (key: string) => void,
     onValueChange?: (v: string, path: string) => void,
+    onRenameFile?: (oldpath: string, newpath: string,) => void,
     onFileChange?: (type: FileChangeType, info?: {
         path?: string, 
         value?: string,
@@ -78,6 +79,7 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
     defaultTheme = 'OneDarkPro',
     onPathChange,
     onValueChange,
+    onRenameFile,
     defaultFiles = {},
     onFileChange,
     onFileSave,
@@ -433,7 +435,10 @@ export const MultiEditorComp = React.forwardRef<MultiRefType, MultiEditorIProps>
                 newpath: newpath,
             });
         }
-    }, [deleteFile, addFile, onFileChangeRef]);
+        if (onRenameFile) {
+            onRenameFile(oldpath, newpath);
+        }
+    }, [deleteFile, addFile, onFileChangeRef, onRenameFile]);
 
     const addFolder = useCallback((path: string, notify = true) => {
         let hasChild = false;

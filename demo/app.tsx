@@ -172,15 +172,16 @@ const App = () => {
                             //     console.log(editorRef.current.getAllValue());
                             // }}
                             onFileChange={(...args) => console.log(args)}
-                            // onRenameFile={(...args) => {
-                            //     setFiles((pre) => {
-                            //         const res = {...pre};
-                            //         res[args[1]] = res[args[0]];
-                            //         delete res[args[0]];
-                            //         return res;
-                            //     });
-                            //     setActivePath(args[1]);
-                            // }}
+                            onRenameFile={(...args) => {
+                                // setFiles((pre) => {
+                                //     const res = {...pre};
+                                //     res[args[1]] = res[args[0]];
+                                //     delete res[args[0]];
+                                //     return res;
+                                // });
+                                // setActivePath(args[1]);
+                                console.log(args);
+                            }}
                             ref={editorRef}
                             defaultPath={activePath}
                             defaultFiles={files}
