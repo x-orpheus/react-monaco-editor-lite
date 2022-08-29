@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Editor, { MultiEditorIProps, MultiRefType, FileChangeType } from './Editor';
+import Editor, { MultiEditorIProps, MultiRefType } from './Editor';
 import './index.less';
 
 export { MultiEditorIProps, MultiRefType, FileChangeType } from './Editor';
