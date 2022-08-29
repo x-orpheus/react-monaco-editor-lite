@@ -1,3 +1,12 @@
+## [1.0.72](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.71...v1.0.72) (2022-08-29)
+
+
+### Features
+
+* change file change notify ([3ae1c65](https://github.com/x-orpheus/react-monaco-editor-lite/commit/3ae1c65d4d15d6807fe4cd4950aa34182557a5c1))
+
+
+
 ## [1.0.71](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.70...v1.0.71) (2022-08-27)
 
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import * as monacoType from 'monaco-editor';
+export declare type FileChangeType = 'addFile' | 'addFoler' | 'deleteFile' | 'deleteFolder' | 'renameFile' | 'renameFolder';
 export interface filelist {
     [key: string]: string | null;
 }
@@ -23,10 +24,16 @@ export interface MultiEditorIProps {
     defaultPath?: string;
     defaultTheme?: string;
     onPathChange?: (key: string) => void;
-    onValueChange?: (v: string) => void;
-    onFileChange?: (key: string, value: string) => void;
+    onValueChange?: (v: string, path: string) => void;
+    onFileChange?: (type: FileChangeType, info?: {
+        path?: string;
+        value?: string;
+        filename?: string;
+        newpath?: string;
+        newvalue?: string;
+        newfilename?: string;
+    }) => void;
     onFileSave?: (key: string, value: string) => void;
-    onRenameFile?: (oldpath: string, newpath: string) => void;
     defaultFiles?: filelist;
     options: monacoType.editor.IStandaloneEditorConstructionOptions;
     title?: string;

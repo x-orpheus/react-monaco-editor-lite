@@ -20,3 +20,8 @@ export declare function deleteModel(path: string): void;
 export declare const copyDataToClipBoard: (data: string, callback?: ((res: boolean) => void) | undefined) => void;
 export declare const worker: Promise<Worker>;
 export declare const setMonacoSyntasValidation: (disable: boolean) => void;
+export declare const filterNull: (obj?: {
+    [key: string]: string | null;
+}) => {
+    [key: string]: string | null;
+};
