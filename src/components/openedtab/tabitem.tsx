@@ -36,7 +36,7 @@ const TabItem: React.FC<{
             fileType = 'default_file';
         }
     const active = currentPath === file.path;
-    const handlePathChange = useCallback((e) => {
+    const handlePathChange = useCallback((e: any) => {
         const key = e.currentTarget.dataset.src!;
         if (onPathChange) {
             onPathChange(key);
@@ -99,7 +99,7 @@ const TabItem: React.FC<{
         }
     }, [file, onCloseFile, onAbortSave, rootEl, onSaveFile])
 
-    const handleMouseDown = useCallback((e) => {
+    const handleMouseDown = useCallback((e: any) => {
         if (e.button !== 2) {
             return;
         }

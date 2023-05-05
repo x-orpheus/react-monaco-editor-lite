@@ -4,6 +4,9 @@
   "description": "",
   "main": "dist/index.bundle.js",
   "typings": "dist/src/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "webpack": "webpack",
     "build": "webpack --config webpack.build.js",
@@ -15,9 +18,9 @@
     "postversion": "git push && git push origin --tags",
     "doc": "typedoc --options typedoc.json"
   },
-  "keywords": [],
+  "keywords": ["editor", "monaco"],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.16.0",
     "@babel/node": "^7.16.0",
@@ -26,8 +29,8 @@
     "@babel/preset-react": "^7.16.0",
     "@babel/preset-typescript": "^7.16.0",
     "@types/prettier": "^2.4.2",
-    "@types/react": "^17.0.33",
-    "@types/react-dom": "^17.0.10",
+    "@types/react": "^18.2.5",
+    "@types/react-dom": "^18.2.3",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "alias-jsconfig-webpack-plugin": "^1.0.2",
@@ -43,17 +46,15 @@
     "image-webpack-loader": "^8.0.1",
     "less": "^4.1.2",
     "less-loader": "^10.2.0",
-    "monaco-editor-webpack-plugin": "^5.0.0",
-    "node-sass": "^6.0.1",
+    "monaco-editor-webpack-plugin": "^7.0.1",
     "path": "^0.12.7",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "sass-loader": "^12.3.0",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.2.6",
-    "typedoc": "^0.22.9",
+    "typedoc": "^0.24.6",
     "typedoc-plugin-markdown": "^3.12.1",
-    "typescript": "^4.4.4",
+    "typescript": "^5.0.4",
     "webpack": "^5.61.0",
     "webpack-cli": "^4.9.1",
     "webpack-dev-server": "^4.4.0"
@@ -63,8 +64,8 @@
     "react-dom": "^17.0.2"
   },
   "dependencies": {
-    "monaco-editor": "^0.30.1",
-    "monaco-editor-textmate": "^3.0.0",
+    "monaco-editor": "^0.38.0",
+    "monaco-editor-textmate": "^4.0.0",
     "monaco-textmate": "^3.0.1",
     "onigasm": "^2.2.5"
   }

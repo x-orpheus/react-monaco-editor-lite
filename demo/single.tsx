@@ -12,11 +12,11 @@ export const App = () => {
         });
     };
 
-    const handleChange = useCallback((e) => {
+    const handleChange = useCallback((e: any) => {
         setValue(e);
     }, []);
     
-    const handleBlur = useCallback((e) => {
+    const handleBlur = useCallback((e: any) => {
         console.log(e);
     }, []);
 

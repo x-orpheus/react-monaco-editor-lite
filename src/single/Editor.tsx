@@ -149,7 +149,7 @@ export const SingleEditor = React.forwardRef<
     // 更新高亮区域
     const decorcations = useRef<any>(null);
 
-    const locModel = useCallback((loc, forceCenter: boolean) => {
+    const locModel = useCallback((loc: any, forceCenter: boolean) => {
       if (loc) {
         const { start, end } = loc;
         decorcations.current = editorRef.current?.deltaDecorations(

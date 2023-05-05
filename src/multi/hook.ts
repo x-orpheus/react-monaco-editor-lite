@@ -29,7 +29,7 @@ export function useDragLine(num: number): [
     start: false,
   });
   const handleMoveStart = useCallback(
-    (e) => {
+    (e: any) => {
       dragStartRef.current = {
         pageX: e.pageX,
         width: filelistWidth,
@@ -39,7 +39,7 @@ export function useDragLine(num: number): [
     [filelistWidth]
   );
 
-  const handleMove = useCallback((e) => {
+  const handleMove = useCallback((e: any) => {
     if (dragStartRef.current.start) {
       const width =
         dragStartRef.current.width + (e.pageX - dragStartRef.current.pageX);
@@ -48,7 +48,7 @@ export function useDragLine(num: number): [
     }
   }, []);
 
-  const handleMoveEnd = useCallback((e) => {
+  const handleMoveEnd = useCallback((e: any) => {
     dragStartRef.current = {
       pageX: e.pageX,
       width: 0,
@@ -67,7 +67,7 @@ export function useDragLine(num: number): [
 }
 
 export function usePrettier(
-  editorRef: React.MutableRefObject<monacoType.editor.IStandaloneCodeEditor | null>
+  editorRef: React.MutableRefObject<monacoType.editor.IStandaloneCodeEditor>
 ): [
   React.MutableRefObject<boolean>,
   (e: any) => void,
@@ -75,11 +75,12 @@ export function usePrettier(
 ] {
   const autoPrettierRef = useRef<boolean>(true);
 
-  const handleSetAutoPrettier = useCallback((e) => {
+  const handleSetAutoPrettier = useCallback((e: any) => {
     autoPrettierRef.current = e.target.checked;
   }, []);
 
   const handleFromat = useCallback(() => {
+    // @ts-ignore
     return editorRef.current?.getAction('editor.action.formatDocument').run();
   }, [editorRef]);
 

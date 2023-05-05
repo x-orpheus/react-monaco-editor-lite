@@ -29,7 +29,7 @@ const Select:SelectInterface = ({
     const value = isControlled ? valueFromProps : internalValue;
 
     const [visible, setVisible] = useState(false);
-    const [data, setData] = useState({ value: defaultValue, label: ''});
+    const [data, setData] = useState<{ value: any; label: string }>({ value: defaultValue, label: ''});
     const targetRef = useRef<HTMLDivElement>(null);
     const container = (getContainer && getContainer()) || document.body;
 
@@ -55,7 +55,7 @@ const Select:SelectInterface = ({
         }
     }, [container]);
 
-    const handleSelect = useCallback((data) => {
+    const handleSelect = useCallback((data: any) => {
         if (!isControlled) {
             setInternalValue(data.value);
         }
@@ -88,6 +88,7 @@ const Select:SelectInterface = ({
                         {
                             React.Children.toArray(children).map(child => (
                                 React.isValidElement(child) ? React.cloneElement(child, {
+                                    // @ts-ignore
                                     defaultValue: data.value,
                                     handleSelect,
                                 }) : child
