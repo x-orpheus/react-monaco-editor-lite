@@ -124,9 +124,7 @@ export const MultiEditorComp = React.forwardRef<
 
     const rootRef = useRef(null);
     const filelistRef = useRef<any>(null);
-    const editorRef = useRef<monacoType.editor.IStandaloneCodeEditor | null>(
-      null
-    );
+    const editorRef = useRef<monacoType.editor.IStandaloneCodeEditor>(null);
     const prePath = useRef<string | null>('');
     const filesRef = useRef({
       ...defaultFiles,
@@ -153,8 +151,9 @@ export const MultiEditorComp = React.forwardRef<
     const curPathRef = useRef(defaultPath || '');
     const curValueRef = useRef('');
 
-    const [autoPrettierRef, handleSetAutoPrettier, handleFromat] =
-      usePrettier(editorRef);
+    const [autoPrettierRef, handleSetAutoPrettier, handleFromat] = usePrettier(
+      editorRef as any
+    );
     const [styles, handleMoveStart, handleMove, handleMoveEnd] =
       useDragLine(180);
 
@@ -618,7 +617,7 @@ export const MultiEditorComp = React.forwardRef<
 
     const decorcations = useRef<any>(null);
 
-    const locModel = useCallback((loc) => {
+    const locModel = useCallback((loc: any) => {
       const { start, end } = loc;
       decorcations.current = editorRef.current?.deltaDecorations(
         decorcations.current || [],
@@ -662,7 +661,7 @@ export const MultiEditorComp = React.forwardRef<
           if (files[file]) {
             filesRef.current[file] = files[file];
           } else {
-            deleteFile(file);
+            // deleteFile(file); // FIXME: 为什么这么写
             delete filesRef.current[file];
           }
         });
