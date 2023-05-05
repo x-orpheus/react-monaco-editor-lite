@@ -6,7 +6,7 @@ import React, {
   useEffect,
 } from 'react';
 import * as monacoType from 'monaco-editor';
-import { initFiles, worker, setMonacoSyntasValidation } from '@utils';
+import { initFiles, worker } from '@utils';
 import { configTheme } from '@utils/initEditor';
 
 export function useDragLine(num: number): [
@@ -114,8 +114,6 @@ export function useInit(
   }, [options, editorRef]);
 
   useEffect(() => {
-    setMonacoSyntasValidation(false);
-
     worker.then(
       (res) =>
         (res.onmessage = function (event) {
