@@ -608,7 +608,7 @@ export const MultiEditorComp = React.forwardRef<
         if (onFileChangeRef.current) {
           onFileChangeRef.current('renameFolder', {
             path,
-            newPath,
+            newpath: newPath,
           });
         }
       },
