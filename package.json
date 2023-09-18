@@ -1,6 +1,6 @@
 {
   "name": "react-monaco-editor-lite",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "",
   "main": "dist/index.bundle.js",
   "typings": "dist/src/index.d.ts",
@@ -15,8 +15,11 @@
     "postversion": "git push && git push origin --tags",
     "doc": "typedoc --options typedoc.json"
   },
-  "keywords": ["editor", "monaco"],
-  "author": "",
+  "keywords": [
+    "editor",
+    "monaco"
+  ],
+  "author": "wwsun",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.16.0",
@@ -57,8 +60,8 @@
     "webpack-dev-server": "^4.4.0"
   },
   "peerDependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react": ">= 16.8",
+    "react-dom": ">=16.8"
   },
   "dependencies": {
     "monaco-editor": "^0.38.0",
