@@ -1,3 +1,20 @@
+## [1.2.3](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.75...v1.2.3) (2023-09-18)
+
+
+### Bug Fixes
+
+* fix renameFolder params ([70d4fc4](https://github.com/x-orpheus/react-monaco-editor-lite/commit/70d4fc453e554a475bde156c7ba9170939c2f203))
+* fix setDiagnosticsOptions ([fab6e2e](https://github.com/x-orpheus/react-monaco-editor-lite/commit/fab6e2eab252a509a9c0d1289220d919e52919b2))
+* init files ([4fee9f2](https://github.com/x-orpheus/react-monaco-editor-lite/commit/4fee9f2cc218e2697429c8fe562bf3a0b63936a4))
+* update ([3c200ec](https://github.com/x-orpheus/react-monaco-editor-lite/commit/3c200ec4216ad93cd20b4aa3f9cd79f48f65ae39))
+
+
+### Features
+
+* disable internal prettier ([06cd4c9](https://github.com/x-orpheus/react-monaco-editor-lite/commit/06cd4c9118ab12c8cfc6363fc889ddbb61a3aca2))
+
+
+
 ## [1.0.75](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.74...v1.0.75) (2022-08-29)
 
 
