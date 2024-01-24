@@ -41,9 +41,7 @@ module.exports = {
       process: 'process/browser',
     }),
     new webpack.DefinePlugin({
-      _ASSETSPATH: JSON.stringify(
-        'https://s5.music.126.net/static_public/6194df158463e8444a55b9d8_6194df158463e8444a55b9da/'
-      ),
+      _ASSETSPATH: JSON.stringify('https://s9.music.126.net/musicst/npm/react-monaco-editor-lite/1.2.3/'),
     }),
   ],
   resolve: {
