@@ -34,9 +34,14 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({onSelectedLine, list
     smoothSelectedResults();
   }, [searchResults, unExpandedTitles]);
 
+  const clear = useCallback(() => {
+    setSearchResults([]);
+    setUnExpandedTitles({});
+  }, []);
+
   const handleSearch = useCallback(() => {
     if (searchText.length === 0) {
-      setSearchResults([]);
+      clear();
       return;
     }
 
