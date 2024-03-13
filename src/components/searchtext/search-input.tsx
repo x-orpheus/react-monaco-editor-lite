@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Close from '@components/icons/close';
 
 interface SearchInputProps {
@@ -8,11 +8,17 @@ interface SearchInputProps {
 }
 
 const SearchInput: React.FC<SearchInputProps> = ({ searchText, setSearchText, onClose }) => {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [inputRef]);
+  
   return (
     <div className='search-result-top-search'>
       <input 
         className='search-result-input'
         type="text" 
+        ref={inputRef}
         value={searchText}
         onChange={(e) => setSearchText(e.target.value)} 
         placeholder="搜索（上下键切换）"
