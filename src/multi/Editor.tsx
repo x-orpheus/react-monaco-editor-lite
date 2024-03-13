@@ -29,6 +29,9 @@ import {
   useVarRef,
 } from './hook';
 
+import SearchFile from '@components/searchfile';
+import SearchAndReplace from '@components/searchtext';
+
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
 
@@ -131,6 +134,8 @@ export const MultiEditorComp = React.forwardRef<
     });
     const valueLisenerRef = useRef<monacoType.IDisposable>();
     const editorStatesRef = useRef(new Map());
+    const [searchTextVisible, setSearchTextVisible] = useState(false);
+    const [searchFileVisible, setSearchFileVisible] = useState(false);
 
     const [openedFiles, setOpenedFiles] = useState<
       Array<{
@@ -159,6 +164,26 @@ export const MultiEditorComp = React.forwardRef<
 
     const disableEslintRef = useRef(ideConfig.disableEslint);
     disableEslintRef.current = ideConfig.disableEslint;
+
+    const handleKeyDown = useCallback((event: { metaKey: any; shiftKey: any; key: string; preventDefault: () => void; }) => {
+      if (event.metaKey && event.shiftKey && (event.key === 'f' || event.key === 'F') && !searchTextVisible) {
+        event.preventDefault();
+        setSearchTextVisible(true);
+      } else if (event.metaKey && event.key === 'p') {
+        event.preventDefault();
+        setSearchFileVisible(pre => !pre);
+        editorRef.current?.focus();
+      }
+    },[searchTextVisible, searchFileVisible]);
+
+    useEffect(() => {
+      const refCurrent = rootRef.current as unknown as HTMLElement;;
+      refCurrent?.addEventListener('keydown', handleKeyDown);
+  
+      return () => {
+        refCurrent?.removeEventListener('keydown', handleKeyDown);
+      };
+    }, [rootRef]); // 当 ref 改变时更新
 
     const restoreModel = useCallback(
       (path: string) => {
@@ -703,6 +728,41 @@ export const MultiEditorComp = React.forwardRef<
       refresh: refreshFiles,
     }));
 
+    const onSelectFile = useCallback((path: string) => {
+      refreshFiles(getAllFiles(), path);
+      setSearchFileVisible(false);
+      editorRef.current?.focus();
+    }, [editorRef]);
+
+    const onSelectedLine = useCallback((path: string, line: number) => { 
+      refreshFiles(getAllFiles(), path, {
+        start: {
+          line: line,
+          column: 1,
+        },
+        end: {
+          line: line,
+          column: 1,
+        },
+      });
+    }, []);
+
+    const configListFiles = useCallback(() => { 
+      const obj = getAllFiles();
+      const convertedObj: Record<string, string> = {};
+      for (const key in obj) {
+        if (obj[key] !== null) {
+          convertedObj[key] = obj[key] as string;
+        }
+      }
+      return convertedObj;
+    }, [getAllFiles]);
+
+    const configFileNames = useCallback(() => { 
+      const obj = getAllFiles();
+      return Object.keys(obj); ;
+    }, [getAllFiles]);
+
     return (
       <div
         ref={rootRef}
@@ -712,23 +772,31 @@ export const MultiEditorComp = React.forwardRef<
         onMouseMove={handleMove}
         onMouseUp={handleMoveEnd}
         className="music-monaco-editor">
-        <FileList
-          getAllFiles={getAllFiles}
-          title={title}
-          disableFileOps={ideConfig.disableFileOps}
-          disableFolderOps={ideConfig.disableFolderOps}
-          ref={filelistRef}
-          rootEl={rootRef}
-          onEditFileName={editFileName}
-          onDeleteFile={deleteFile}
-          onAddFile={addFile}
-          onAddFolder={addFolder}
-          onDeleteFolder={deleteFolder}
-          onEditFolderName={editFolderName}
-          style={styles}
-          currentPath={curPath}
-          defaultFiles={defaultFiles}
-          onPathChange={handlePathChange}
+        {searchFileVisible && <SearchFile list={configFileNames()} onSelectFile={onSelectFile} />}
+        {searchTextVisible ? 
+          <SearchAndReplace  
+            style={styles} 
+            onSelectedLine={onSelectedLine} 
+            listFiles={configListFiles()} 
+            onClose={() => setSearchTextVisible(false)}
+          /> : null}
+          <FileList
+            getAllFiles={getAllFiles}
+            title={title}
+            disableFileOps={ideConfig.disableFileOps}
+            disableFolderOps={ideConfig.disableFolderOps}
+            ref={filelistRef}
+            rootEl={rootRef}
+            onEditFileName={editFileName}
+            onDeleteFile={deleteFile}
+            onAddFile={addFile}
+            onAddFolder={addFolder}
+            onDeleteFolder={deleteFolder}
+            onEditFolderName={editFolderName}
+            style={{...styles, display: !searchTextVisible ? 'block' : 'none'}}
+            currentPath={curPath}
+            defaultFiles={defaultFiles}
+            onPathChange={handlePathChange}
         />
         <div
           onMouseDown={handleMoveStart}
