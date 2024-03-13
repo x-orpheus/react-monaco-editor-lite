@@ -61,6 +61,7 @@ export interface MultiEditorIProps {
     disableSetting?: boolean;
     disablePrettier?: boolean;
     saveWhenBlur?: boolean;
+    disableSearch?: boolean;
   };
   defaultPath?: string;
   defaultTheme?: string;
@@ -113,6 +114,7 @@ export const MultiEditorComp = React.forwardRef<
         disableSetting: false,
         disablePrettier: false,
         saveWhenBlur: false,
+        disableSearch: false
       },
       options,
       title,
@@ -165,25 +167,27 @@ export const MultiEditorComp = React.forwardRef<
     const disableEslintRef = useRef(ideConfig.disableEslint);
     disableEslintRef.current = ideConfig.disableEslint;
 
-    const handleKeyDown = useCallback((event: { metaKey: any; shiftKey: any; key: string; preventDefault: () => void; }) => {
-      if (event.metaKey && event.shiftKey && (event.key === 'f' || event.key === 'F') && !searchTextVisible) {
-        event.preventDefault();
-        setSearchTextVisible(true);
-      } else if (event.metaKey && event.key === 'p') {
-        event.preventDefault();
-        setSearchFileVisible(pre => !pre);
-        editorRef.current?.focus();
-      }
-    },[searchTextVisible, searchFileVisible]);
-
-    useEffect(() => {
-      const refCurrent = rootRef.current as unknown as HTMLElement;;
-      refCurrent?.addEventListener('keydown', handleKeyDown);
+    if (!ideConfig.disableSearch) {
+      const handleKeyDown = useCallback((event: { metaKey: any; shiftKey: any; key: string; preventDefault: () => void; }) => {
+        if (event.metaKey && event.shiftKey && (event.key === 'f' || event.key === 'F') && !searchTextVisible) {
+          event.preventDefault();
+          setSearchTextVisible(true);
+        } else if (event.metaKey && event.key === 'p') {
+          event.preventDefault();
+          setSearchFileVisible(pre => !pre);
+          editorRef.current?.focus();
+        }
+      },[searchTextVisible, searchFileVisible]);
   
-      return () => {
-        refCurrent?.removeEventListener('keydown', handleKeyDown);
-      };
-    }, [rootRef]); // 当 ref 改变时更新
+      useEffect(() => {
+        const refCurrent = rootRef.current as unknown as HTMLElement;;
+        refCurrent?.addEventListener('keydown', handleKeyDown);
+    
+        return () => {
+          refCurrent?.removeEventListener('keydown', handleKeyDown);
+        };
+      }, [rootRef]); // 当 ref 改变时更新
+    }
 
     const restoreModel = useCallback(
       (path: string) => {
@@ -772,14 +776,19 @@ export const MultiEditorComp = React.forwardRef<
         onMouseMove={handleMove}
         onMouseUp={handleMoveEnd}
         className="music-monaco-editor">
-        {searchFileVisible && <SearchFile list={configFileNames()} onSelectFile={onSelectFile} />}
-        {searchTextVisible ? 
-          <SearchAndReplace  
-            style={styles} 
-            onSelectedLine={onSelectedLine} 
-            listFiles={configListFiles()} 
-            onClose={() => setSearchTextVisible(false)}
-          /> : null}
+
+          {!ideConfig.disableSearch && searchFileVisible && 
+            <SearchFile list={configFileNames()} onSelectFile={onSelectFile} 
+          />}
+
+          {!ideConfig.disableSearch && searchTextVisible && 
+            <SearchAndReplace  
+              style={styles} 
+              onSelectedLine={onSelectedLine} 
+              listFiles={configListFiles()} 
+              onClose={() => setSearchTextVisible(false)}
+          />}
+
           <FileList
             getAllFiles={getAllFiles}
             title={title}
