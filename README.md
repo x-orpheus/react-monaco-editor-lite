@@ -139,6 +139,11 @@ export function minus(a, b) {
 export default SingleIDE;
 ```
 
+#### 搜索文件
+快捷键：command/ctrl + p
+
+#### 搜索文本
+快捷键：shift + command/ctrl + f
 
 ### 组件参数及方法
 
