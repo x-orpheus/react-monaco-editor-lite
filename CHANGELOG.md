@@ -1,3 +1,12 @@
+# [1.3.0](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.2.3...v1.3.0) (2024-03-18)
+
+
+### Features
+
+* support search file & search text ([#6](https://github.com/x-orpheus/react-monaco-editor-lite/issues/6)) ([b4e9557](https://github.com/x-orpheus/react-monaco-editor-lite/commit/b4e9557bc7ba636b6932aca85f532e743298bca8))
+
+
+
 ## [1.2.3](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.0.75...v1.2.3) (2023-09-18)
 
 
