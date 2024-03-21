@@ -176,6 +176,10 @@ export const MultiEditorComp = React.forwardRef<
           event.preventDefault();
           setSearchFileVisible(pre => !pre);
           editorRef.current?.focus();
+        } else if (event.key === "Escape") {
+          event.preventDefault();
+          setSearchFileVisible(false);
+          editorRef.current?.focus();
         }
       },[searchTextVisible, searchFileVisible]);
   
