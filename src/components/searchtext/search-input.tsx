@@ -23,7 +23,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ searchText, setSearchText, on
         onChange={(e) => setSearchText(e.target.value)} 
         placeholder="搜索（上下键切换）"
       />
-       <div onClick={() => onClose(false)}
+       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} onClick={() => onClose(false)}
               className="music-monaco-editor--close">
           <Close
             style={{
