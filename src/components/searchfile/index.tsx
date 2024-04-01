@@ -5,12 +5,14 @@ import './index.less';
 interface SearchFileProps {
   list: string[];
   onSelectFile: (filename: string) => void;
+  onClose: () => void;
 }
 
 const SearchFile: React.FC<SearchFileProps> = (props) => {
   const [searchResults, setSearchResults] = useState<string[]>([]);
   const filenames = useState(Array.isArray(props.list) ? [...props.list] : [])[0];
   const onSelectFile = props.onSelectFile;
+  const onClose = props.onClose;
 
   const handleSearch = (query: string) => {
     if (!query || query.length === 0) {
@@ -28,8 +30,8 @@ const SearchFile: React.FC<SearchFileProps> = (props) => {
   };
 
   return (
-    <div className='search-file-background'>
-      <div className='search-file-body-back'>
+    <div className='search-file-background' onClick={onClose}>
+      <div className='search-file-body-back' onClick={(e) => e.stopPropagation()}>
         <SearchFileBody
           onSearch={handleSearch}
           searchResults={searchResults}
