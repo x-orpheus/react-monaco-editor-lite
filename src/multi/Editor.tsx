@@ -176,6 +176,15 @@ export const MultiEditorComp = React.forwardRef<
           event.preventDefault();
           setSearchFileVisible(pre => !pre);
           editorRef.current?.focus();
+        } else if (event.key === "Escape") {
+          if (searchFileVisible) {
+            event.preventDefault();
+            setSearchFileVisible(false);
+          } else if (searchTextVisible) {
+            event.preventDefault();
+            setSearchTextVisible(false);
+          }
+          editorRef.current?.focus();
         }
       },[searchTextVisible, searchFileVisible]);
   
@@ -186,7 +195,7 @@ export const MultiEditorComp = React.forwardRef<
         return () => {
           refCurrent?.removeEventListener('keydown', handleKeyDown);
         };
-      }, [rootRef]); // 当 ref 改变时更新
+      }, [rootRef, handleKeyDown]); // 当 ref 改变时更新
     }
 
     const restoreModel = useCallback(
@@ -738,6 +747,11 @@ export const MultiEditorComp = React.forwardRef<
       editorRef.current?.focus();
     }, [editorRef]);
 
+    const searchFileClose = useCallback(() => {
+      setSearchFileVisible(false);
+      editorRef.current?.focus();
+    }, [editorRef]);
+
     const onSelectedLine = useCallback((path: string, line: number) => { 
       refreshFiles(getAllFiles(), path, {
         start: {
@@ -778,8 +792,7 @@ export const MultiEditorComp = React.forwardRef<
         className="music-monaco-editor">
 
           {!ideConfig.disableSearch && searchFileVisible && 
-            <SearchFile list={configFileNames()} onSelectFile={onSelectFile} 
-          />}
+            <SearchFile list={configFileNames()} onSelectFile={onSelectFile} onClose={searchFileClose}/>}
 
           {!ideConfig.disableSearch && searchTextVisible && 
             <SearchAndReplace  
