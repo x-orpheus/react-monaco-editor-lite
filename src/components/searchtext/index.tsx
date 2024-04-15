@@ -35,14 +35,6 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({onSelectedLine, list
     smoothSelectedResults();
   }, [searchResults, unExpandedTitles]);
 
-  useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      setResultText(searchText);
-    }, 500);
-
-    return () => clearTimeout(delayDebounceFn);
-  }, [searchText]);
-
   const clear = useCallback(() => {
     setSearchResults([]);
     setUnExpandedTitles({});
