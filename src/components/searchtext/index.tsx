@@ -18,7 +18,8 @@ interface SelectedRow {
 type SearchResultType = Record<string, { code: string; line: number }[]>[];
 
 const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({onSelectedLine, listFiles, style, onClose}) => {
-  const [searchText, setSearchText] = useState('');                                                        
+  const [searchText, setSearchText] = useState('');    
+  const [resultText, setResultText] = useState('');   
   const [searchResults, setSearchResults] = useState<SearchResultType>([]);
   const [unExpandedTitles, setUnExpandedTitles] = useState<Record<number, boolean>>({}); 
   const [selectedRow, setSelectedRow] = useState<SelectedRow>({ titleIndex: -1, rowIndex: -1 }); 
@@ -109,6 +110,14 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({onSelectedLine, list
   }, [selectedRow, allSelectResults]);
 
   useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      setResultText(searchText);
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchText]);
+
+  useEffect(() => {
     const current = innerRef?.current as unknown as HTMLElement;
     if (current) {
       current.addEventListener('keydown', handleKeyDown);
@@ -161,7 +170,7 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({onSelectedLine, list
       <SearchResult
         searchResults={searchResults}
         unExpandedTitles={unExpandedTitles}
-        searchText={searchText}
+        searchText={resultText}
         selectedRow={selectedRow}
         handleRowSelection={handleRowSelection}
         toggleExpand={toggleExpand}
