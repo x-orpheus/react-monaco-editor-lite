@@ -118,6 +118,14 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({onSelectedLine, list
   }, [selectedRow, allSelectResults]);
 
   useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      setResultText(searchText);
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchText]);
+
+  useEffect(() => {
     const current = innerRef?.current as unknown as HTMLElement;
     if (current) {
       current.addEventListener('keydown', handleKeyDown);
