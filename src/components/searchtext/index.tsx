@@ -29,11 +29,19 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({onSelectedLine, list
 
   useEffect(() => {
     handleSearch();
-  }, [searchText, listFiles]);
+  }, [resultText, listFiles]);
 
   useEffect(() => {
     smoothSelectedResults();
   }, [searchResults, unExpandedTitles]);
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      setResultText(searchText);
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchText]);
 
   const clear = useCallback(() => {
     setSearchResults([]);
@@ -41,7 +49,7 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({onSelectedLine, list
   }, []);
 
   const handleSearch = useCallback(() => {
-    if (searchText.length === 0) {
+    if (resultText.length === 0) {
       clear();
       return;
     }
@@ -53,7 +61,7 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({onSelectedLine, list
         var matchingSubstrings = [];
         for (var i = 0; i < matches.length; i++) {
           const lineStr = matches[i];
-          if (lineStr.toLowerCase().includes(searchText.toLowerCase())) {
+          if (lineStr.toLowerCase().includes(resultText.toLowerCase())) {
             matchingSubstrings.push({code: lineStr, line: i + 1});
           }
         }
@@ -65,7 +73,7 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({onSelectedLine, list
       }
     }
     setSearchResults(lsearchResults);
-  } , [searchText, listFiles]);
+  } , [resultText, listFiles]);
 
   const smoothSelectedResults = useCallback(() => {
     const selectedResults: { titleIndex: number; rowIndex: number }[] = [];
@@ -108,14 +116,6 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({onSelectedLine, list
       setSelectedRow((pre) => preRow(pre.titleIndex,  pre.rowIndex));
     }
   }, [selectedRow, allSelectResults]);
-
-  useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      setResultText(searchText);
-    }, 500);
-
-    return () => clearTimeout(delayDebounceFn);
-  }, [searchText]);
 
   useEffect(() => {
     const current = innerRef?.current as unknown as HTMLElement;
