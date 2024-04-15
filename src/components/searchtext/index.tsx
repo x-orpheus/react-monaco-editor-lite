@@ -29,7 +29,7 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({onSelectedLine, list
 
   useEffect(() => {
     handleSearch();
-  }, [searchText, listFiles]);
+  }, [resultText, listFiles]);
 
   useEffect(() => {
     smoothSelectedResults();
@@ -41,7 +41,7 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({onSelectedLine, list
   }, []);
 
   const handleSearch = useCallback(() => {
-    if (searchText.length === 0) {
+    if (resultText.length === 0) {
       clear();
       return;
     }
@@ -53,7 +53,7 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({onSelectedLine, list
         var matchingSubstrings = [];
         for (var i = 0; i < matches.length; i++) {
           const lineStr = matches[i];
-          if (lineStr.toLowerCase().includes(searchText.toLowerCase())) {
+          if (lineStr.toLowerCase().includes(resultText.toLowerCase())) {
             matchingSubstrings.push({code: lineStr, line: i + 1});
           }
         }
@@ -65,7 +65,7 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({onSelectedLine, list
       }
     }
     setSearchResults(lsearchResults);
-  } , [searchText, listFiles]);
+  } , [resultText, listFiles]);
 
   const smoothSelectedResults = useCallback(() => {
     const selectedResults: { titleIndex: number; rowIndex: number }[] = [];
