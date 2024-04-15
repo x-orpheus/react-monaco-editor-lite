@@ -1,3 +1,20 @@
+## [1.3.3](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.2.3...v1.3.3) (2024-04-15)
+
+
+### Bug Fixes
+
+* debounce search text use result text ([c4ede2d](https://github.com/x-orpheus/react-monaco-editor-lite/commit/c4ede2d9160d37fe621ced5b635494d065e1065e))
+* input css style ([#7](https://github.com/x-orpheus/react-monaco-editor-lite/issues/7)) ([72231d5](https://github.com/x-orpheus/react-monaco-editor-lite/commit/72231d5990afa244d8c6acd673cd485dacc516ed))
+* press esc to close searchFile input ([#8](https://github.com/x-orpheus/react-monaco-editor-lite/issues/8)) ([b644f89](https://github.com/x-orpheus/react-monaco-editor-lite/commit/b644f896c9008ce2cabdc7fec541a69433df878a))
+
+
+### Features
+
+* add decounce for searching text ([2c8b836](https://github.com/x-orpheus/react-monaco-editor-lite/commit/2c8b83610cd8f9ccdabb78b18959481a9c8ab30a))
+* support search file & search text ([#6](https://github.com/x-orpheus/react-monaco-editor-lite/issues/6)) ([b4e9557](https://github.com/x-orpheus/react-monaco-editor-lite/commit/b4e9557bc7ba636b6932aca85f532e743298bca8))
+
+
+
 ## [1.3.2](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.2.3...v1.3.2) (2024-04-02)
 
 
