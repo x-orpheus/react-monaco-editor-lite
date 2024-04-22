@@ -1,6 +1,6 @@
 .music-monaco-editor-list {
     &-wrapper {
-        width: 220px;
+        width: 220px !important;
         font-size: 14px;
         line-height: 28px;
         height: 100%;
@@ -15,21 +15,37 @@
             border-bottom: 1px solid #ccc;
             .panel-header {
                 display: flex;
-                height: 25px;
+                font-size: 12px;
+                height: 24px;
+                align-items: center;
+                line-height: 24px;
                 padding: 0 5px;
                 justify-content: space-between;
                 background: var(--monaco-editor-foldBackground);
+                &-icon{
+                    &:hover {
+                        background: var(--monaco-editor-selectionBackground);
+                    }
+                }
             }
-    
-        
+            .panel-body {
+                min-height: 150px;
+                overflow: auto;
+                max-height: 200px;
+            }
             .music-monaco-icons {
                 margin-left: 5px !important;
             }
-            .music-monaco-editor-list-file-item-row{
+            .music-monaco-editor-list-file-item-row {
                 height: 24px !important;
             }
-            .music-monaco-editor-list-file-item-row-name{
+            .music-monaco-editor-list-file-item-row-path {
                 font-style: italic;
+            }
+            .empty {
+                text-align: center;
+                user-select: none;
+                font-size: 12px;
             }
         }
     }
@@ -58,21 +74,23 @@
 
     &-title {
         display: flex;
+        padding: 0 5px;
         flex-direction: row;
         align-items: center;
-        height: 28px;
+        height: 24px;
         user-select: none;
         cursor: pointer;
-        line-height: 28px;
+        line-height: 24px;
+        background: var(--monaco-editor-foldBackground);
 
         &-icon {
-            visibility: hidden;
-            font-size: 16px;
+            font-size: 14px;
+            cursor: pointer;
             color: var(--monaco-editor-foreground);
             margin-right: 4px;
 
             &:hover {
-                color: var(--monaco-list-hoverForeground);
+                background: var(--monaco-editor-selectionBackground);
             }
         }
 
@@ -156,6 +174,11 @@
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
+            }
+
+            &-path{
+                font-size: 10px;
+                margin-left: 5px;
             }
         }
     }

@@ -57,6 +57,9 @@ const SimpleFile: React.FC<{
         className="music-monaco-editor-list-file-item-row-name"
       >
         {file.name}
+        <span className="music-monaco-editor-list-file-item-row-path">
+          {file.path}
+        </span>
       </span>
     </div>
   );

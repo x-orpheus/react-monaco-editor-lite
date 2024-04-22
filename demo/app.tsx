@@ -160,7 +160,7 @@ const App = () => {
     <div
       style={{
         height: "100%",
-        padding: '10px 5px',
+        padding: '10px 0',
       }}
     >
       <div
