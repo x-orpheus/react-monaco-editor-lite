@@ -18,9 +18,11 @@ import {
 } from '@utils/index';
 import File from './file';
 import './index.less';
+import OpenFilePanel from './open-file-panel';
 
 export interface FileTreeIProps {
     defaultFiles: any,
+    openedFiles: any,
     getAllFiles: () => any,
     onPathChange: (key: string) => void,
     title?: string,
@@ -32,6 +34,7 @@ export interface FileTreeIProps {
     onAddFolder: (...args: any) => void,
     onDeleteFolder: (path: string) => void,
     onEditFolderName: (path: string, name: string) => void,
+    onCloseFile: (path: string) => void,
     rootEl: React.MutableRefObject<null>,
     disableFileOps?: {
         add?: boolean,
@@ -62,9 +65,11 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(({
     onAddFolder,
     onDeleteFolder,
     onEditFolderName,
+    onCloseFile,
     rootEl,
     disableFileOps = {},
     disableFolderOps = {},
+    openedFiles
 } ,ref) => {
     const [filetree, setFiletree] = useState(() => generateFileTree(defaultFiles));
 
@@ -180,6 +185,7 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(({
 
     return (
         <div className="music-monaco-editor-list-wrapper" style={style}>
+            <OpenFilePanel filetree={filetree} openedFiles={openedFiles} onPathChange={onPathChange} onCloseFile={onCloseFile} currentPath={currentPath}></OpenFilePanel>
             {
                 title && (
                     <div className="music-monaco-editor-list-title">

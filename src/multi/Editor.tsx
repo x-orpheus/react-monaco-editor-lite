@@ -167,36 +167,34 @@ export const MultiEditorComp = React.forwardRef<
     const disableEslintRef = useRef(ideConfig.disableEslint);
     disableEslintRef.current = ideConfig.disableEslint;
 
-    if (!ideConfig.disableSearch) {
-      const handleKeyDown = useCallback((event: { metaKey: any; shiftKey: any; key: string; preventDefault: () => void; }) => {
-        if (event.metaKey && event.shiftKey && (event.key === 'f' || event.key === 'F') && !searchTextVisible) {
+    const handleKeyDown = useCallback((event: { metaKey: any; shiftKey: any; key: string; preventDefault: () => void; }) => {
+      if (event.metaKey && event.shiftKey && (event.key === 'f' || event.key === 'F') && !searchTextVisible) {
+        event.preventDefault();
+        setSearchTextVisible(true);
+      } else if (event.metaKey && event.key === 'p') {
+        event.preventDefault();
+        setSearchFileVisible(pre => !pre);
+        editorRef.current?.focus();
+      } else if (event.key === "Escape") {
+        if (searchFileVisible) {
           event.preventDefault();
-          setSearchTextVisible(true);
-        } else if (event.metaKey && event.key === 'p') {
+          setSearchFileVisible(false);
+        } else if (searchTextVisible) {
           event.preventDefault();
-          setSearchFileVisible(pre => !pre);
-          editorRef.current?.focus();
-        } else if (event.key === "Escape") {
-          if (searchFileVisible) {
-            event.preventDefault();
-            setSearchFileVisible(false);
-          } else if (searchTextVisible) {
-            event.preventDefault();
-            setSearchTextVisible(false);
-          }
-          editorRef.current?.focus();
+          setSearchTextVisible(false);
         }
-      },[searchTextVisible, searchFileVisible]);
-  
-      useEffect(() => {
-        const refCurrent = rootRef.current as unknown as HTMLElement;;
-        refCurrent?.addEventListener('keydown', handleKeyDown);
+        editorRef.current?.focus();
+      }
+    },[searchTextVisible, searchFileVisible]);
     
-        return () => {
-          refCurrent?.removeEventListener('keydown', handleKeyDown);
-        };
-      }, [rootRef, handleKeyDown]); // 当 ref 改变时更新
-    }
+    useEffect(() => {
+      const refCurrent = rootRef.current as unknown as HTMLElement;
+        !ideConfig.disableSearch && refCurrent?.addEventListener('keydown', handleKeyDown);
+  
+      return () => {
+        !ideConfig.disableSearch && refCurrent?.removeEventListener('keydown', handleKeyDown);
+      };
+    }, [rootRef, handleKeyDown, ideConfig]); // 当 ref 改变时更新
 
     const restoreModel = useCallback(
       (path: string) => {
@@ -381,22 +379,31 @@ export const MultiEditorComp = React.forwardRef<
       ideConfig.saveWhenBlur ? saveFile : noop
     );
 
+    // path 为空: 关闭全部文件
+    // TODO: 检测文件是否未保存
     const onCloseFile = useCallback(
       (path: string) => {
         let targetPath = '';
         if (openedFiles.length) {
-          const res = openedFiles.filter((v, index) => {
-            if (v.path === path) {
-              if (index === 0) {
-                if (openedFiles[index + 1]) {
-                  targetPath = openedFiles[index + 1].path;
+          let res: any[];
+          if(!path){
+            res = [];
+          }
+          else{
+            res = openedFiles.filter((v, index) => {
+              if (v.path === path) {
+                if (index === 0) {
+                  if (openedFiles[index + 1]) {
+                    targetPath = openedFiles[index + 1].path;
+                  }
+                } else {
+                  targetPath = openedFiles[index - 1].path;
                 }
-              } else {
-                targetPath = openedFiles[index - 1].path;
               }
-            }
-            return v.path !== path;
-          });
+              return v.path !== path;
+            });
+          }
+            
           // 目标文件是当前文件，且存在下一激活文件时，执行model及path切换的逻辑
           if (targetPath && curPathRef.current === path) {
             restoreModel(targetPath);
@@ -778,7 +785,7 @@ export const MultiEditorComp = React.forwardRef<
 
     const configFileNames = useCallback(() => { 
       const obj = getAllFiles();
-      return Object.keys(obj); ;
+      return Object.keys(obj); 
     }, [getAllFiles]);
 
     return (
@@ -805,6 +812,7 @@ export const MultiEditorComp = React.forwardRef<
           <FileList
             getAllFiles={getAllFiles}
             title={title}
+            openedFiles={openedFiles}
             disableFileOps={ideConfig.disableFileOps}
             disableFolderOps={ideConfig.disableFolderOps}
             ref={filelistRef}
@@ -814,6 +822,7 @@ export const MultiEditorComp = React.forwardRef<
             onAddFile={addFile}
             onAddFolder={addFolder}
             onDeleteFolder={deleteFolder}
+            onCloseFile={onCloseFile}
             onEditFolderName={editFolderName}
             style={{...styles, display: !searchTextVisible ? 'block' : 'none'}}
             currentPath={curPath}
