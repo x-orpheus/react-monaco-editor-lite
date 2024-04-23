@@ -227,7 +227,7 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
           >
             {title || "CORE"}
           </span>
-          <span title="文件搜索">
+          <span title="文件搜索 CMD+SHIFT+F">
             <SearchIcon
               onClick={() => {
                 setSearchTextVisible(true);
