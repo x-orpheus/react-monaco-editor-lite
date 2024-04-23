@@ -3,6 +3,7 @@ import { Registry } from 'monaco-textmate';
 import { wireTmGrammars } from 'monaco-editor-textmate';
 declare type monacoType = typeof import('monaco-editor');
 import { ASSETSPATH } from './consts';
+
 // import config from './eslintconfig';
 declare global {
   interface Window {
@@ -83,40 +84,37 @@ export async function configTheme(name: string) {
   window.monaco.editor.setTheme(name);
 }
 
-async function addExtraLib() {
-  let res = await (await fetch(`${ASSETSPATH}@types/react/index.d.ts`)).text();
-  window.monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
-    allowJs: true,
-    allowNonTsExtensions: true,
-    allowSyntheticDefaultImports: true, // for use of import React from 'react' ranther than import * as React from 'react'
+let isAddDefaultsLibs = false;
+export async function addExtraLibs(extraLibs: Array<{ url: string; path: string; }>) {
+  if (!isAddDefaultsLibs) {
+    extraLibs = [{
+      url: `${ASSETSPATH}@types/react/index.d.ts`,
+      path: 'music:/node_modules/@types/react/index.d.ts'
+    }, {
+      url: `${ASSETSPATH}@types/react/global.d.ts`,
+      path: 'music:/node_modules/%40types/react/global.d.ts'
+    }, {
+      url: `${ASSETSPATH}@types/react-dom/index.d.ts`,
+      path: 'music:/node_modules/@types/react-dom/index.d.ts'
+    }].concat(extraLibs);
+    isAddDefaultsLibs = true;
+  }
+
+  const requests = extraLibs.map(async (lib) => {
+    const res = await (await fetch(lib.url)).text();
+    window.monaco.languages.typescript.javascriptDefaults.addExtraLib(
+      res,
+      lib.path
+    );
+    window.monaco.languages.typescript.typescriptDefaults.addExtraLib(
+      res,
+      lib.path
+    );
+    window.monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true);
   });
-  window.monaco.languages.typescript.javascriptDefaults.addExtraLib(
-    res,
-    'music:/node_modules/@types/react/index.d.ts'
-  );
-  window.monaco.languages.typescript.typescriptDefaults.addExtraLib(
-    res,
-    'music:/node_modules/@types/react/index.d.ts'
-  );
-  res = await (await fetch(`${ASSETSPATH}@types/react/global.d.ts`)).text();
-  window.monaco.languages.typescript.javascriptDefaults.addExtraLib(
-    res,
-    'music:/node_modules/%40types/react/global.d.ts'
-  );
-  window.monaco.languages.typescript.typescriptDefaults.addExtraLib(
-    res,
-    'music:/node_modules/%40types/react/global.d.ts'
-  );
-  res = await (await fetch(`${ASSETSPATH}@types/react-dom/index.d.ts`)).text();
-  window.monaco.languages.typescript.javascriptDefaults.addExtraLib(
-    res,
-    'music:/node_modules/@types/react-dom/index.d.ts'
-  );
-  window.monaco.languages.typescript.typescriptDefaults.addExtraLib(
-    res,
-    'music:/node_modules/@types/react-dom/index.d.ts'
-  );
+  await Promise.all(requests);
 }
+
 
 function configMonaco() {
   const init = async () => {
@@ -126,7 +124,11 @@ function configMonaco() {
     // 加载textmate语义解析webassembly文件
     await loadWASM(`${ASSETSPATH}onigasm.wasm`);
 
-    addExtraLib();
+    window.monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+      allowJs: true,
+      allowNonTsExtensions: true,
+      allowSyntheticDefaultImports: true, // for use of import React from 'react' ranther than import * as React from 'react'
+    });
   };
   init();
 

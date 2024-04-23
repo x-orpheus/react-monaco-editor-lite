@@ -228,6 +228,10 @@ const App = () => {
                 //   disableEslint: true,
                 disablePrettier: true,
               }}
+              extraLibs={[{
+                url: "https://d2.music.126.net/dmusic/obj/w5zCg8OAw6HDjzjDgMK_/35246957834/7d53/3b7a/7ef0/30ab2174d344733b71039d56dceb2109.ts?download=reactnative.d.ts",
+                path: "music:/node_modules/@types/react-native/index.d.ts"
+              }]}
               // ideConfig={{
               //     // disableFileOps: true,
               //     // disablePrettier: true,

@@ -1,5 +1,6 @@
 import React from 'react';
+import { Text } from 'react-native';
 
-const App = () => (<div>13</div>);
+const App = () => (<div><Text />13</div>);
 
 export default App;
