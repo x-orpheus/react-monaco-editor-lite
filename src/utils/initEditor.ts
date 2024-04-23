@@ -84,19 +84,22 @@ export async function configTheme(name: string) {
   window.monaco.editor.setTheme(name);
 }
 
+let isAddDefaultsLibs = false;
 export async function addExtraLibs(extraLibs: Array<{ url: string; path: string; }>) {
-
-  extraLibs = [{
-    url: `${ASSETSPATH}@types/react/index.d.ts`,
-    path: 'music:/node_modules/@types/react/index.d.ts'
-  }, {
-    url: `${ASSETSPATH}@types/react/global.d.ts`,
-    path: 'music:/node_modules/%40types/react/global.d.ts'
-  }, {
-    url: `${ASSETSPATH}@types/react-dom/index.d.ts`,
-    path: 'music:/node_modules/@types/react-dom/index.d.ts'
+  if (!isAddDefaultsLibs) {
+    extraLibs = [{
+      url: `${ASSETSPATH}@types/react/index.d.ts`,
+      path: 'music:/node_modules/@types/react/index.d.ts'
+    }, {
+      url: `${ASSETSPATH}@types/react/global.d.ts`,
+      path: 'music:/node_modules/%40types/react/global.d.ts'
+    }, {
+      url: `${ASSETSPATH}@types/react-dom/index.d.ts`,
+      path: 'music:/node_modules/@types/react-dom/index.d.ts'
+    }].concat(extraLibs);
+    isAddDefaultsLibs = true;
   }
-].concat(extraLibs);
+
   const requests = extraLibs.map(async (lib) => {
     let res = await (await fetch(lib.url)).text();
     window.monaco.languages.typescript.javascriptDefaults.addExtraLib(
