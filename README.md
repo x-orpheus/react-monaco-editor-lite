@@ -145,6 +145,9 @@ export default SingleIDE;
 #### 搜索文本
 快捷键：shift + command/ctrl + f
 
+#### 类型提示声明
+MultiEditor 新增属性 extraLibs 配置额外的类型提示配置
+
 ### 组件参数及方法
 
 查看此[文档](https://x-orpheus.github.io/react-monaco-editor-lite/public/docs/index.html)
