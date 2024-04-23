@@ -33,8 +33,8 @@ const Setting: React.FC<{
         onClick={() => setVisible(true)}>
         <SettingIcon
           style={{
-            width: '16px',
-            height: '16px',
+            width: '14px',
+            height: '14px',
           }}
         />
       </div>

@@ -101,7 +101,7 @@ export async function addExtraLibs(extraLibs: Array<{ url: string; path: string;
   }
 
   const requests = extraLibs.map(async (lib) => {
-    let res = await (await fetch(lib.url)).text();
+    const res = await (await fetch(lib.url)).text();
     window.monaco.languages.typescript.javascriptDefaults.addExtraLib(
       res,
       lib.path
