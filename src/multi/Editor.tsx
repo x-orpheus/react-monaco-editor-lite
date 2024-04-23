@@ -19,7 +19,7 @@ import {
   filterNull,
 } from '@utils';
 import { THEMES } from '@utils/consts';
-import { configTheme } from '@utils/initEditor';
+import { configTheme, addExtraLibs } from '@utils/initEditor';
 import Setting from '@components/Setting';
 import {
   useDragLine,
@@ -83,6 +83,10 @@ export interface MultiEditorIProps {
   defaultFiles?: filelist;
   options: monacoType.editor.IStandaloneEditorConstructionOptions;
   title?: string;
+  extraLibs?: Array<{
+    url: string;
+    path: string;
+  }>;
 }
 
 export interface MultiRefType {
@@ -93,7 +97,7 @@ export interface MultiRefType {
   refresh: (files: filelist, path?: string) => void;
 }
 
-export const MultiEditorComp = React.forwardRef<
+const MultiPrivateEditorComp = React.forwardRef<
   MultiRefType,
   MultiEditorIProps
 >(
@@ -118,6 +122,7 @@ export const MultiEditorComp = React.forwardRef<
       },
       options,
       title,
+      extraLibs
     },
     ref
   ) => {
@@ -863,6 +868,70 @@ export const MultiEditorComp = React.forwardRef<
         )}
       </div>
     );
+  }
+);
+
+export const MultiEditorComp = React.forwardRef<
+  MultiRefType,
+  MultiEditorIProps
+>(
+  (
+    {
+      defaultPath,
+      defaultTheme = 'OneDarkPro',
+      onPathChange,
+      onValueChange,
+      onRenameFile,
+      defaultFiles = {},
+      onFileChange,
+      onFileSave,
+      ideConfig = {
+        disableFileOps: {},
+        disableFolderOps: {},
+        disableEslint: false,
+        disableSetting: false,
+        disablePrettier: false,
+        saveWhenBlur: false,
+        disableSearch: false
+      },
+      options,
+      title,
+      extraLibs
+    },
+    ref
+  ) => {
+     
+    const [showEditor, setShowEditor]= useState<Boolean>(false);
+    
+    useEffect(() => {
+      if (extraLibs === undefined || extraLibs.length === 0) {
+        setShowEditor(true);
+      } else {
+        addExtraLibs(extraLibs)
+        .then(() => {
+          setShowEditor(true);
+        })
+        .catch((error) => {
+          setShowEditor(true);
+        });
+      }
+    }, [showEditor, extraLibs]);
+
+    return (showEditor ? 
+    <MultiPrivateEditorComp  
+      defaultPath={defaultPath}
+      defaultTheme={defaultTheme}
+      onPathChange={onPathChange}
+      onValueChange={onValueChange}
+      onRenameFile={onRenameFile}
+      defaultFiles={defaultFiles}
+      onFileChange={onFileChange}
+      onFileSave={onFileSave}
+      ideConfig={ideConfig}
+      options={options}
+      title={title}
+      extraLibs={extraLibs} 
+      ref={ref}/> : <div>加载中...</div>);
   }
 );
 
