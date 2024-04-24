@@ -148,6 +148,9 @@ export default SingleIDE;
 #### 类型提示声明
 MultiEditor 新增属性 extraLibs 配置额外的类型提示配置
 
+#### 文件/目录右键菜单功能
+MultiEditor 新增属性 useFileMenu 用于是否启用文件/目录右键菜单功能
+
 ### 组件参数及方法
 
 查看此[文档](https://x-orpheus.github.io/react-monaco-editor-lite/public/docs/index.html)
