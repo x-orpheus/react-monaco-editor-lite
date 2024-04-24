@@ -1,4 +1,9 @@
-import React, { useCallback, useState, useImperativeHandle } from "react";
+import React, {
+  useCallback,
+  useState,
+  useImperativeHandle,
+  useRef,
+} from "react";
 import AddFileIcon from "@components/icons/addfile";
 import AddFolderIcon from "@components/icons/addfolder";
 import Modal from "@components/modal";
@@ -17,6 +22,9 @@ import "./index.less";
 import OpenFilePanel from "./open-file-panel";
 import SearchIcon from "@components/icons/search";
 import Collapse from "@components/icons/collapse";
+import Dropdown from "rc-dropdown";
+import "rc-dropdown/assets/index.css";
+import FileMenu from "../menu";
 
 export interface FileTreeIProps {
   defaultFiles: any;
@@ -45,6 +53,7 @@ export interface FileTreeIProps {
     delete?: boolean;
     rename?: boolean;
   };
+  useFileMenu: boolean;
 }
 
 export interface FileTreeRefType {
@@ -72,12 +81,19 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
       disableFileOps = {},
       disableFolderOps = {},
       openedFiles,
+      useFileMenu = true,
     },
     ref
   ) => {
     const [filetree, setFiletree] = useState(() =>
       generateFileTree(defaultFiles)
     );
+    const [menuVisible, setMenuVisible] = useState(false);
+    const [isMenuFile, setIsMenuFile] = useState(false);
+    const [menuPath, setMenuPath] = useState("");
+    const menuAction =
+      useRef<(action: string, path: string, isFile: boolean) => void | null>();
+    const isFirstRun = useRef(true);
 
     useImperativeHandle(ref, () => ({
       refresh: (files) => setFiletree(generateFileTree(files)),
@@ -88,6 +104,42 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
         setFiletree(addSourceFile(filetree, path));
       },
       [filetree]
+    );
+
+    const handleContextMenu = useCallback(
+      (
+        event: any,
+        fileAction: (action: string, path: string, isFile: boolean) => void
+      ) => {
+        event.preventDefault();
+        if (menuVisible) {
+          setMenuPath(event.currentTarget.dataset.src);
+          setIsMenuFile(event.currentTarget.dataset.isFile);
+        }
+
+        if (!menuVisible && isFirstRun.current) {
+          const action = fileAction;
+          menuAction.current = action;
+          isFirstRun.current = false;
+          setMenuPath(event.currentTarget.dataset.src);
+          setIsMenuFile(event.currentTarget.dataset.isFile);
+          setMenuVisible(true);
+        }
+      },
+      [menuVisible, menuAction, setMenuVisible, isFirstRun]
+    );
+
+    const handleMenuClick = useCallback(
+      (info: any, path: string, isFile: boolean) => {
+        const action = menuAction.current;
+        if (action) {
+          action(info.key, path, isFile);
+        }
+
+        setMenuVisible(false);
+        isFirstRun.current = true;
+      },
+      [menuAction, setMenuVisible]
     );
 
     const deleteFile = useCallback(
@@ -269,25 +321,68 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
             />
           </span>
         </div>
-        <div className="music-monaco-editor-list-files">
-          <File
-            getAllFiles={getAllFiles}
-            disableFileOps={disableFileOps}
-            disableFolderOps={disableFolderOps}
-            onEditFileName={editFileName}
-            onEditFolderName={editFolderName}
-            onDeleteFile={deleteFile}
-            onDeleteFolder={deleteFolder}
-            onAddFile={addFile}
-            onAddFolder={addFolder}
-            onConfirmAddFile={handleConfirmAddFile}
-            onConfirmAddFolder={handleConfirmAddFolder}
-            currentPath={currentPath}
-            root
-            file={filetree}
-            onPathChange={onPathChange}
-          />
-        </div>
+
+        {useFileMenu ? (
+          <Dropdown
+            visible={menuVisible}
+            trigger={["contextMenu"]}
+            overlay={
+              <FileMenu
+                disableFileOps={disableFileOps}
+                disableFolderOps={disableFolderOps}
+                isFile={isMenuFile}
+                path={menuPath}
+                handleMenuClick={handleMenuClick}
+              />
+            }
+            onVisibleChange={(visible) => setMenuVisible(visible)}
+            alignPoint={true}
+          >
+            <div className="music-monaco-editor-list-files">
+              <File
+                getAllFiles={getAllFiles}
+                disableFileOps={disableFileOps}
+                disableFolderOps={disableFolderOps}
+                onEditFileName={editFileName}
+                onEditFolderName={editFolderName}
+                onDeleteFile={deleteFile}
+                onDeleteFolder={deleteFolder}
+                onAddFile={addFile}
+                onAddFolder={addFolder}
+                onConfirmAddFile={handleConfirmAddFile}
+                onConfirmAddFolder={handleConfirmAddFolder}
+                currentPath={currentPath}
+                root
+                file={filetree}
+                onPathChange={onPathChange}
+                onContextMenu={handleContextMenu}
+                useFileMenu={useFileMenu}
+              />
+            </div>
+          </Dropdown>
+        ) : (
+          <div className="music-monaco-editor-list-files">
+            <File
+              getAllFiles={getAllFiles}
+              disableFileOps={disableFileOps}
+              disableFolderOps={disableFolderOps}
+              onEditFileName={editFileName}
+              onEditFolderName={editFolderName}
+              onDeleteFile={deleteFile}
+              onDeleteFolder={deleteFolder}
+              onAddFile={addFile}
+              onAddFolder={addFolder}
+              onConfirmAddFile={handleConfirmAddFile}
+              onConfirmAddFolder={handleConfirmAddFolder}
+              currentPath={currentPath}
+              root
+              file={filetree}
+              onPathChange={onPathChange}
+              onContextMenu={handleContextMenu}
+              useFileMenu={useFileMenu}
+            />
+          </div>
+        )}
       </div>
     );
   }

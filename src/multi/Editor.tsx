@@ -21,6 +21,7 @@ import {
 import { THEMES } from "@utils/consts";
 import { configTheme, addExtraLibs } from "@utils/initEditor";
 import Setting from "@components/Setting";
+
 import {
   useDragLine,
   usePrettier,
@@ -63,6 +64,7 @@ export interface MultiEditorIProps {
     disablePrettier?: boolean;
     saveWhenBlur?: boolean;
     disableSearch?: boolean;
+    useFileMenu?: boolean;
   };
   defaultPath?: string;
   defaultTheme?: string;
@@ -98,7 +100,6 @@ export interface MultiRefType {
   refresh: (files: filelist, path?: string) => void;
 }
 
-// eslint-disable-next-line react/display-name
 const MultiPrivateEditorComp = React.forwardRef<
   MultiRefType,
   MultiEditorIProps
@@ -121,6 +122,7 @@ const MultiPrivateEditorComp = React.forwardRef<
         disablePrettier: false,
         saveWhenBlur: false,
         disableSearch: false,
+        useFileMenu: true,
       },
       options,
       title,
@@ -863,6 +865,7 @@ const MultiPrivateEditorComp = React.forwardRef<
             currentPath={curPath}
             defaultFiles={defaultFiles}
             onPathChange={handlePathChange}
+            useFileMenu={ideConfig.useFileMenu ?? true} 
           />
           <div
             onMouseDown={handleMoveStart}
@@ -937,7 +940,8 @@ export const MultiEditorComp = React.forwardRef<
         disableSetting: false,
         disablePrettier: false,
         saveWhenBlur: false,
-        disableSearch: false
+        disableSearch: false,
+        useFileMenu: true
       },
       options,
       title,

@@ -23,6 +23,7 @@ const File: React.FC<{
     onPathChange: (key: string) => void,
     root: boolean,
     currentPath?: string,
+    useFileMenu?: boolean,
     onAddFile: (...args: any[]) => void,
     onConfirmAddFile: (...args: any[]) => void,
     onDeleteFile: (...args: any[]) => void,
@@ -31,6 +32,7 @@ const File: React.FC<{
     onAddFolder: (...args: any[]) => void,
     onDeleteFolder: (...args: any[]) => void,
     onEditFolderName: (...args: any[]) => void,
+    onContextMenu: (e: any, fileAction:(action:string, path: string, isFile: boolean) => void) => void
 }> = ({
     getAllFiles,
     disableFileOps = {},
@@ -39,6 +41,7 @@ const File: React.FC<{
     onPathChange,
     currentPath = '',
     root,
+    useFileMenu = true,
     onAddFile,
     onConfirmAddFile,
     onDeleteFile,
@@ -47,6 +50,7 @@ const File: React.FC<{
     onAddFolder,
     onDeleteFolder,
     onEditFolderName,
+    onContextMenu
 }) => {
     const [showChild, setShowChild] = useState(false);
     const [editing, setEditing] = useState(false);
@@ -181,6 +185,31 @@ const File: React.FC<{
         }
     }, [currentPath, file.path]);
 
+    const handleFileAction = (action: string, path: string, isFile: boolean) => {
+        switch (action) {
+            case 'newFile':
+                if (!isFile) {
+                    setShowChild(true);
+                    onAddFile(path + '/');
+                }
+                break;
+            case 'newFolder':
+                if (!isFile) {
+                    setShowChild(true);
+                    onAddFolder(path + '/');
+                }
+                break;
+            case 'delete':
+                isFile ? onDeleteFile(path) : onDeleteFolder(path);
+                break;
+            case 'editName':                                                                      
+                setEditing(true)
+                break;
+            default:
+                break;
+        }
+    };
+
     if (file._isFile) {
         let fileType;
         if (file.name && file.name.indexOf('.') !== -1) {
@@ -190,11 +219,13 @@ const File: React.FC<{
         }
         
         return (
-            <div
+             <div
                 data-src={file.path}
                 title={file.path}
                 onClick={handlePathChange}
                 key={file.path}
+                data-is-file={file._isFile}
+                onContextMenu={e => onContextMenu(e, handleFileAction)}
                 className={`music-monaco-editor-list-file-item-row ${currentPath === file.path ? 'music-monaco-editor-list-file-item-row-focused' : ''}`}>
                 <Icon
                     type={fileType}
@@ -207,7 +238,7 @@ const File: React.FC<{
                         <>
                             <span style={{ flex: 1 }} className="music-monaco-editor-list-file-item-row-name">{file.name}</span>
                             {
-                                disableFileOps.rename ? null : <EditIcon
+                                (disableFileOps.rename || useFileMenu) ? null : <EditIcon
                                     onClick={(e:Event) => {
                                         e.stopPropagation();
                                         setEditing(true);
@@ -215,7 +246,7 @@ const File: React.FC<{
                                     className="music-monaco-editor-list-split-icon" />
                             }
                             {
-                                disableFileOps.delete ? null : (<DeleteIcon
+                                (disableFileOps.delete || useFileMenu) ? null : (<DeleteIcon
                                     onClick={(e:Event) => {
                                         e.stopPropagation();
                                         onDeleteFile(file.path);
@@ -242,26 +273,25 @@ const File: React.FC<{
                         </>
                     )
                 }
-            </div>
+            </div> 
         )
     }
     return (
-        <div className="music-monaco-editor-list-file-item">
+        <div className="music-monaco-editor-list-file-item"> 
             {
                 file._isDirectory && (
-                    <div onClick={handleClick} className="music-monaco-editor-list-file-item-row" title={file.path}>
+                    <div onClick={handleClick} className="music-monaco-editor-list-file-item-row" title={file.path}  data-src={file.path} data-is-file={file._isFile} onContextMenu={e => onContextMenu(e, handleFileAction)}>
                         <Arrow collpase={!showChild} />
                         <Icon
                             style={{
                                 marginRight: '5px',
                             }}
                             type={showChild ? 'default_folder_opened' : 'default_folder'} />
-                        {
-                            (file.name && !editing) ? (
+                            {(file.name && !editing) ? (
                                 <>
                                     <span style={{ flex: 1 }} className="music-monaco-editor-list-file-item-row-name">{file.name}</span>
                                     {
-                                        disableFolderOps.rename ? null : (
+                                        (disableFolderOps.rename || useFileMenu) ? null : (
                                             <EditIcon
                                                 onClick={(e:Event) => {
                                                     e.stopPropagation();
@@ -271,7 +301,7 @@ const File: React.FC<{
                                         )
                                     }
                                     {
-                                        disableFolderOps.delete ? null : (
+                                        (disableFolderOps.delete || useFileMenu) ? null : (
                                             <DeleteIcon
                                                 onClick={(e:Event) => {
                                                     e.stopPropagation();
@@ -281,7 +311,7 @@ const File: React.FC<{
                                         )
                                     }
                                     {
-                                        disableFileOps.add ? null : (
+                                        (disableFileOps.add || useFileMenu) ? null : (
                                             <AddFileIcon
                                                 onClick={(e:Event) => {
                                                     e.stopPropagation();
@@ -292,7 +322,7 @@ const File: React.FC<{
                                         )
                                     }
                                     {
-                                        disableFolderOps.add ? null : (
+                                        (disableFolderOps.add || useFileMenu) ? null : (
                                             <AddFolderIcon
                                                 onClick={(e:Event) => {
                                                     e.stopPropagation();
@@ -303,7 +333,7 @@ const File: React.FC<{
                                         )
                                     }
                                 </>
-                            ) : (
+                                ) : (
                                 <div
                                     onClick={(e: any) => {
                                         e.stopPropagation();
@@ -316,8 +346,8 @@ const File: React.FC<{
                                     className={`music-monaco-editor-list-file-item-new
                                         ${showError ? 'music-monaco-editor-list-file-item-new-error' : ''}`}
                                     contentEditable />
-                            )
-                        }
+                                )
+                            }
                     </div>
                 )
             }
@@ -343,6 +373,8 @@ const File: React.FC<{
                                     file={file.children[item]}
                                     onPathChange={onPathChange}
                                     key={item}
+                                    onContextMenu={onContextMenu}
+                                    useFileMenu={useFileMenu}
                                     />
                             ))
                         }
