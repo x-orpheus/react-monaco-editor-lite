@@ -1,9 +1,9 @@
-import ReactDOM, { unstable_batchedUpdates } from 'react-dom';
-import { useCallback, useState, useEffect, useRef } from 'react';
-import Editor from '../src/multi';
-import { themes } from '@utils/initEditor';
-import { THEMES, ASSETSPATH } from '@utils/consts';
-import { copyDataToClipBoard } from '@utils';
+import ReactDOM, { unstable_batchedUpdates } from "react-dom";
+import { useCallback, useState, useEffect, useRef } from "react";
+import Editor from "../src/multi";
+import { themes } from "@utils/initEditor";
+import { THEMES, ASSETSPATH } from "@utils/consts";
+import { copyDataToClipBoard } from "@utils";
 interface filelist {
   [key: string]: string;
 }
@@ -16,19 +16,19 @@ declare global {
 }
 
 const filesName = [
-  '/index.html',
-  '/app/index.jsx',
-  '/app/index.css',
-  '/app/button.jsx',
-  '/src/index.jsx',
-  '/src/components/index.jsx',
+  "/index.html",
+  "/app/index.jsx",
+  "/app/index.css",
+  "/app/button.jsx",
+  "/src/index.jsx",
+  "/src/components/index.jsx",
   // '/app.js',
   // '/cc.js',
-  '/app.ts',
-  '/cc.ts',
+  "/app.ts",
+  "/cc.ts",
   // '/test.css',
   // '/src/index.jsx',
-  '/style.md',
+  "/style.md",
   // '/styles/index.less',
   // '/src/components/title/index.js',
   // '/src/components/title/index.less',
@@ -86,7 +86,7 @@ const App = () => {
       filesContent.forEach((content, index) => {
         res[filesName[index]] = content;
       });
-      res['/test.js'] = code;
+      res["/test.js"] = code;
       unstable_batchedUpdates(() => {
         setFiles(res);
         // setPath(filesName[0]);
@@ -95,7 +95,7 @@ const App = () => {
     });
     setTimeout(() => {
       console.log(themes);
-      setColors(themes['GithubLightDefault'].colors);
+      setColors(themes["GithubLightDefault"].colors);
     }, 5000);
   }, []);
 
@@ -130,7 +130,7 @@ const App = () => {
   // useEffect(() => {
   //     window.addEventListener('message', res => console.log(res));
   // }, []);
-  const [activePath, setActivePath] = useState('/app.ts');
+  const [activePath, setActivePath] = useState("/app.ts");
 
   useEffect(() => {
     console.log(files);
@@ -149,158 +149,180 @@ const App = () => {
   });
 
   const addFile = useCallback(() => {
-    setActivePath('/src/pages/new-page1.js');
+    setActivePath("/src/pages/new-page1.js");
     setFiles((pre) => ({
       ...pre,
-      '/src/pages/new-page1.js': `export default const foo = 'hello';`,
+      "/src/pages/new-page1.js": `export default const foo = 'hello';`,
     }));
   }, []);
 
   return (
-    <div>
-      <div onClick={addFile}>addFile</div>
-      <div onClick={() => console.log(editorRef.current)}>ref api</div>
+    <div
+      style={{
+        height: "100%",
+        padding: '10px 0',
+      }}
+    >
       <div
-        onClick={() =>
-          console.log(
-            editorRef.current.refresh(files, '/style.md', {
-              start: {
-                line: 29,
-                column: 1,
-              },
-              end: {
-                line: 40,
-                column: 1,
-              },
-            })
-          )
-        }>
-        refresh
+        style={{
+          display: "flex",
+          height: "30px",
+          alignItems: "center",
+        }}
+      >
+        <div onClick={addFile}>addFile</div>
+        <div onClick={() => console.log(editorRef.current)}>ref api</div>
+        <div
+          onClick={() =>
+            console.log(
+              editorRef.current.refresh(files, "/style.md", {
+                start: {
+                  line: 29,
+                  column: 1,
+                },
+                end: {
+                  line: 40,
+                  column: 1,
+                },
+              })
+            )
+          }
+        >
+          refresh
+        </div>
+        <div
+          onClick={() => {
+            console.log(editorRef.current.getAllValue());
+          }}
+        >
+          real getAllvalue
+        </div>
+        <div onClick={() => setColors(themes["OneDarkPro"].colors)}>
+          refresh theme color
+        </div>
+        <select
+          name="theme"
+          onChange={handleThemeChange}
+          defaultValue="OneDarkPro"
+        >
+          {THEMES.map((theme) => (
+            <option key={theme} value={theme}>
+              {theme}
+            </option>
+          ))}
+        </select>
       </div>
       <div
-        onClick={() => {
-          console.log(editorRef.current.getAllValue());
-        }}>
-        real getAllvalue
-      </div>
-      <div onClick={() => setColors(themes['OneDarkPro'].colors)}>
-        refresh theme color
-      </div>
-      <select
-        name="theme"
-        onChange={handleThemeChange}
-        defaultValue="OneDarkPro">
-        {THEMES.map((theme) => (
-          <option key={theme} value={theme}>
-            {theme}
-          </option>
-        ))}
-      </select>
-      {Object.keys(files).length > 0 && (
-        <div style={{ width: '800px', height: '300px' }}>
-          { 
-          <Editor
-            title="tango project"
-            defaultTheme="GithubLightDefault"
-            ideConfig={{
-              saveWhenBlur: true,
-              //   disableEslint: true,
-              disablePrettier: true,
-              disableFileOps: {
-                add: false,
-                delete: false,
-                rename: false,
-            },
-            disableFolderOps: {
-                add: false,
-                delete: false,
-                rename: false,
-            }
-            }}
-            // ideConfig={{
-            //     disablePrettier: true,
-            //     disableEslint: true,
-            //     saveWhenBlur: true,
-            //     disableFileOps: {
-            //         add: true,
-            //         delete: true,
-            //         rename: false,
-            //     },
-            //     disableFolderOps: {
-            //         add: false,
-            //         delete: false,
-            //         rename: false,
-            //     }
-            // }}
-            // onPathChange={(path) => { setActivePath(path); }}
-            // onFileSave={(key: string, value: string) => {
-            //     console.log(editorRef.current.getAllValue());
-            // }}
-            onFileChange={(...args) => console.log(args)}
-            onRenameFile={(...args) => {
-              // setFiles((pre) => {
-              //     const res = {...pre};
-              //     res[args[1]] = res[args[0]];
-              //     delete res[args[0]];
-              //     return res;
-              // });
-              // setActivePath(args[1]);
-              console.log(args);
-            }}
-            ref={editorRef}
-            defaultPath={activePath}
-            defaultFiles={files}
-            options={{
-              fontSize: 14,
-              automaticLayout: true,
-            }}
-            extraLibs={[{
+        style={{
+          display: "flex",
+          height: "calc(100% - 30px)" 
+        }}
+      >
+        {Object.keys(files).length > 0 && (
+          <div style={{ flex: 1, }}>
+            <Editor
+              title="tango project"
+              defaultTheme="GithubLightDefault"
+              ideConfig={{
+                saveWhenBlur: true,
+                //   disableEslint: true,
+                disablePrettier: true,
+                disableFileOps: {
+                  add: false,
+                  delete: false,
+                  rename: false,
+              },
+              disableFolderOps: {
+                  add: false,
+                  delete: false,
+                  rename: false,
+              }
+              }}
+              extraLibs={[{
                 url: "https://d2.music.126.net/dmusic/obj/w5zCg8OAw6HDjzjDgMK_/35246957834/7d53/3b7a/7ef0/30ab2174d344733b71039d56dceb2109.ts?download=reactnative.d.ts",
                 path: "music:/node_modules/@types/react-native/index.d.ts"
               }]}
-          />
-}
-        </div>
-      )}
-      {/* <iframe src="http://localhost:8081/index.html" ref={sandboxRef} /> */}
-      <div
-        style={{
-          position: 'absolute',
-          right: '0',
-          top: '0',
-          bottom: '0',
-          width: '400px',
-          overflow: 'scroll',
-        }}>
-        {Object.keys(colors).map((v) => (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}
-            onClick={() => {
-              copyDataToClipBoard(`var(--monaco-${v.replace('.', '-')})`);
-            }}
-            key={v}>
-            <div
-              style={{
-                marginRight: '5px',
-              }}>
-              {v}
-            </div>
-            <div
-              style={{
-                width: '100px',
-                height: '14px',
-                background: colors[v],
+              // ideConfig={{
+              //     // disableFileOps: true,
+              //     // disablePrettier: true,
+              //     // disableEslint: true,
+              //     // saveWhenBlur: true,
+              //     // disableFileOps: {
+              //     //     add: true,
+              //     //     delete: true,
+              //     //     rename: false,
+              //     // },
+              //     // disableFolderOps: {
+              //     //     add: false,
+              //     //     delete: false,
+              //     //     rename: false,
+              //     // }
+              // }}
+              // onPathChange={(path) => { setActivePath(path); }}
+              // onFileSave={(key: string, value: string) => {
+              //     console.log(editorRef.current.getAllValue());
+              // }}
+              onFileChange={(...args) => console.log(args)}
+              onRenameFile={(...args) => {
+                // setFiles((pre) => {
+                //     const res = {...pre};
+                //     res[args[1]] = res[args[0]];
+                //     delete res[args[0]];
+                //     return res;
+                // });
+                // setActivePath(args[1]);
+                console.log(args);
+              }}
+              ref={editorRef}
+              defaultPath={activePath}
+              defaultFiles={files}
+              options={{
+                fontSize: 14,
+                automaticLayout: true,
               }}
             />
           </div>
-        ))}
+        )}
+        {/* <iframe src="http://localhost:8081/index.html" ref={sandboxRef} /> */}
+        <div
+          style={{
+            width: "300px",
+            overflow: "scroll",
+            height: "800px",
+          }}
+        >
+          {Object.keys(colors).map((v) => (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+              onClick={() => {
+                copyDataToClipBoard(`var(--monaco-${v.replace(".", "-")})`);
+              }}
+              key={v}
+            >
+              <div
+                style={{
+                  marginRight: "5px",
+                }}
+              >
+                {v}
+              </div>
+              <div
+                style={{
+                  width: "100px",
+                  height: "14px",
+                  background: colors[v],
+                }}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById("root"));

@@ -30,7 +30,7 @@
     align-items: flex-start;
     justify-content: flex-start;
     width: 100%;
-    height: 100%;
+    height: calc(100% - 30px);
     position: relative;
     color: var(--monaco-editor-foreground);
 
@@ -92,9 +92,9 @@
 
         &-button {
             cursor: pointer;
-            position: absolute;
-            left: 8px;
-            bottom: 5px;
+            height: 14px;
+            width: 14px;
+            color: var(--monaco-list-activeSelectionForeground);
         }
 
         &-header {
@@ -149,10 +149,9 @@
     }
 
     &-prettier {
-        position: absolute;
-        right: 5px;
-        top: 5px;
         cursor: pointer;
+        height: 14px;
+        width: 14px;
     }
 
     &-input {
@@ -188,5 +187,65 @@
     &-icon {
         width: 60px;
         height: 60px;
+    }
+}
+
+
+.music-monaco-editor-status-bar {
+    height: 24px;
+    display: flex;
+    padding: 0 12px;
+    align-items: center;
+    justify-content: space-between;
+    background:var(--monaco-panel-background);
+    font-size: 12px;
+    
+    &-logo {
+        width: 14px;
+        height: 14px;
+        user-select: none;
+    }
+
+    &-title {
+        color: var(--monaco-editor-foreground);
+    }
+
+    &-left {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    &-right {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        user-select: none;
+        color: var(--monaco-editor-foreground);
+    }
+
+    &-shortcut {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        position: relative;
+
+        &-icon {
+            width: 14px;
+            height: 14px;
+        }
+
+        &-popup {
+            position: absolute;
+            bottom: 24px;
+            width: 150px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            word-break: break-all;
+            padding: 5px 10px;
+            right: 0;
+            color: var(--monaco-list-activeSelectionForeground);
+            background: var(--monaco-editor-selectionBackground);
+        }
     }
 }

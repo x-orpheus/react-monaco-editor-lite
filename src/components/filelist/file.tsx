@@ -160,6 +160,17 @@ const File: React.FC<{
         }
     }, [editing, file]);
 
+    useEffect(() => {
+        const callback =  (e: any) => {
+            setShowChild(false);
+        }
+        // 监听收起事件
+        window.addEventListener('__COLLAPSE__FILE__', callback)
+        return () => {
+            window.removeEventListener('__COLLAPSE__FILE__', callback)
+        };
+    }, []);
+
     const keys = useMemo(() => {
         if (file._isFile) return [];
         const childs = file.children;
