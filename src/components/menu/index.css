@@ -1,4 +1,4 @@
-.rc-menu .rc-menu-item-group-title {
+.rc-menu.monaco-file-menu .rc-menu-item-group-title {
     height: 0;
     padding: 0;
     margin: 0;
@@ -6,7 +6,7 @@
     display: none;
   }
 
-  .rc-menu .rc-menu-item {
+  .rc-menu.monaco-file-menu .monaco-file-menu-item {
     color: #4d4d4d;
     line-height: 13px;
     padding-left: 20px;
@@ -14,9 +14,10 @@
     display: flex;
     align-items: center;
     white-space: pre-wrap;
+    cursor: pointer;
   }
 
-  .rc-menu-item-divider {
+  .rc-menu.monaco-file-menu .rc-menu-item-divider {
     margin: 3px 0 !important;
     pointer-events: none !important;
     background-color: #e0e0e0;
@@ -25,4 +26,10 @@
     padding: 0;
     overflow: hidden;
     line-height: 0;
+  }
+
+  .rc-dropdown .monaco-file-menu {
+    box-shadow: 0 0px 0px #ccc;
+    border-radius: 0;
+    border: 0.5px solid #ccc;
   }

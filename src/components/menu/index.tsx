@@ -32,13 +32,13 @@ const FileMenu: React.FC<{
   }
 
   return (
-    <Menu style={{ width: 200 }} onClick={handleMenuClick} selectedKeys={[]}>
-       <MenuItemGroup title="Group">
-        {showAddFile && <MenuItem key="newFile">新建文件</MenuItem>}
-        {showAddFolder && <MenuItem key="newFolder">新建文件夹</MenuItem>}
+    <Menu style={{ width: 200 }} onClick={handleMenuClick} selectedKeys={[]} className='monaco-file-menu'>
+       <MenuItemGroup title="Group" className='monaco-item-group'>
+        {showAddFile && <MenuItem className='monaco-file-menu-item' key="newFile">新建文件</MenuItem>}
+        {showAddFolder && <MenuItem className='monaco-file-menu-item' key="newFolder">新建文件夹</MenuItem>}
         {(showAddFile || showAddFolder) && <Divider />}
-        {showDelete && <MenuItem key="delete">删除</MenuItem>}
-        {showRename && <MenuItem key="editName">重命名</MenuItem>}
+        {showDelete && <MenuItem className='monaco-file-menu-item' key="delete">删除</MenuItem>}
+        {showRename && <MenuItem className='monaco-file-menu-item' key="editName">重命名</MenuItem>}
       </MenuItemGroup>
     </Menu>
   );
