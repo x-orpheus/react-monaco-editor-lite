@@ -2,6 +2,7 @@ import React, {
     useCallback,
     useState,
     useImperativeHandle,
+    useRef
 } from 'react';
 import AddFileIcon from '@components/icons/addfile';
 import AddFolderIcon from '@components/icons/addfolder';
@@ -18,6 +19,9 @@ import {
 } from '@utils/index';
 import File from './file';
 import './index.less';
+
+import Dropdown from 'rc-dropdown';
+import 'rc-dropdown/assets/index.css';
 
 export interface FileTreeIProps {
     defaultFiles: any,
@@ -43,6 +47,7 @@ export interface FileTreeIProps {
         delete?: boolean,
         rename?: boolean,
     },
+    useFileMenu: boolean,
 }
 
 export interface FileTreeRefType {
@@ -65,8 +70,15 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(({
     rootEl,
     disableFileOps = {},
     disableFolderOps = {},
+    useFileMenu = true
 } ,ref) => {
     const [filetree, setFiletree] = useState(() => generateFileTree(defaultFiles));
+
+    const [menuVisible, setMenuVisible] = useState(false);
+    const [isMenuFile, setIsMenuFile]  = useState(false);
+    const [menuPath, setMenuPath]  = useState('');
+    const menuAction = useRef<(action:string, path: string, isFile: boolean) => void | null>();
+    const isFirstRun = useRef(true);
 
     useImperativeHandle(ref, () => ({
         refresh: (files) => setFiletree(generateFileTree(files)),
@@ -178,6 +190,33 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(({
         setFiletree(tree);
     }, [filetree, onAddFolder]);
 
+    const handleContextMenu = useCallback((event: any, fileAction:(action:string, path: string, isFile: boolean) => void) => {
+        event.preventDefault();
+        if (menuVisible) {
+            setMenuPath(event.currentTarget.dataset.src);
+            setIsMenuFile(event.currentTarget.dataset.isFile);
+        }
+
+        if (!menuVisible && isFirstRun.current) {                                                 
+            const action = fileAction;
+            menuAction.current = action;
+            isFirstRun.current = false;
+            setMenuPath(event.currentTarget.dataset.src);
+            setIsMenuFile(event.currentTarget.dataset.isFile);
+            setMenuVisible(true);
+        }
+    }, [menuVisible, menuAction, setMenuVisible, isFirstRun]);
+
+    const handleMenuClick = useCallback((info: any, path: string, isFile: boolean) => {
+        const action = menuAction.current;
+        if (action) {
+            action(info.key, path, isFile);
+        }
+
+        setMenuVisible(false);
+        isFirstRun.current = true;
+    }, [menuAction, setMenuVisible]);
+
     return (
         <div className="music-monaco-editor-list-wrapper" style={style}>
             {
@@ -207,24 +246,52 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(({
                     </div>
                 )
             }
-            <div className="music-monaco-editor-list-files">
-                <File
-                    getAllFiles={getAllFiles}
-                    disableFileOps={disableFileOps}
-                    disableFolderOps={disableFolderOps}
-                    onEditFileName={editFileName}
-                    onEditFolderName={editFolderName}
-                    onDeleteFile={deleteFile}
-                    onDeleteFolder={deleteFolder}
-                    onAddFile={addFile}
-                    onAddFolder={addFolder}
-                    onConfirmAddFile={handleConfirmAddFile}
-                    onConfirmAddFolder={handleConfirmAddFolder}
-                    currentPath={currentPath}
-                    root
-                    file={filetree}
-                    onPathChange={onPathChange} />
-            </div>
+            
+            {useFileMenu ? <Dropdown
+                visible={menuVisible}
+                trigger={['contextMenu']}
+                overlay={<FileMenu disableFileOps={disableFileOps} disableFolderOps={disableFolderOps} isFile={isMenuFile} path={menuPath} handleMenuClick={handleMenuClick}/>}
+                onVisibleChange={(visible) => setMenuVisible(visible)}
+                alignPoint={true}
+            >
+                <div className="music-monaco-editor-list-files">
+                    <File
+                        getAllFiles={getAllFiles}
+                        disableFileOps={disableFileOps}
+                        disableFolderOps={disableFolderOps}
+                        onEditFileName={editFileName}
+                        onEditFolderName={editFolderName}
+                        onDeleteFile={deleteFile}
+                        onDeleteFolder={deleteFolder}
+                        onAddFile={addFile}
+                        onAddFolder={addFolder}
+                        onConfirmAddFile={handleConfirmAddFile}
+                        onConfirmAddFolder={handleConfirmAddFolder}
+                        currentPath={currentPath}
+                        root
+                        file={filetree}
+                        onPathChange={onPathChange}
+                        onContextMenu={handleContextMenu}/>
+                </div>
+            </Dropdown> : <div className="music-monaco-editor-list-files">
+                    <File
+                        getAllFiles={getAllFiles}
+                        disableFileOps={disableFileOps}
+                        disableFolderOps={disableFolderOps}
+                        onEditFileName={editFileName}
+                        onEditFolderName={editFolderName}
+                        onDeleteFile={deleteFile}
+                        onDeleteFolder={deleteFolder}
+                        onAddFile={addFile}
+                        onAddFolder={addFolder}
+                        onConfirmAddFile={handleConfirmAddFile}
+                        onConfirmAddFolder={handleConfirmAddFolder}
+                        currentPath={currentPath}
+                        root
+                        file={filetree}
+                        onPathChange={onPathChange}
+                        onContextMenu={handleContextMenu}/>
+                </div>}
         </div>
     )
 });

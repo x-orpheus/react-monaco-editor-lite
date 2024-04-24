@@ -1,0 +1,28 @@
+.rc-menu .rc-menu-item-group-title {
+    height: 0;
+    padding: 0;
+    margin: 0;
+    border: none;
+    display: none;
+  }
+
+  .rc-menu .rc-menu-item {
+    color: #4d4d4d;
+    line-height: 13px;
+    padding-left: 20px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    white-space: pre-wrap;
+  }
+
+  .rc-menu-item-divider {
+    margin: 3px 0 !important;
+    pointer-events: none !important;
+    background-color: #e0e0e0;
+    opacity: .3;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    line-height: 0;
+  }

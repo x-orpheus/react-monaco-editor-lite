@@ -62,6 +62,7 @@ export interface MultiEditorIProps {
     disablePrettier?: boolean;
     saveWhenBlur?: boolean;
     disableSearch?: boolean;
+    useFileMenu?: boolean;
   };
   defaultPath?: string;
   defaultTheme?: string;
@@ -118,7 +119,8 @@ const MultiPrivateEditorComp = React.forwardRef<
         disableSetting: false,
         disablePrettier: false,
         saveWhenBlur: false,
-        disableSearch: false
+        disableSearch: false,
+        useFileMenu: true,
       },
       options,
       title,
@@ -808,23 +810,23 @@ const MultiPrivateEditorComp = React.forwardRef<
           />}
 
           <FileList
-            getAllFiles={getAllFiles}
-            title={title}
-            disableFileOps={ideConfig.disableFileOps}
-            disableFolderOps={ideConfig.disableFolderOps}
-            ref={filelistRef}
-            rootEl={rootRef}
-            onEditFileName={editFileName}
-            onDeleteFile={deleteFile}
-            onAddFile={addFile}
-            onAddFolder={addFolder}
-            onDeleteFolder={deleteFolder}
-            onEditFolderName={editFolderName}
-            style={{...styles, display: !searchTextVisible ? 'block' : 'none'}}
-            currentPath={curPath}
-            defaultFiles={defaultFiles}
-            onPathChange={handlePathChange}
-        />
+          getAllFiles={getAllFiles}
+          title={title}
+          disableFileOps={ideConfig.disableFileOps}
+          disableFolderOps={ideConfig.disableFolderOps}
+          ref={filelistRef}
+          rootEl={rootRef}
+          onEditFileName={editFileName}
+          onDeleteFile={deleteFile}
+          onAddFile={addFile}
+          onAddFolder={addFolder}
+          onDeleteFolder={deleteFolder}
+          onEditFolderName={editFolderName}
+          style={{ ...styles, display: !searchTextVisible ? 'block' : 'none' }}
+          currentPath={curPath}
+          defaultFiles={defaultFiles}
+          onPathChange={handlePathChange} 
+          useFileMenu={ideConfig.useFileMenu ?? true} />
         <div
           onMouseDown={handleMoveStart}
           className="music-monaco-editor-drag"
@@ -892,7 +894,8 @@ export const MultiEditorComp = React.forwardRef<
         disableSetting: false,
         disablePrettier: false,
         saveWhenBlur: false,
-        disableSearch: false
+        disableSearch: false,
+        useFileMenu: true
       },
       options,
       title,

@@ -206,22 +206,31 @@ const App = () => {
               saveWhenBlur: true,
               //   disableEslint: true,
               disablePrettier: true,
+              disableFileOps: {
+                add: false,
+                delete: false,
+                rename: false,
+            },
+            disableFolderOps: {
+                add: false,
+                delete: false,
+                rename: false,
+            }
             }}
             // ideConfig={{
-            //     // disableFileOps: true,
-            //     // disablePrettier: true,
-            //     // disableEslint: true,
-            //     // saveWhenBlur: true,
-            //     // disableFileOps: {
-            //     //     add: true,
-            //     //     delete: true,
-            //     //     rename: false,
-            //     // },
-            //     // disableFolderOps: {
-            //     //     add: false,
-            //     //     delete: false,
-            //     //     rename: false,
-            //     // }
+            //     disablePrettier: true,
+            //     disableEslint: true,
+            //     saveWhenBlur: true,
+            //     disableFileOps: {
+            //         add: true,
+            //         delete: true,
+            //         rename: false,
+            //     },
+            //     disableFolderOps: {
+            //         add: false,
+            //         delete: false,
+            //         rename: false,
+            //     }
             // }}
             // onPathChange={(path) => { setActivePath(path); }}
             // onFileSave={(key: string, value: string) => {

@@ -67,6 +67,8 @@
     "monaco-editor": "^0.38.0",
     "monaco-editor-textmate": "^4.0.0",
     "monaco-textmate": "^3.0.1",
-    "onigasm": "^2.2.5"
+    "onigasm": "^2.2.5",
+    "rc-menu": "^9.13.0",
+    "rc-dropdown": "4.2.0"
   }
 }
