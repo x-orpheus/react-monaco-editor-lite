@@ -356,6 +356,7 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
                 file={filetree}
                 onPathChange={onPathChange}
                 onContextMenu={handleContextMenu}
+                useFileMenu={useFileMenu}
               />
             </div>
           </Dropdown>
@@ -378,6 +379,7 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
               file={filetree}
               onPathChange={onPathChange}
               onContextMenu={handleContextMenu}
+              useFileMenu={useFileMenu}
             />
           </div>
         )}

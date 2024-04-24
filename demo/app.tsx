@@ -232,6 +232,7 @@ const App = () => {
                   delete: false,
                   rename: false,
               },
+              useFileMenu: true,
               disableFolderOps: {
                   add: false,
                   delete: false,

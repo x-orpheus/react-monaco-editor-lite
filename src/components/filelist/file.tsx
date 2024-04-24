@@ -238,7 +238,7 @@ const File: React.FC<{
                         <>
                             <span style={{ flex: 1 }} className="music-monaco-editor-list-file-item-row-name">{file.name}</span>
                             {
-                                disableFileOps.rename || useFileMenu ? null : <EditIcon
+                                (disableFileOps.rename || useFileMenu) ? null : <EditIcon
                                     onClick={(e:Event) => {
                                         e.stopPropagation();
                                         setEditing(true);
@@ -246,7 +246,7 @@ const File: React.FC<{
                                     className="music-monaco-editor-list-split-icon" />
                             }
                             {
-                                disableFileOps.delete || useFileMenu ? null : (<DeleteIcon
+                                (disableFileOps.delete || useFileMenu) ? null : (<DeleteIcon
                                     onClick={(e:Event) => {
                                         e.stopPropagation();
                                         onDeleteFile(file.path);
@@ -291,7 +291,7 @@ const File: React.FC<{
                                 <>
                                     <span style={{ flex: 1 }} className="music-monaco-editor-list-file-item-row-name">{file.name}</span>
                                     {
-                                        disableFolderOps.rename || useFileMenu ? null : (
+                                        (disableFolderOps.rename || useFileMenu) ? null : (
                                             <EditIcon
                                                 onClick={(e:Event) => {
                                                     e.stopPropagation();
@@ -301,7 +301,7 @@ const File: React.FC<{
                                         )
                                     }
                                     {
-                                        disableFolderOps.delete || useFileMenu ? null : (
+                                        (disableFolderOps.delete || useFileMenu) ? null : (
                                             <DeleteIcon
                                                 onClick={(e:Event) => {
                                                     e.stopPropagation();
@@ -311,7 +311,7 @@ const File: React.FC<{
                                         )
                                     }
                                     {
-                                        disableFileOps.add || useFileMenu ? null : (
+                                        (disableFileOps.add || useFileMenu) ? null : (
                                             <AddFileIcon
                                                 onClick={(e:Event) => {
                                                     e.stopPropagation();
@@ -322,7 +322,7 @@ const File: React.FC<{
                                         )
                                     }
                                     {
-                                        disableFolderOps.add || useFileMenu ? null : (
+                                        (disableFolderOps.add || useFileMenu) ? null : (
                                             <AddFolderIcon
                                                 onClick={(e:Event) => {
                                                     e.stopPropagation();
@@ -374,6 +374,7 @@ const File: React.FC<{
                                     onPathChange={onPathChange}
                                     key={item}
                                     onContextMenu={onContextMenu}
+                                    useFileMenu={useFileMenu}
                                     />
                             ))
                         }
