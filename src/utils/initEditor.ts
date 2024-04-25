@@ -88,7 +88,7 @@ let isAddDefaultsLibs = false;
 export async function addExtraLibs(extraLibs: Array<{ url: string; path: string; }>) {
   if (!isAddDefaultsLibs) {
     extraLibs = [{
-      url: `https://d1.music.126.net/dmusic/obj/w5zCg8OAw6HDjzjDgMK_/35499940420/bc86/65fe/7be4/17172939804db04c61e2cc7a97751f4e.ts?download=indexhello.d.ts`,
+      url: `https://d2.music.126.net/dmusic/obj/w5zCg8OAw6HDjzjDgMK_/35499940420/bc86/65fe/7be4/17172939804db04c61e2cc7a97751f4e.ts?download=react.d.ts`,
       path: 'music:/node_modules/@types/react/index.d.ts'
     }, {
       url: `${ASSETSPATH}@types/react/global.d.ts`,
