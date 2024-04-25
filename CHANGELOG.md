@@ -1,3 +1,12 @@
+## [1.3.6](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.3.5...v1.3.6) (2024-04-25)
+
+
+### Performance Improvements
+
+* update css style ([5234b1e](https://github.com/x-orpheus/react-monaco-editor-lite/commit/5234b1e0bfd6afdf72f9cc11a423c93dc7738823))
+
+
+
 ## [1.3.5](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.3.4...v1.3.5) (2024-04-25)
 
 
