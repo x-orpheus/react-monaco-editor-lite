@@ -1,27 +1,11 @@
-#music-monaco-editor-root {
-    // --monaco-list-activeSelectionBackground: #2c313a;
-    // --monaco-list-activeSelectionForeground: #d7dae0;
-    // --monaco-list-focusBackground: #323842;
-    // --monaco-list-focusForeground: #f0f0f0;
-    // --monaco-list-highlightForeground: #c5c5c5;
-    // --monaco-list-hoverBackground: #2c313a;
-    // --monaco-list-hoverForeground: #ffffff;
-    // --monaco-list-inactiveSelectionBackground: #323842;
-    // --monaco-list-inactiveSelectionForeground: #d7dae0;
-    // --monaco-list-warningForeground: #d19a66;
-
-    // --monaco-editor-background: #282c34;
-    // --monaco-editor-foreground: #abb2bf;
-
-    // --monaco-scrollbar-shadow: #23252c;
-    // --monaco-scrollbarSlider-activeBackground: #747d9180;
-    // --monaco-scrollbarSlider-background: #4e566660;
-    // --monaco-scrollbarSlider-hoverBackground: #5a637580;
-    // --monaco-editorCursor-foreground: #528bff;
-}
-
 .music-monaco-editor-highlight {
     background: rgba(0, 0, 0, 0.08);
+}
+
+.music-monaco-editor-root-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .music-monaco-editor {
@@ -30,7 +14,7 @@
     align-items: flex-start;
     justify-content: flex-start;
     width: 100%;
-    height: calc(100% - 30px);
+    flex: 1;
     position: relative;
     color: var(--monaco-editor-foreground);
 
@@ -192,14 +176,14 @@
 
 
 .music-monaco-editor-status-bar {
-    height: 24px;
+    flex-basis: 24px;
     display: flex;
     padding: 0 12px;
     align-items: center;
     justify-content: space-between;
-    background:var(--monaco-panel-background);
+    background: var(--monaco-panel-background);
     font-size: 12px;
-    
+
     &-logo {
         width: 14px;
         height: 14px;

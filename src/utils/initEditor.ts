@@ -68,7 +68,7 @@ export async function configTheme(name: string) {
     document.getElementsByTagName('head')[0].appendChild(style);
   }
 
-  let res = '#music-monaco-editor-root {';
+  let res = '.music-monaco-editor-root-wrapper {';
 
   Object.keys(theme.colors).forEach((v) => {
     res += `${prefix}${v.replace('.', '-')}: ${
