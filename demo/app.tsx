@@ -215,7 +215,7 @@ const App = () => {
       <div
         style={{
           display: "flex",
-          height: "calc(100% - 30px)" 
+          height: "calc(100% - 54px)" 
         }}
       >
         {Object.keys(files).length > 0 && (
