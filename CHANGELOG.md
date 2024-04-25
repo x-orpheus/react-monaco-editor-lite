@@ -1,3 +1,15 @@
+## [1.3.4](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.3.3...v1.3.4) (2024-04-25)
+
+
+### Features
+
+* add open file panel & statusbar ([7975530](https://github.com/x-orpheus/react-monaco-editor-lite/commit/797553042cbde51a5544ad35d0e68d52c96dd9dc))
+* add react d.ts lib ([13fb954](https://github.com/x-orpheus/react-monaco-editor-lite/commit/13fb954b6f57b8911ac09a23e345a73575f365d1))
+* editor support inject extra libs d.ts  ([c277fd7](https://github.com/x-orpheus/react-monaco-editor-lite/commit/c277fd7dc19225aea15acfa26e40a18b94ec382d))
+* sidebar file panel default use contextMenu ([0e3ed93](https://github.com/x-orpheus/react-monaco-editor-lite/commit/0e3ed93fc6eed48991e87a94e93ea35cb98be258))
+
+
+
 ## [1.3.3](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.2.3...v1.3.3) (2024-04-15)
 
 
