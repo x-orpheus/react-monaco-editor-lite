@@ -1,3 +1,12 @@
+## [1.3.5](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.3.4...v1.3.5) (2024-04-25)
+
+
+### Bug Fixes
+
+* root-wrapper dom style ([f1147dc](https://github.com/x-orpheus/react-monaco-editor-lite/commit/f1147dc253cdbd559abb53fe1a9970eced4e85ce))
+
+
+
 ## [1.3.4](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.3.3...v1.3.4) (2024-04-25)
 
 
