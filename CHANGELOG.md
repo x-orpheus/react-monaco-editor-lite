@@ -1,3 +1,12 @@
+## [1.3.7](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.3.6...v1.3.7) (2024-04-25)
+
+
+### Bug Fixes
+
+* height bug ([f80393d](https://github.com/x-orpheus/react-monaco-editor-lite/commit/f80393d25e74c63753f12a2b9b3d088962b97806))
+
+
+
 ## [1.3.6](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.3.5...v1.3.6) (2024-04-25)
 
 
