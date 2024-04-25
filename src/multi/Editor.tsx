@@ -172,7 +172,7 @@ const MultiPrivateEditorComp = React.forwardRef<
       editorRef as any
     );
     const [styles, handleMoveStart, handleMove, handleMoveEnd] =
-      useDragLine(180);
+      useDragLine(220);
 
     const disableEslintRef = useRef(ideConfig.disableEslint);
     disableEslintRef.current = ideConfig.disableEslint;
