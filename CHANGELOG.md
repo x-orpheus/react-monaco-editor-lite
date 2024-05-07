@@ -1,3 +1,12 @@
+## [1.3.8](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.3.7...v1.3.8) (2024-05-07)
+
+
+### Bug Fixes
+
+* status-bar zIndex ([92eabfe](https://github.com/x-orpheus/react-monaco-editor-lite/commit/92eabfe03ef65623d68e6211f00781d345f25724))
+
+
+
 ## [1.3.7](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.3.6...v1.3.7) (2024-04-25)
 
 
