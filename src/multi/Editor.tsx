@@ -900,21 +900,29 @@ const MultiPrivateEditorComp = React.forwardRef<
         <StatusBar
           title={title}
           rightActions={[
-            ideConfig.disablePrettier ? null : (
-              <Prettier
-                onClick={handleFromat}
-                className="music-monaco-editor-prettier"
-              />
-            ),
-            ideConfig.disableSetting ? null : (
-              <Setting
-                disablePrettier={ideConfig.disablePrettier}
-                defaultTheme={defaultTheme}
-                getTarget={() => rootRef.current}
-                autoPrettier={autoPrettierRef.current}
-                onAutoPrettierChange={handleSetAutoPrettier}
-              />
-            ),
+           <React.Fragment key="prettier">
+            {
+               ideConfig.disablePrettier ? null : (
+                <Prettier
+                  onClick={handleFromat}
+                  className="music-monaco-editor-prettier"
+                />
+              )
+            }
+           </React.Fragment>,
+           <React.Fragment key="setting">
+            {
+               ideConfig.disableSetting ? null : (
+                <Setting
+                  disablePrettier={ideConfig.disablePrettier}
+                  defaultTheme={defaultTheme}
+                  getTarget={() => rootRef.current}
+                  autoPrettier={autoPrettierRef.current}
+                  onAutoPrettierChange={handleSetAutoPrettier}
+                />
+              )
+            }
+           </React.Fragment>,
           ]}
         />
       </div>
