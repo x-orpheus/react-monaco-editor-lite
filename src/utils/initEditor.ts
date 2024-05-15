@@ -178,7 +178,7 @@ export const startUp = () => {
     () => {
       window.require.config({
         paths: {
-          vs: 'https://g.alicdn.com/code/lib/monaco-editor/0.31.1/min/vs',
+          vs: 'https://g.alicdn.com/code/lib/monaco-editor/0.38.0/min/vs',
         },
       });
 
