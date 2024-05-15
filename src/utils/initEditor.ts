@@ -174,7 +174,7 @@ export const startUp = () => {
   if (execed) return;
   execed = true;
   loadScript(
-    'https://g.alicdn.com/code/lib/monaco-editor/0.31.1/min/vs/loader.min.js',
+    'https://g.alicdn.com/code/lib/monaco-editor/0.38.0/min/vs/loader.min.js',
     () => {
       window.require.config({
         paths: {
