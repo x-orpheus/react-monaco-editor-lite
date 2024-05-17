@@ -2,6 +2,8 @@
 /* eslint-disable */
 const path = require('path');
 const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+
 // const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
@@ -43,6 +45,13 @@ module.exports = {
     new webpack.DefinePlugin({
       _ASSETSPATH: JSON.stringify('https://s9.music.126.net/musicst/npm/react-monaco-editor-lite/1.2.3/'),
     }),
+    new UglifyJsPlugin({
+      uglifyOptions: {
+        compress: {
+          drop_console: true
+        }
+      },
+    })
   ],
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
