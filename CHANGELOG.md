@@ -1,3 +1,12 @@
+## [1.3.11](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.3.10...v1.3.11) (2024-05-17)
+
+
+### Bug Fixes
+
+* remove console ([4d53092](https://github.com/x-orpheus/react-monaco-editor-lite/commit/4d53092026a58f61b5b8e6ae0c2b5a12be6b8678))
+
+
+
 ## [1.3.10](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.3.9...v1.3.10) (2024-05-17)
 
 
