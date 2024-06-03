@@ -1,3 +1,12 @@
+## [1.3.12](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.3.11...v1.3.12) (2024-06-03)
+
+
+### Bug Fixes
+
+* sidebar file panel scroll height ([4ee2c53](https://github.com/x-orpheus/react-monaco-editor-lite/commit/4ee2c53e8c3817dfd079b0c6ad20c1ce8417fff1))
+
+
+
 ## [1.3.11](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.3.10...v1.3.11) (2024-05-17)
 
 
