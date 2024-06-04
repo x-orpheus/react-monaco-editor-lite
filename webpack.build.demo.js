@@ -4,6 +4,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Alias = require('alias-jsconfig-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -51,6 +52,13 @@ module.exports = {
       _ASSETSPATH: JSON.stringify(
         'https://s5.music.126.net/static_public/6194df158463e8444a55b9d8_6194df158463e8444a55b9da/'
       ),
+    }),
+    new UglifyJsPlugin({
+      uglifyOptions: {
+        compress: {
+          drop_console: true
+        }
+      },
     }),
     new Alias({
       language: 'ts', // or 'ts'

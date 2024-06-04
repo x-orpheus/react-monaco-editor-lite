@@ -1,18 +1,18 @@
 .music-monaco-editor-list {
     &-wrapper {
-        width: 220px !important;
         font-size: 14px;
         line-height: 28px;
         height: 100%;
         background: var(--monaco-editor-background);
         color: var(--monaco-editor-foreground);
-        overflow: scroll;
+        // overflow: scroll;
         flex-shrink: 0;
         // padding: 5px 0 0 10px;
         box-sizing: border-box;
 
         .open-file-panel {
             border-bottom: 1px solid #ccc;
+
             .panel-header {
                 display: flex;
                 font-size: 12px;
@@ -22,26 +22,31 @@
                 padding: 0 5px;
                 justify-content: space-between;
                 background: var(--monaco-editor-foldBackground);
-                &-icon{
+
+                &-icon {
                     &:hover {
                         background: var(--monaco-editor-selectionBackground);
                     }
                 }
             }
+
             .panel-body {
-                min-height: 150px;
+                height: 180px;
                 overflow: auto;
-                max-height: 200px;
             }
+
             .music-monaco-icons {
                 margin-left: 5px !important;
             }
+
             .music-monaco-editor-list-file-item-row {
                 height: 24px !important;
             }
+
             .music-monaco-editor-list-file-item-row-path {
                 font-style: italic;
             }
+
             .empty {
                 text-align: center;
                 user-select: none;
@@ -117,12 +122,14 @@
             }
         }
     }
+
     &-close {
         &-icon {
             width: 10px;
             font-size: 16px;
             color: var(--monaco-editor-foreground);
             margin-left: 8px;
+
             &:hover {
                 color: var(--monaco-list-hoverForeground);
             }
@@ -176,10 +183,15 @@
                 text-overflow: ellipsis;
             }
 
-            &-path{
+            &-path {
                 font-size: 10px;
                 margin-left: 5px;
             }
         }
+    }
+
+    &-files {
+        height: calc(100% - 235px);
+        overflow: auto;
     }
 }

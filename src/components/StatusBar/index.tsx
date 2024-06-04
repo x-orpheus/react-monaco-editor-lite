@@ -15,11 +15,9 @@ const StatusBar: React.FC<IStatusBar> = ({
 
   return (
     <div
-      id="music-monaco-editor-root"
       className="music-monaco-editor-status-bar"
     >
       <div
-        id="music-monaco-editor-status-bar-left"
         className="music-monaco-editor-status-bar-left"
       >
         <img src={logoSrc} className="music-monaco-editor-status-bar-logo" />

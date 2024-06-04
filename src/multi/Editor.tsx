@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import React, {
   useCallback,
   useEffect,
@@ -126,7 +127,7 @@ const MultiPrivateEditorComp = React.forwardRef<
       },
       options,
       title,
-      extraLibs
+      // extraLibs,
     },
     ref
   ) => {
@@ -171,7 +172,7 @@ const MultiPrivateEditorComp = React.forwardRef<
       editorRef as any
     );
     const [styles, handleMoveStart, handleMove, handleMoveEnd] =
-      useDragLine(180);
+      useDragLine(220);
 
     const disableEslintRef = useRef(ideConfig.disableEslint);
     disableEslintRef.current = ideConfig.disableEslint;
@@ -815,10 +816,12 @@ const MultiPrivateEditorComp = React.forwardRef<
     }, [getAllFiles]);
 
     return (
-      <>
+      <div
+        id="music-monaco-editor-root"
+        className="music-monaco-editor-root-wrapper"
+      >
         <div
           ref={rootRef}
-          id="music-monaco-editor-root"
           tabIndex={0}
           onKeyDown={dealKey}
           onMouseMove={handleMove}
@@ -865,7 +868,7 @@ const MultiPrivateEditorComp = React.forwardRef<
             currentPath={curPath}
             defaultFiles={defaultFiles}
             onPathChange={handlePathChange}
-            useFileMenu={ideConfig.useFileMenu ?? true} 
+            useFileMenu={ideConfig.useFileMenu ?? true}
           />
           <div
             onMouseDown={handleMoveStart}
@@ -897,24 +900,32 @@ const MultiPrivateEditorComp = React.forwardRef<
         <StatusBar
           title={title}
           rightActions={[
-            ideConfig.disablePrettier ? null : (
-              <Prettier
-                onClick={handleFromat}
-                className="music-monaco-editor-prettier"
-              />
-            ),
-            ideConfig.disableSetting ? null : (
-              <Setting
-                disablePrettier={ideConfig.disablePrettier}
-                defaultTheme={defaultTheme}
-                getTarget={() => rootRef.current}
-                autoPrettier={autoPrettierRef.current}
-                onAutoPrettierChange={handleSetAutoPrettier}
-              />
-            ),
+           <React.Fragment key="prettier">
+            {
+               ideConfig.disablePrettier ? null : (
+                <Prettier
+                  onClick={handleFromat}
+                  className="music-monaco-editor-prettier"
+                />
+              )
+            }
+           </React.Fragment>,
+           <React.Fragment key="setting">
+            {
+               ideConfig.disableSetting ? null : (
+                <Setting
+                  disablePrettier={ideConfig.disablePrettier}
+                  defaultTheme={defaultTheme}
+                  getTarget={() => rootRef.current}
+                  autoPrettier={autoPrettierRef.current}
+                  onAutoPrettierChange={handleSetAutoPrettier}
+                />
+              )
+            }
+           </React.Fragment>,
           ]}
         />
-      </>
+      </div>
     );
   }
 );
@@ -926,7 +937,7 @@ export const MultiEditorComp = React.forwardRef<
   (
     {
       defaultPath,
-      defaultTheme = 'OneDarkPro',
+      defaultTheme = "OneDarkPro",
       onPathChange,
       onValueChange,
       onRenameFile,
@@ -941,46 +952,49 @@ export const MultiEditorComp = React.forwardRef<
         disablePrettier: false,
         saveWhenBlur: false,
         disableSearch: false,
-        useFileMenu: true
+        useFileMenu: true,
       },
       options,
       title,
-      extraLibs
+      extraLibs,
     },
     ref
   ) => {
-     
-    const [showEditor, setShowEditor]= useState<boolean>(false);
-    
+    const [showEditor, setShowEditor] = useState<boolean>(false);
+
     useEffect(() => {
       if (extraLibs === undefined || extraLibs.length === 0) {
         setShowEditor(true);
       } else {
         addExtraLibs(extraLibs)
-        .then(() => {
-          setShowEditor(true);
-        })
-        .catch((error) => {
-          setShowEditor(true);
-        });
+          .then(() => {
+            setShowEditor(true);
+          })
+          .catch((error) => {
+            setShowEditor(true);
+          });
       }
     }, [showEditor, extraLibs]);
 
-    return (showEditor ? 
-    <MultiPrivateEditorComp  
-      defaultPath={defaultPath}
-      defaultTheme={defaultTheme}
-      onPathChange={onPathChange}
-      onValueChange={onValueChange}
-      onRenameFile={onRenameFile}
-      defaultFiles={defaultFiles}
-      onFileChange={onFileChange}
-      onFileSave={onFileSave}
-      ideConfig={ideConfig}
-      options={options}
-      title={title}
-      extraLibs={extraLibs} 
-      ref={ref}/> : <div>加载中...</div>);
+    return showEditor ? (
+      <MultiPrivateEditorComp
+        defaultPath={defaultPath}
+        defaultTheme={defaultTheme}
+        onPathChange={onPathChange}
+        onValueChange={onValueChange}
+        onRenameFile={onRenameFile}
+        defaultFiles={defaultFiles}
+        onFileChange={onFileChange}
+        onFileSave={onFileSave}
+        ideConfig={ideConfig}
+        options={options}
+        title={title}
+        extraLibs={extraLibs}
+        ref={ref}
+      />
+    ) : (
+      <div>加载中...</div>
+    );
   }
 );
 

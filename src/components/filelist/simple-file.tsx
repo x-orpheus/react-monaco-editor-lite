@@ -9,7 +9,7 @@ const SimpleFile: React.FC<{
   onCloseFile: (key: string) => void;
 }> = ({ file, onPathChange, currentPath = "", onCloseFile }) => {
 
-  console.log("file", file);
+  // console.log("file", file);
 
   const handlePathChange = useCallback(
     (e: any) => {

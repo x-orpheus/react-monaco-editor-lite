@@ -18,7 +18,7 @@ const OpenFilePanel: React.FC<IOpenFilePanel> = ({
   currentPath,
   onCloseFile,
 }) => {
-  console.log("openedFiles", openedFiles, "filetree", filetree);
+  // console.log("openedFiles", openedFiles, "filetree", filetree);
 
   return (
     <div className="open-file-panel">

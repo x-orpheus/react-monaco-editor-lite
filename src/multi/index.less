@@ -1,251 +1,235 @@
-#music-monaco-editor-root {
-    // --monaco-list-activeSelectionBackground: #2c313a;
-    // --monaco-list-activeSelectionForeground: #d7dae0;
-    // --monaco-list-focusBackground: #323842;
-    // --monaco-list-focusForeground: #f0f0f0;
-    // --monaco-list-highlightForeground: #c5c5c5;
-    // --monaco-list-hoverBackground: #2c313a;
-    // --monaco-list-hoverForeground: #ffffff;
-    // --monaco-list-inactiveSelectionBackground: #323842;
-    // --monaco-list-inactiveSelectionForeground: #d7dae0;
-    // --monaco-list-warningForeground: #d19a66;
-
-    // --monaco-editor-background: #282c34;
-    // --monaco-editor-foreground: #abb2bf;
-
-    // --monaco-scrollbar-shadow: #23252c;
-    // --monaco-scrollbarSlider-activeBackground: #747d9180;
-    // --monaco-scrollbarSlider-background: #4e566660;
-    // --monaco-scrollbarSlider-hoverBackground: #5a637580;
-    // --monaco-editorCursor-foreground: #528bff;
-}
-
 .music-monaco-editor-highlight {
     background: rgba(0, 0, 0, 0.08);
 }
 
-.music-monaco-editor {
+.music-monaco-editor-root-wrapper {
     display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
+    flex-direction: column;
+    height: 100%;
     width: 100%;
-    height: calc(100% - 30px);
-    position: relative;
-    color: var(--monaco-editor-foreground);
-
-    &-drag {
-        width: 5px;
-        background: var(--monaco-editor-background);
-        border-right: 1px solid var(--monaco-activityBar-border);
-        height: 100%;
-        cursor: col-resize;
-        flex-shrink: 0;
-
-        &:hover {
-            background: var(--monaco-editorCursor-foreground);
-        }
-    }
-
-    &-area {
-        color: var(--monaco-editor-foreground);
-        background-color: var(--monaco-editor-background);
-        flex: 1;
-        min-width: 0;
-        height: 100%;
+    .music-monaco-editor {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         align-items: flex-start;
         justify-content: flex-start;
+        width: 100%;
+        height: calc(100% - 24px);
         position: relative;
-
-        &-empty {
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 0;
-            bottom: 0;
+        color: var(--monaco-editor-foreground);
+    
+        &-drag {
+            width: 5px;
             background: var(--monaco-editor-background);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            user-select: none;
-
-            &-icon {
-                user-select: none;
-                width: 100px;
-                height: 100px;
-                margin-bottom: 20px;
+            border-right: 1px solid var(--monaco-activityBar-border);
+            height: 100%;
+            cursor: col-resize;
+            flex-shrink: 0;
+    
+            &:hover {
+                background: var(--monaco-editorCursor-foreground);
             }
         }
-    }
-
-    &-setting {
-        width: 400px;
-        height: 200px;
-        background: var(--monaco-editor-background);
-        border-radius: 10px;
-        color: var(--monaco-list-activeSelectionForeground);
-        display: flex;
-        flex-direction: column;
-
-        &-button {
+    
+        &-area {
+            color: var(--monaco-editor-foreground);
+            background-color: var(--monaco-editor-background);
+            flex: 1;
+            min-width: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            position: relative;
+    
+            &-empty {
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                background: var(--monaco-editor-background);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                user-select: none;
+    
+                &-icon {
+                    user-select: none;
+                    width: 100px;
+                    height: 100px;
+                    margin-bottom: 20px;
+                }
+            }
+        }
+    
+        &-setting {
+            width: 400px;
+            height: 200px;
+            background: var(--monaco-editor-background);
+            border-radius: 10px;
+            color: var(--monaco-list-activeSelectionForeground);
+            display: flex;
+            flex-direction: column;
+    
+            &-button {
+                cursor: pointer;
+                height: 14px;
+                width: 14px;
+                color: var(--monaco-list-activeSelectionForeground);
+            }
+    
+            &-header {
+                position: relative;
+                height: 28px;
+                line-height: 28px;
+                width: 100%;
+                background: var(--monaco-activityBarBadge-background);
+                color: var(--monaco-activityBarBadge-foreground);
+                border-radius: 8px 8px 0 0;
+                box-sizing: border-box;
+                padding-left: 10px;
+    
+                &-close {
+                    cursor: pointer;
+                    line-height: 12px;
+                    height: 12px;
+                    top: 4px;
+                    padding: 4px;
+                    position: absolute;
+                    right: 10px;
+                }
+            }
+    
+            &-content {
+                flex-grow: 1;
+                padding: 10px 10px 10px 30px;
+                overflow-y: scroll;
+            }
+    
+            /* 滚动槽 */
+            &-content::-webkit-scrollbar {
+                width: 6px;
+                height: 6px;
+            }
+    
+            &-content::-webkit-scrollbar-track {
+                background: var(--monaco-editor-background);
+                box-shadow: inset 0 0 5px var(--monaco-scrollbar-shadow);
+                -webkit-box-shadow: inset 0 0 5px var(--monaco-scrollbar-shadow);
+            }
+    
+            /* 滚动条滑块 */
+            &-content::-webkit-scrollbar-thumb {
+                border-radius: 3px;
+                background: var(--monaco-scrollbarSlider-background);
+                box-shadow: inset 0 0 5px var(--monaco-scrollbar-shadow);
+                -webkit-box-shadow: inset 0 0 5px var(--monaco-scrollbar-shadow);
+    
+                //TODO: 增加滚动条hover态展示
+            }
+        }
+    
+        &-prettier {
             cursor: pointer;
             height: 14px;
             width: 14px;
-            color: var(--monaco-list-activeSelectionForeground);
         }
-
-        &-header {
-            position: relative;
-            height: 28px;
-            line-height: 28px;
-            width: 100%;
-            background: var(--monaco-activityBarBadge-background);
-            color: var(--monaco-activityBarBadge-foreground);
-            border-radius: 8px 8px 0 0;
-            box-sizing: border-box;
-            padding-left: 10px;
-
-            &-close {
-                cursor: pointer;
-                line-height: 12px;
-                height: 12px;
-                top: 4px;
-                padding: 4px;
-                position: absolute;
-                right: 10px;
+    
+        &-input {
+            &-row {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                margin-top: 10px;
+            }
+    
+            &-name {
+                font-size: 12px;
+                line-height: 20px;
+                width: 100px;
+                text-align: left;
+            }
+    
+            &-value {
+                font-size: 12px;
+                line-height: 20px;
             }
         }
-
-        &-content {
-            flex-grow: 1;
-            padding: 10px 10px 10px 30px;
-            overflow-y: scroll;
-        }
-
-        /* 滚动槽 */
-        &-content::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-
-        &-content::-webkit-scrollbar-track {
-            background: var(--monaco-editor-background);
-            box-shadow: inset 0 0 5px var(--monaco-scrollbar-shadow);
-            -webkit-box-shadow: inset 0 0 5px var(--monaco-scrollbar-shadow);
-        }
-
-        /* 滚动条滑块 */
-        &-content::-webkit-scrollbar-thumb {
-            border-radius: 3px;
-            background: var(--monaco-scrollbarSlider-background);
-            box-shadow: inset 0 0 5px var(--monaco-scrollbar-shadow);
-            -webkit-box-shadow: inset 0 0 5px var(--monaco-scrollbar-shadow);
-
-            //TODO: 增加滚动条hover态展示
-        }
     }
-
-    &-prettier {
-        cursor: pointer;
-        height: 14px;
-        width: 14px;
-    }
-
-    &-input {
-        &-row {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            margin-top: 10px;
-        }
-
-        &-name {
-            font-size: 12px;
-            line-height: 20px;
-            width: 100px;
-            text-align: left;
-        }
-
-        &-value {
-            font-size: 12px;
-            line-height: 20px;
-        }
-    }
-}
-
-.music-monaco-editor-loading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-    background: var(--monaco-editor-background);
-
-    &-icon {
-        width: 60px;
-        height: 60px;
-    }
-}
-
-
-.music-monaco-editor-status-bar {
-    height: 24px;
-    display: flex;
-    padding: 0 12px;
-    align-items: center;
-    justify-content: space-between;
-    background:var(--monaco-panel-background);
-    font-size: 12px;
     
-    &-logo {
-        width: 14px;
-        height: 14px;
-        user-select: none;
-    }
-
-    &-title {
-        color: var(--monaco-editor-foreground);
-    }
-
-    &-left {
+    .music-monaco-editor-loading {
         display: flex;
         align-items: center;
-        gap: 6px;
-    }
-
-    &-right {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        user-select: none;
-        color: var(--monaco-editor-foreground);
-    }
-
-    &-shortcut {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        position: relative;
-
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+        background: var(--monaco-editor-background);
+    
         &-icon {
+            width: 60px;
+            height: 60px;
+        }
+    }
+    
+    .music-monaco-editor-status-bar {
+        flex-basis: 24px;
+        display: flex;
+        padding: 0 12px;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--monaco-panel-background);
+        font-size: 12px;
+        z-index: 1;
+    
+        &-logo {
             width: 14px;
             height: 14px;
+            user-select: none;
         }
-
-        &-popup {
-            position: absolute;
-            bottom: 24px;
-            width: 150px;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-            word-break: break-all;
-            padding: 5px 10px;
-            right: 0;
-            color: var(--monaco-list-activeSelectionForeground);
-            background: var(--monaco-editor-selectionBackground);
+    
+        &-title {
+            color: var(--monaco-editor-foreground);
+        }
+    
+        &-left {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+    
+        &-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            user-select: none;
+            color: var(--monaco-editor-foreground);
+        }
+    
+        &-shortcut {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+    
+            &-icon {
+                width: 14px;
+                height: 14px;
+            }
+    
+            &-popup {
+                position: absolute;
+                bottom: 24px;
+                width: 150px;
+                border-top-left-radius: 8px;
+                border-top-right-radius: 8px;
+                word-break: break-all;
+                padding: 5px 10px;
+                right: 0;
+                color: var(--monaco-list-activeSelectionForeground);
+                background: var(--monaco-editor-selectionBackground);
+            }
         }
     }
 }
