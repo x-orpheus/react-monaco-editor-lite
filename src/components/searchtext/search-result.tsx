@@ -7,12 +7,11 @@ interface SearchResultProps {
   unExpandedTitles: Record<string, boolean>;
   searchText: string;
   selectedRow: { titleIndex: number; rowIndex: number };
-  handleRowSelection: (
-    titleIndex: number,
-    rowIndex: number,
-  ) => void;
+  handleRowSelection: (titleIndex: number, rowIndex: number) => void;
   toggleExpand: (expanded: boolean, titleIndex: number) => void;
-  replaceRowSelection: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  replaceRowSelection: (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => void;
   canReplace: boolean;
 }
 
@@ -70,9 +69,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
                         : "search-results-item"
                     }
                     key={rowIndex}
-                    onClick={() =>
-                      handleRowSelection(titleIndex , rowIndex)
-                    }
+                    onClick={() => handleRowSelection(titleIndex, rowIndex)}
                   >
                     <div className="search-results-code">
                       {renderStringWithHighlight(row.code, searchText)}
@@ -80,7 +77,10 @@ const SearchResult: React.FC<SearchResultProps> = ({
                     {canReplace &&
                       titleIndex === selectedRow.titleIndex &&
                       rowIndex === selectedRow.rowIndex && (
-                        <div className="search-results-replace" onClick={replaceRowSelection}>
+                        <div
+                          className="search-results-replace"
+                          onClick={replaceRowSelection}
+                        >
                           <Replace
                             style={{
                               width: "20px",

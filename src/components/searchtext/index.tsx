@@ -200,7 +200,7 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({
       } else if (event.key === "ArrowUp") {
         event.preventDefault();
         setSelectedRow((pre) => preRow(pre.titleIndex, pre.rowIndex));
-      } 
+      }
     },
     [selectedRow, allSelectResults]
   );
@@ -249,14 +249,13 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({
     setSelectedRow({ titleIndex: -1, rowIndex: -1 });
   };
 
-  const handleRowSelection = (
-    titleIndex: any,
-    rowIndex: any,
-  ) => {
+  const handleRowSelection = (titleIndex: any, rowIndex: any) => {
     setSelectedRow({ titleIndex, rowIndex });
   };
 
-  const replaceRowSelection = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const replaceRowSelection = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
     if (
       selectedRow.titleIndex >= 0 &&
       searchResults &&
