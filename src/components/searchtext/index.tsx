@@ -2,12 +2,15 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import SearchInput from "./search-input";
 import SearchResult from "./search-result";
 import "./search-text.less";
+import Modal from "@components/modal";
 
 interface SearchAndReplaceProps {
   onSelectedLine: (title: string, line: number) => void;
   listFiles: Record<string, string>;
   style?: React.CSSProperties;
   onClose: React.Dispatch<React.SetStateAction<boolean>>;
+  onReplace: (listFiles: Record<string, string>) => void;
+  rootEl: React.MutableRefObject<null>;
 }
 
 interface SelectedRow {
@@ -22,8 +25,11 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({
   listFiles,
   style,
   onClose,
+  onReplace,
+  rootEl,
 }) => {
   const [searchText, setSearchText] = useState("");
+  const [replaceText, setReplaceText] = useState("");
   const [resultText, setResultText] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResultType>([]);
   const [unExpandedTitles, setUnExpandedTitles] = useState<
@@ -36,12 +42,13 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({
   const [allSelectResults, setAllSelectResults] = useState<
     { titleIndex: number; rowIndex: number }[]
   >([]);
+  const [collpase, setCollpase] = useState(false);
 
   const innerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     handleSearch();
-  }, [resultText, listFiles]);
+  }, [resultText]);
 
   useEffect(() => {
     smoothSelectedResults();
@@ -78,6 +85,72 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({
     }
     setSearchResults(lsearchResults);
   }, [resultText, listFiles]);
+
+  const replaceAll = useCallback(() => {
+    let length = 0;
+    searchResults.forEach((item) => {
+      for (const [key, values] of Object.entries(item)) {
+        length += values.length;
+      }
+    });
+
+    Modal.confirm({
+      target: rootEl.current,
+      okText: "确定",
+      onOk: (ok: () => void) => {
+        for (const [key, value] of Object.entries(listFiles)) {
+          handleReplaceFile(key, value);
+        }
+        onReplace(listFiles);
+        ok();
+      },
+      title: "确定要全部替换吗？",
+      content: () => (
+        <div>
+          <div>
+            涉及 {searchResults.length} 文件，共 {length} 行
+          </div>
+        </div>
+      ),
+    });
+  }, [replaceText, listFiles, searchResults]);
+
+  const handleReplaceLine = useCallback(
+    (fileName: string, line: number) => {
+      const matches = listFiles[fileName].split("\n");
+      if (matches && matches.length > line - 1) {
+        let regex = new RegExp(searchText, "gi");
+        matches[line - 1] = matches[line - 1].replace(regex, replaceText);
+        listFiles[fileName] = matches.join("\n");
+      }
+      onReplace(listFiles);
+    },
+    [replaceText, listFiles]
+  );
+
+  const handleReplaceFile = useCallback(
+    (fileName: string, code: string) => {
+      const matches = code.split("\n");
+      searchResults.forEach((result) => {
+        for (const [resultKey, resultValues] of Object.entries(result)) {
+          if (resultKey === fileName) {
+            resultValues.forEach((resultValue) => {
+              if (matches && matches.length > resultValue.line - 1) {
+                let regex = new RegExp(searchText, "gi");
+                matches[resultValue.line - 1] = resultValue.code.replace(
+                  regex,
+                  replaceText
+                );
+              }
+            });
+          }
+        }
+      });
+      const newValue = matches.join("\n");
+      listFiles[fileName] = newValue;
+    },
+    [replaceText, listFiles]
+  );
 
   const smoothSelectedResults = useCallback(() => {
     const selectedResults: { titleIndex: number; rowIndex: number }[] = [];
@@ -120,19 +193,14 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({
   );
 
   const handleKeyDown = useCallback(
-    (event: {
-      metaKey: any;
-      shiftKey: any;
-      key: string;
-      preventDefault: () => void;
-    }) => {
+    (event: KeyboardEvent) => {
       if (event.key === "ArrowDown") {
         event.preventDefault();
         setSelectedRow((pre) => nextRow(pre.titleIndex, pre.rowIndex));
       } else if (event.key === "ArrowUp") {
         event.preventDefault();
         setSelectedRow((pre) => preRow(pre.titleIndex, pre.rowIndex));
-      }
+      } 
     },
     [selectedRow, allSelectResults]
   );
@@ -166,10 +234,12 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({
         const title = keys[0];
         const entry =
           searchResults[selectedRow.titleIndex][title][selectedRow.rowIndex];
-        onSelectedLine && onSelectedLine(title, entry.line);
+        if (entry) {
+          onSelectedLine && onSelectedLine(title, entry?.line);
+        }
       }
     }
-  }, [selectedRow]);
+  }, [searchResults, selectedRow]);
 
   const toggleExpand = (expanded: any, titleIndex: any) => {
     setUnExpandedTitles((prev) => ({
@@ -188,6 +258,24 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({
     setSelectedRow({ titleIndex, rowIndex });
   };
 
+  const replaceRowSelection = () => {
+    if (
+      selectedRow.titleIndex >= 0 &&
+      searchResults &&
+      searchResults.length > selectedRow.titleIndex
+    ) {
+      const keys = Object.keys(searchResults[selectedRow.titleIndex]);
+      if (keys && keys.length > 0) {
+        const key = keys[0];
+        const entry =
+          searchResults[selectedRow.titleIndex][key][selectedRow.rowIndex];
+        if (entry) {
+          handleReplaceLine(key, entry.line);
+        }
+      }
+    }
+  };
+
   return (
     <div
       ref={innerRef}
@@ -204,7 +292,12 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({
       <SearchInput
         searchText={searchText}
         setSearchText={setSearchText}
+        replaceText={replaceText}
+        setReplaceText={setReplaceText}
         onClose={onClose}
+        onReplace={replaceAll}
+        collpase={collpase}
+        setCollpase={setCollpase}
       />
       <SearchResult
         searchResults={searchResults}
@@ -213,6 +306,8 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({
         selectedRow={selectedRow}
         handleRowSelection={handleRowSelection}
         toggleExpand={toggleExpand}
+        replaceRowSelection={replaceRowSelection}
+        canReplace={collpase}
       />
     </div>
   );

@@ -797,7 +797,7 @@ const MultiPrivateEditorComp = React.forwardRef<
           column: 1,
         },
       });
-    }, []);
+    }, [getAllFiles]);
 
     const configListFiles = useCallback(() => {
       const obj = getAllFiles();
@@ -813,6 +813,16 @@ const MultiPrivateEditorComp = React.forwardRef<
     const configFileNames = useCallback(() => {
       const obj = getAllFiles();
       return Object.keys(obj);
+    }, [getAllFiles]);
+
+    const onReplace = useCallback((listFiles: Record<string, string>) => {
+      const obj = getAllFiles();
+      for (const key in obj) {
+        if (listFiles[key] !== null) {
+          obj[key] = listFiles[key];
+        }
+      }
+      refreshFiles(obj);
     }, [getAllFiles]);
 
     return (
@@ -842,6 +852,8 @@ const MultiPrivateEditorComp = React.forwardRef<
               onSelectedLine={onSelectedLine}
               listFiles={configListFiles()}
               onClose={() => setSearchTextVisible(false)}
+              onReplace={onReplace}
+              rootEl={rootRef}
             />
           )}
 

@@ -7,15 +7,6 @@
   border: 1px solid #F0F0F0;
 }
 
-.search-result-top-search {
-  position: sticky;
-  z-index: 1;
-  background: var(--monaco-editor-background);
-  display: flex;
-  align-items: center;
-  padding-right: 5px;
-}
-
 .search-result-list {
   margin-top: 0;
   overflow-y: auto;
@@ -45,6 +36,20 @@
   }
 }
 
+.search-results-code {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-results-replace {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  margin: 0 5px 0 5px;
+}
+
 .search-results-title,
 .search-results-item-selected,
 .search-results-item {
@@ -54,6 +59,9 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  display: flex;
+  flex-direction: horizontal;
+  align-items: center;
   color: var(--monaco-list-focusForeground)
 }
 
@@ -67,15 +75,69 @@
   background: var(--monaco-list-focusBackground);
   color: var(--monaco-list-focusForeground)
 }  
+
+.search-result-top-search {
+  position: sticky;
+  z-index: 1;
+  background: var(--monaco-editor-background);
+  display: flex;
+  flex-direction: horizontal;
+}
+
+.search-result-search-innner {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  background: var(--monaco-editor-background);
+}
+
+.search-result-search-replace-container, 
+.search-result-search-container {
+  display: flex;
+  background: var(--monaco-editor-background);
+  display: flex;
+  align-items: center;
+  padding-right: 5px;
+}
+
 .search-result-input {
   flex: 1;
   border-radius: 2px;
   background: var(--monaco-list-focusBackground);
   border: 0.5px solid;
   margin: 5px;
+  min-width: 70px;
+  height: 20px;
+  padding-left: 5px;
+  color: var(--monaco-list-focusForeground)
+}
+
+.search-result-input-replace {
+  flex: 1;
+  border-radius: 2px;
+  background: var(--monaco-list-focusBackground);
+  border: 0.5px solid;
+  margin: 0 5px 5px 5px;
   margin-right: 5px;
   min-width: 70px;
   height: 20px;
   padding-left: 5px;
   color: var(--monaco-list-focusForeground)
+}
+
+.music-monaco-editor-close,
+.music-monaco-editor-replace
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.search-result-replace-switch {
+  display: flex;
+  padding-left: 5px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }

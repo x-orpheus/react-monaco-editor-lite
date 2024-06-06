@@ -142,7 +142,7 @@ export default SingleIDE;
 #### 搜索文件
 快捷键：command/ctrl + p
 
-#### 搜索文本
+#### 搜索 & 替换文本
 快捷键：shift + command/ctrl + f
 
 #### 类型提示声明

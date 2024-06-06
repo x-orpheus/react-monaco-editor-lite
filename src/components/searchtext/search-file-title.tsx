@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from 'react';
-import Icon from '@components/icons';
-import Arrow from '@components/icons/arrow';
+import React, { useState, useCallback } from "react";
+import Icon from "@components/icons";
+import Arrow from "@components/icons/arrow";
 
 interface SearchFileTitleProps {
   title: string;
@@ -13,12 +13,12 @@ const SearchFileTitle: React.FC<SearchFileTitleProps> = (props) => {
   const [expanded, setExpanded] = useState(true);
 
   const renderTitle = (titleText: string) => {
-    const fileName = titleText.split('/').pop();
+    const fileName = titleText.split("/").pop();
     let fileType;
-    if (fileName && fileName.indexOf('.') !== -1) {
-      fileType = `file_type_${fileName.split('.').slice(-1)}`;
+    if (fileName && fileName.indexOf(".") !== -1) {
+      fileType = `file_type_${fileName.split(".").slice(-1)}`;
     } else {
-      fileType = 'default_file';
+      fileType = "default_file";
     }
 
     return (
@@ -27,12 +27,21 @@ const SearchFileTitle: React.FC<SearchFileTitleProps> = (props) => {
         <Icon
           type={fileType}
           style={{
-            marginLeft: '5px',
-            marginRight: '5px',
+            marginLeft: "5px",
+            marginRight: "5px",
           }}
         />
-        <span style={{ color: 'var(--monaco-list-focusForeground)', marginRight: 5 }}>{fileName}</span>
-        <span style={{ color: 'var(--monaco-list-focusForeground)' }}>{titleText}</span>
+        <span
+          style={{
+            color: "var(--monaco-list-focusForeground)",
+            marginRight: 5,
+          }}
+        >
+          {fileName}
+        </span>
+        <span style={{ color: "var(--monaco-list-focusForeground)" }}>
+          {titleText}
+        </span>
       </div>
     );
   };
