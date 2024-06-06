@@ -251,25 +251,26 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({
 
   const handleRowSelection = (
     titleIndex: any,
-    title: any,
     rowIndex: any,
-    row: any
   ) => {
     setSelectedRow({ titleIndex, rowIndex });
   };
 
-  const replaceRowSelection = () => {
+  const replaceRowSelection = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (
       selectedRow.titleIndex >= 0 &&
       searchResults &&
       searchResults.length > selectedRow.titleIndex
     ) {
+      event.preventDefault();
+      event.stopPropagation();
       const keys = Object.keys(searchResults[selectedRow.titleIndex]);
       if (keys && keys.length > 0) {
         const key = keys[0];
         const entry =
           searchResults[selectedRow.titleIndex][key][selectedRow.rowIndex];
         if (entry) {
+          setSelectedRow({ titleIndex: -1, rowIndex: -1 });
           handleReplaceLine(key, entry.line);
         }
       }

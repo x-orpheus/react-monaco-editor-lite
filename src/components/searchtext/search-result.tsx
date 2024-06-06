@@ -9,12 +9,10 @@ interface SearchResultProps {
   selectedRow: { titleIndex: number; rowIndex: number };
   handleRowSelection: (
     titleIndex: number,
-    title: string,
     rowIndex: number,
-    row: { code: string }
   ) => void;
   toggleExpand: (expanded: boolean, titleIndex: number) => void;
-  replaceRowSelection: () => void;
+  replaceRowSelection: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   canReplace: boolean;
 }
 
@@ -73,7 +71,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
                     }
                     key={rowIndex}
                     onClick={() =>
-                      handleRowSelection(titleIndex, title, rowIndex, row)
+                      handleRowSelection(titleIndex , rowIndex)
                     }
                   >
                     <div className="search-results-code">
@@ -82,7 +80,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
                     {canReplace &&
                       titleIndex === selectedRow.titleIndex &&
                       rowIndex === selectedRow.rowIndex && (
-                        <div className="search-results-replace" onClick={() => replaceRowSelection()}>
+                        <div className="search-results-replace" onClick={replaceRowSelection}>
                           <Replace
                             style={{
                               width: "20px",
