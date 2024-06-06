@@ -48,7 +48,7 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({
 
   useEffect(() => {
     handleSearch();
-  }, [resultText]);
+  }, [resultText, listFiles]);
 
   useEffect(() => {
     smoothSelectedResults();
@@ -239,7 +239,7 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({
         }
       }
     }
-  }, [searchResults, selectedRow]);
+  }, [selectedRow]);
 
   const toggleExpand = (expanded: any, titleIndex: any) => {
     setUnExpandedTitles((prev) => ({
