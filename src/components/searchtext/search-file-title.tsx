@@ -14,6 +14,7 @@ const SearchFileTitle: React.FC<SearchFileTitleProps> = (props) => {
 
   const renderTitle = (titleText: string) => {
     const fileName = titleText.split('/').pop();
+    const fileDir = titleText.split('/').slice(0, -1).join('/');
     let fileType;
     if (fileName && fileName.indexOf('.') !== -1) {
       fileType = `file_type_${fileName.split('.').slice(-1)}`;
@@ -32,7 +33,7 @@ const SearchFileTitle: React.FC<SearchFileTitleProps> = (props) => {
           }}
         />
         <span className="search-results-file-name">{fileName}</span>
-        <span className="search-results-file-path">{titleText}</span>
+        <span className="search-results-file-path">{fileDir}</span>
       </div>
     );
   };

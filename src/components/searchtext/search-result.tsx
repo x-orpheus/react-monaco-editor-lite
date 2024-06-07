@@ -30,10 +30,10 @@ const SearchResult: React.FC<SearchResultProps> = ({
     return (
       <span>
         {parts.map((part, index) => (
-          <span key={index}>
+          <span style={{ fontSize: "13px"}} key={index}>
             {part}
             {index !== parts.length - 1 && (
-              <span style={{ backgroundColor: '#E9C4AA' }}>{highlight}</span>
+              <span style={{ backgroundColor: '#E9C4AA', fontSize: "13px"}}>{highlight}</span>
             )}
           </span>
         ))}
