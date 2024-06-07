@@ -1,4 +1,10 @@
-import React, { useState, useRef, useEffect, ChangeEvent, KeyboardEvent } from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  ChangeEvent,
+  KeyboardEvent,
+} from 'react';
 import Icon from '@components/icons';
 
 interface SearchModalProps {
@@ -7,7 +13,11 @@ interface SearchModalProps {
   onExecute: (result: string) => void;
 }
 
-const SearchModal: React.FC<SearchModalProps> = ({onSearch, searchResults, onExecute }) => {
+const SearchModal: React.FC<SearchModalProps> = ({
+  onSearch,
+  searchResults,
+  onExecute,
+}) => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedItem, setSelectedItem] = useState<number>(0);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -19,9 +29,14 @@ const SearchModal: React.FC<SearchModalProps> = ({onSearch, searchResults, onExe
 
   useEffect(() => {
     if (searchResults.length > 0 && modalRef.current) {
-      const selectedItemElement = modalRef.current.childNodes[selectedItem] as HTMLElement;
+      const selectedItemElement = modalRef.current.childNodes[
+        selectedItem
+      ] as HTMLElement;
       if (selectedItemElement) {
-        selectedItemElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        selectedItemElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
       }
     }
   }, [selectedItem, searchResults]);
@@ -34,7 +49,9 @@ const SearchModal: React.FC<SearchModalProps> = ({onSearch, searchResults, onExe
         setSelectedItem((prev) => (prev + 1) % searchResults.length);
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
-        setSelectedItem((prev) => (prev - 1 + searchResults.length) % searchResults.length);
+        setSelectedItem(
+          (prev) => (prev - 1 + searchResults.length) % searchResults.length
+        );
       } else if (e.key === 'Enter') {
         e.preventDefault();
         onExecute(searchResults[selectedItem]);
@@ -63,7 +80,7 @@ const SearchModal: React.FC<SearchModalProps> = ({onSearch, searchResults, onExe
       <div className="search-file-modal" onClick={(e) => e.stopPropagation()}>
         <input
           ref={inputRef}
-          className='search-file-input'
+          className="search-file-input"
           id="file-search-input"
           type="text"
           value={searchQuery}
@@ -76,17 +93,32 @@ const SearchModal: React.FC<SearchModalProps> = ({onSearch, searchResults, onExe
           placeholder="Search for files..."
         />
         {searchResults.length > 0 && (
-          <ul ref={modalRef} style={{ listStyleType: 'none', padding: 0, maxHeight: '500px', overflowY: 'auto' }}>
+          <ul
+            ref={modalRef}
+            style={{
+              listStyleType: 'none',
+              padding: 0,
+              maxHeight: '500px',
+              overflowY: 'auto',
+            }}
+          >
             {searchResults.map((result, index) => (
               <li
-                className= {index === selectedItem ? 'search-file-result-item-selected' : 'search-file-result-item'}
+                className={
+                  index === selectedItem
+                    ? 'search-file-result-item-selected'
+                    : 'search-file-result-item'
+                }
                 key={index}
                 onClick={() => onClickLine(index)}
               >
-                <Icon type={getFileType(result)} style={{
-                  marginLeft: '5px',
-                  marginRight: '5px',
-                }} />
+                <Icon
+                  type={getFileType(result)}
+                  style={{
+                    marginLeft: '5px',
+                    marginRight: '5px',
+                  }}
+                />
                 {result}
               </li>
             ))}
