@@ -1,6 +1,6 @@
-import React from "react";
-import SearchFileTitle from "./search-file-title";
-import Replace from "@components/icons/replace";
+import React from 'react';
+import SearchFileTitle from './search-file-title';
+import Replace from '@components/icons/replace';
 
 interface SearchResultProps {
   searchResults: Array<{ [key: string]: Array<{ code: string }> }>;
@@ -33,7 +33,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
           <span key={index}>
             {part}
             {index !== parts.length - 1 && (
-              <span style={{ backgroundColor: "#E9C4AA" }}>{highlight}</span>
+              <span style={{ backgroundColor: '#E9C4AA' }}>{highlight}</span>
             )}
           </span>
         ))}
@@ -53,10 +53,10 @@ const SearchResult: React.FC<SearchResultProps> = ({
             />
             <ul
               style={{
-                listStyleType: "none",
+                listStyleType: 'none',
                 paddingLeft: 10,
-                display: !unExpandedTitles[titleIndex] ? "block" : "none",
-                overflow: "auto",
+                display: !unExpandedTitles[titleIndex] ? 'block' : 'none',
+                overflow: 'auto',
               }}
             >
               {searchText &&
@@ -65,8 +65,8 @@ const SearchResult: React.FC<SearchResultProps> = ({
                     className={
                       titleIndex === selectedRow.titleIndex &&
                       rowIndex === selectedRow.rowIndex
-                        ? "search-results-item-selected"
-                        : "search-results-item"
+                        ? 'search-results-item-selected'
+                        : 'search-results-item'
                     }
                     key={rowIndex}
                     onClick={() => handleRowSelection(titleIndex, rowIndex)}
@@ -83,8 +83,8 @@ const SearchResult: React.FC<SearchResultProps> = ({
                         >
                           <Replace
                             style={{
-                              width: "20px",
-                              height: "20px",
+                              width: '20px',
+                              height: '20px',
                             }}
                           />
                         </div>

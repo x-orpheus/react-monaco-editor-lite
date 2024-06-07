@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
-import Close from "@components/icons/close";
-import Replace from "@components/icons/replace";
-import Arrow from "@components/icons/arrow";
+import React, { useEffect, useRef, useState } from 'react';
+import Close from '@components/icons/close';
+import Replace from '@components/icons/replace';
+import Arrow from '@components/icons/arrow';
 
 interface SearchInputProps {
   searchText: string;
@@ -53,8 +53,8 @@ const SearchInput: React.FC<SearchInputProps> = ({
           >
             <Close
               style={{
-                width: "12px",
-                height: "12px",
+                width: '12px',
+                height: '12px',
               }}
             />
           </div>
@@ -72,8 +72,8 @@ const SearchInput: React.FC<SearchInputProps> = ({
             <div onClick={onReplace} className="music-monaco-editor-replace">
               <Replace
                 style={{
-                  width: "20px",
-                  height: "20px",
+                  width: '20px',
+                  height: '20px',
                 }}
               />
             </div>

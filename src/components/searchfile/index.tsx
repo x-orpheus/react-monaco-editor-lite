@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
-import SearchFileBody from "./search-file-body";
-import "./index.less";
+import React, { useState, useEffect, useCallback } from 'react';
+import SearchFileBody from './search-file-body';
+import './index.less';
 
 interface SearchFileProps {
   list: string[];

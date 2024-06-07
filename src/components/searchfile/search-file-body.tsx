@@ -4,8 +4,8 @@ import React, {
   useEffect,
   ChangeEvent,
   KeyboardEvent,
-} from "react";
-import Icon from "@components/icons";
+} from 'react';
+import Icon from '@components/icons';
 
 interface SearchModalProps {
   onSearch: (query: string) => void;
@@ -18,7 +18,7 @@ const SearchModal: React.FC<SearchModalProps> = ({
   searchResults,
   onExecute,
 }) => {
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedItem, setSelectedItem] = useState<number>(0);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const modalRef = useRef<HTMLUListElement | null>(null);
@@ -34,8 +34,8 @@ const SearchModal: React.FC<SearchModalProps> = ({
       ] as HTMLElement;
       if (selectedItemElement) {
         selectedItemElement.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
+          behavior: 'smooth',
+          block: 'center',
         });
       }
     }
@@ -43,16 +43,16 @@ const SearchModal: React.FC<SearchModalProps> = ({
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
-    if (target.id === "file-search-input") {
-      if (e.key === "ArrowDown") {
+    if (target.id === 'file-search-input') {
+      if (e.key === 'ArrowDown') {
         e.preventDefault();
         setSelectedItem((prev) => (prev + 1) % searchResults.length);
-      } else if (e.key === "ArrowUp") {
+      } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         setSelectedItem(
           (prev) => (prev - 1 + searchResults.length) % searchResults.length
         );
-      } else if (e.key === "Enter") {
+      } else if (e.key === 'Enter') {
         e.preventDefault();
         onExecute(searchResults[selectedItem]);
       }
@@ -65,12 +65,12 @@ const SearchModal: React.FC<SearchModalProps> = ({
   };
 
   const getFileType = (filename: string) => {
-    const fileName = filename.split("/").pop();
+    const fileName = filename.split('/').pop();
     let fileType;
-    if (fileName && fileName.indexOf(".") !== -1) {
-      fileType = `file_type_${fileName.split(".").slice(-1)}`;
+    if (fileName && fileName.indexOf('.') !== -1) {
+      fileType = `file_type_${fileName.split('.').slice(-1)}`;
     } else {
-      fileType = "default_file";
+      fileType = 'default_file';
     }
     return fileType;
   };
@@ -96,18 +96,18 @@ const SearchModal: React.FC<SearchModalProps> = ({
           <ul
             ref={modalRef}
             style={{
-              listStyleType: "none",
+              listStyleType: 'none',
               padding: 0,
-              maxHeight: "500px",
-              overflowY: "auto",
+              maxHeight: '500px',
+              overflowY: 'auto',
             }}
           >
             {searchResults.map((result, index) => (
               <li
                 className={
                   index === selectedItem
-                    ? "search-file-result-item-selected"
-                    : "search-file-result-item"
+                    ? 'search-file-result-item-selected'
+                    : 'search-file-result-item'
                 }
                 key={index}
                 onClick={() => onClickLine(index)}
@@ -115,8 +115,8 @@ const SearchModal: React.FC<SearchModalProps> = ({
                 <Icon
                   type={getFileType(result)}
                   style={{
-                    marginLeft: "5px",
-                    marginRight: "5px",
+                    marginLeft: '5px',
+                    marginRight: '5px',
                   }}
                 />
                 {result}
