@@ -1,4 +1,4 @@
-# monaco-base-ide
+# react-monaco-editor-lite
 ![img](https://p6.music.126.net/obj/wo3DlcOGw6DClTvDisK1/36505433932/638f/06f4/a958/4d82bdeff7c5c5afa437028f68ed1b65.png)
 ![img2](https://p5.music.126.net/obj/wo3DlcOGw6DClTvDisK1/36505435944/01f8/2388/f3e9/bafe10aedf6a954f4ce09bf02c725748.png)
 
