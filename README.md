@@ -1,6 +1,6 @@
 # monaco-base-ide
-![img](https://p5.music.126.net/obj/wo3DlcOGw6DClTvDisK1/36483369774/ca7d/7350/1ed3/f2e963bf2226a3f0f447eea38aac3ee5.png)
-![img2](https://p6.music.126.net/obj/wo3DlcOGw6DClTvDisK1/36483331014/f34a/6545/a6ff/3483e5ac60340e334fc05aafa4601dc7.png)
+![img](https://p6.music.126.net/obj/wo3DlcOGw6DClTvDisK1/36505433932/638f/06f4/a958/4d82bdeff7c5c5afa437028f68ed1b65.png)
+![img2](https://p5.music.126.net/obj/wo3DlcOGw6DClTvDisK1/36505435944/01f8/2388/f3e9/bafe10aedf6a954f4ce09bf02c725748.png)
 
 ## 如何使用
 
