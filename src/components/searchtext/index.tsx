@@ -42,7 +42,7 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({
   const [allSelectResults, setAllSelectResults] = useState<
     { titleIndex: number; rowIndex: number }[]
   >([]);
-  const [collpase, setCollpase] = useState(false);
+  const [expand, setExpand] = useState(false);
 
   const innerRef = useRef<HTMLDivElement>(null);
 
@@ -119,14 +119,24 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({
     (fileName: string, line: number) => {
       const matches = listFiles[fileName].split("\n");
       if (matches && matches.length > line - 1) {
-        let regex = new RegExp(searchText, "gi");
-        matches[line - 1] = matches[line - 1].replace(regex, replaceText);
+        matches[line - 1] = handleReplaceCode(matches[line - 1], replaceText);
         listFiles[fileName] = matches.join("\n");
       }
       onReplace(listFiles);
     },
     [replaceText, listFiles]
   );
+
+  const handleReplaceCode = useCallback((code: string, replaceText: string) => {
+    const escapeRegExp = (text:string) => {
+      return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+    }
+    let regex = new RegExp(escapeRegExp(searchText), "gi");
+    return code.replace(
+      regex,
+      replaceText
+    );
+  }, [searchText]);
 
   const handleReplaceFile = useCallback(
     (fileName: string, code: string) => {
@@ -136,11 +146,7 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({
           if (resultKey === fileName) {
             resultValues.forEach((resultValue) => {
               if (matches && matches.length > resultValue.line - 1) {
-                let regex = new RegExp(searchText, "gi");
-                matches[resultValue.line - 1] = resultValue.code.replace(
-                  regex,
-                  replaceText
-                );
+                matches[resultValue.line - 1] = handleReplaceCode(resultValue.code, replaceText);
               }
             });
           }
@@ -296,8 +302,8 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({
         setReplaceText={setReplaceText}
         onClose={onClose}
         onReplace={replaceAll}
-        collpase={collpase}
-        setCollpase={setCollpase}
+        expand={expand}
+        setExpand={setExpand}
       />
       <SearchResult
         searchResults={searchResults}
@@ -307,7 +313,7 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({
         handleRowSelection={handleRowSelection}
         toggleExpand={toggleExpand}
         replaceRowSelection={replaceRowSelection}
-        canReplace={collpase}
+        canReplace={expand}
       />
     </div>
   );

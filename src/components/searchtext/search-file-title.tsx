@@ -31,15 +31,10 @@ const SearchFileTitle: React.FC<SearchFileTitleProps> = (props) => {
             marginRight: "5px",
           }}
         />
-        <span
-          style={{
-            color: "var(--monaco-list-focusForeground)",
-            marginRight: 5,
-          }}
-        >
+        <span className="search-results-file-name">
           {fileName}
         </span>
-        <span style={{ color: "var(--monaco-list-focusForeground)" }}>
+        <span className="search-results-file-path">
           {titleText}
         </span>
       </div>

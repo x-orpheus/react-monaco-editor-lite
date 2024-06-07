@@ -10,8 +10,8 @@ interface SearchInputProps {
   setReplaceText: React.Dispatch<React.SetStateAction<string>>;
   onClose: React.Dispatch<React.SetStateAction<boolean>>;
   onReplace: () => void;
-  collpase: boolean;
-  setCollpase: React.Dispatch<React.SetStateAction<boolean>>;
+  expand: boolean;
+  setExpand: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SearchInput: React.FC<SearchInputProps> = ({
@@ -21,8 +21,8 @@ const SearchInput: React.FC<SearchInputProps> = ({
   setReplaceText,
   onClose,
   onReplace,
-  collpase,
-  setCollpase,
+  expand,
+  setExpand,
 }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
@@ -33,9 +33,9 @@ const SearchInput: React.FC<SearchInputProps> = ({
     <div className="search-result-top-search">
       <div
         className="search-result-replace-switch"
-        onClick={() => setCollpase((pre) => !pre)}
+        onClick={() => setExpand((pre) => !pre)}
       >
-        <Arrow collpase={collpase} />
+        <Arrow collpase={!expand} />
       </div>
       <div className="search-result-search-innner">
         <div className="search-result-search-container">
@@ -60,7 +60,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
           </div>
         </div>
 
-        {collpase && (
+        {expand && (
           <div className="search-result-search-replace-container">
             <input
               className="search-result-input-replace"
