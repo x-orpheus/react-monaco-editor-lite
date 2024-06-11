@@ -823,6 +823,7 @@ const MultiPrivateEditorComp = React.forwardRef<
         }
       }
       refreshFiles(obj);
+      saveFile();
     }, [getAllFiles]);
 
     return (

@@ -72,8 +72,8 @@ const SearchInput: React.FC<SearchInputProps> = ({
             <div onClick={onReplace} className="music-monaco-editor-replace">
               <Replace
                 style={{
-                  width: '20px',
-                  height: '20px',
+                  width: '15px',
+                  height: '15px',
                 }}
               />
             </div>

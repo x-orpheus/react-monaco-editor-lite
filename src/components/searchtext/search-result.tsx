@@ -83,8 +83,9 @@ const SearchResult: React.FC<SearchResultProps> = ({
                         >
                           <Replace
                             style={{
-                              width: '20px',
-                              height: '20px',
+                              width: '15px',
+                              height: '15px',
+                              marginBottom: '5px',
                             }}
                           />
                         </div>
