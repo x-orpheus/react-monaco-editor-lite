@@ -355,3 +355,11 @@ export const filterNull = (obj: { [key: string]: string | null } = {}) => {
   });
   return newobj;
 };
+
+export const handleReplaceCode = (code: string, searchText: string, replaceText: string) => {
+  const escapeRegExp = (text: string) => {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+  };
+  let regex = new RegExp(escapeRegExp(searchText), 'gi');
+  return code.replace(regex, replaceText);
+};
