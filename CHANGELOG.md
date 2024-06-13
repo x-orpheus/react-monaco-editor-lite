@@ -1,3 +1,12 @@
+## [1.3.14](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.3.13...v1.3.14) (2024-06-11)
+
+
+### Bug Fixes
+
+* replace file to save & ui fix ([#19](https://github.com/x-orpheus/react-monaco-editor-lite/issues/19)) ([a5a704e](https://github.com/x-orpheus/react-monaco-editor-lite/commit/a5a704ec07ab1c1967c8a3b532dff65a38c1a2d4))
+
+
+
 ## [1.3.13](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.3.12...v1.3.13) (2024-06-07)
 
 
