@@ -9,7 +9,7 @@ interface SearchAndReplaceProps {
   listFiles: Record<string, string>;
   style?: React.CSSProperties;
   onClose: React.Dispatch<React.SetStateAction<boolean>>;
-  onReplace: (listFiles: Record<string, string>) => void;
+  onReplace: (listFiles: Record<string, string>, replaceKeys: string[]) => void;
   rootEl: React.MutableRefObject<null>;
 }
 
@@ -86,10 +86,13 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({
     setSearchResults(lsearchResults);
   }, [resultText, listFiles]);
 
+
   const replaceAll = useCallback(() => {
     let length = 0;
+    let resultFileNames : string[] = [];
     searchResults.forEach((item) => {
       for (const [key, values] of Object.entries(item)) {
+        resultFileNames.push(key);
         length += values.length;
       }
     });
@@ -101,7 +104,8 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({
         for (const [key, value] of Object.entries(listFiles)) {
           handleReplaceFile(key, value);
         }
-        onReplace(listFiles);
+
+        onReplace(listFiles, resultFileNames);
         ok();
       },
       title: '确定要全部替换吗？',
@@ -113,30 +117,27 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({
         </div>
       ),
     });
-  }, [replaceText, listFiles, searchResults]);
+  }, [replaceText, searchText, listFiles, searchResults]);
 
   const handleReplaceLine = useCallback(
     (fileName: string, line: number) => {
       const matches = listFiles[fileName].split('\n');
       if (matches && matches.length > line - 1) {
-        matches[line - 1] = handleReplaceCode(matches[line - 1], replaceText);
+        matches[line - 1] = handleReplaceCode(matches[line - 1]);
         listFiles[fileName] = matches.join('\n');
       }
-      onReplace(listFiles);
+      onReplace(listFiles, [fileName]);
     },
-    [replaceText, listFiles]
+    [replaceText, searchText, listFiles]
   );
 
-  const handleReplaceCode = useCallback(
-    (code: string, replaceText: string) => {
+  const handleReplaceCode = useCallback((code: string) => {
       const escapeRegExp = (text: string) => {
         return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
       };
       let regex = new RegExp(escapeRegExp(searchText), 'gi');
       return code.replace(regex, replaceText);
-    },
-    [searchText]
-  );
+    }, [searchText, replaceText]);
 
   const handleReplaceFile = useCallback(
     (fileName: string, code: string) => {
@@ -147,8 +148,7 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({
             resultValues.forEach((resultValue) => {
               if (matches && matches.length > resultValue.line - 1) {
                 matches[resultValue.line - 1] = handleReplaceCode(
-                  resultValue.code,
-                  replaceText
+                  resultValue.code
                 );
               }
             });
@@ -158,7 +158,7 @@ const SearchAndReplace: React.FC<SearchAndReplaceProps> = ({
       const newValue = matches.join('\n');
       listFiles[fileName] = newValue;
     },
-    [replaceText, listFiles]
+    [replaceText, searchText, listFiles, searchResults]
   );
 
   const smoothSelectedResults = useCallback(() => {

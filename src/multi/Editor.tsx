@@ -815,7 +815,7 @@ const MultiPrivateEditorComp = React.forwardRef<
       return Object.keys(obj);
     }, [getAllFiles]);
 
-    const onReplace = useCallback((listFiles: Record<string, string>) => {
+    const onReplace = (listFiles: Record<string, string>, resultFileNames: string[]) => {
       const obj = getAllFiles();
       for (const key in obj) {
         if (listFiles[key] !== null) {
@@ -823,8 +823,12 @@ const MultiPrivateEditorComp = React.forwardRef<
         }
       }
       refreshFiles(obj);
-      saveFile();
-    }, [getAllFiles]);
+      resultFileNames.forEach((fileName) => {
+        if (onFileSaveRef.current) {
+          onFileSaveRef.current(fileName, obj[fileName]);
+        }
+      })
+    };
 
     return (
       <div
