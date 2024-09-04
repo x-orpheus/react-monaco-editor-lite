@@ -23,6 +23,7 @@ const File: React.FC<{
     onPathChange: (key: string) => void,
     root: boolean,
     currentPath?: string,
+    activeDirectory?: string,
     useFileMenu?: boolean,
     onAddFile: (...args: any[]) => void,
     onConfirmAddFile: (...args: any[]) => void,
@@ -43,6 +44,7 @@ const File: React.FC<{
     currentPath = '',
     root,
     useFileMenu = true,
+    activeDirectory = '',
     onAddFile,
     onConfirmAddFile,
     onDeleteFile,
@@ -57,6 +59,15 @@ const File: React.FC<{
     const [showChild, setShowChild] = useState(false);
     const [editing, setEditing] = useState(false);
     const nameRef = useRef<HTMLDivElement>(null);
+
+    const isDirectorySelected = useMemo(() => {
+        if (!activeDirectory) return false;
+        if (file.path === activeDirectory.replace(/\/$/, '')) {
+            const isCurrentFileInChildren = currentPath.replace(/\/[^\/]*$/, '') === file.path;
+            return isCurrentFileInChildren ? !showChild : true;
+        }
+        return false;
+    }, [activeDirectory, currentPath, showChild, file]);
 
     const handleDirectoryClick = useCallback((e: MouseEvent<HTMLDivElement>) => {
         onClickItem?.({
@@ -293,7 +304,7 @@ const File: React.FC<{
                 file._isDirectory && (
                     <div
                         onClick={handleDirectoryClick}
-                        className="music-monaco-editor-list-file-item-row"
+                        className={`music-monaco-editor-list-file-item-row ${isDirectorySelected ? 'music-monaco-editor-list-file-item-row-selected' : ''}`}
                         title={file.path}
                         data-src={file.path}
                         data-is-file={file._isFile}
@@ -388,6 +399,7 @@ const File: React.FC<{
                                     currentPath={currentPath}
                                     root={false}
                                     file={file.children[item]}
+                                    activeDirectory={activeDirectory}
                                     onPathChange={onPathChange}
                                     key={item}
                                     onContextMenu={onContextMenu}

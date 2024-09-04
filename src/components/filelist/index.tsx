@@ -95,7 +95,7 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
     const menuAction =
       useRef<(action: string, path: string, isFile: boolean) => void | null>();
     const isFirstRun = useRef(true);
-    const activeDirectory = useRef("/");
+    const [activeDirectory, setActiveDirectory] = useState("/");
 
     useImperativeHandle(ref, () => ({
       refresh: (files) => setFiletree(generateFileTree(files)),
@@ -276,7 +276,7 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
       if (fileNames.every(fileName => !fileName.startsWith(path))) {
         return;
       }
-      activeDirectory.current = path;
+      setActiveDirectory(path);
     }, [getAllFiles]);
 
     const handleClickItem = useCallback((item: { path: string, isFile: boolean }) => {
@@ -319,7 +319,7 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
               <AddFileIcon
                 onClick={(e: Event) => {
                   e.stopPropagation();
-                  addFile(activeDirectory.current);
+                  addFile(activeDirectory);
                 }}
                 className="music-monaco-editor-list-title-icon"
               />
@@ -330,7 +330,7 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
               <AddFolderIcon
                 onClick={(e: Event) => {
                   e.stopPropagation();
-                  addFolder(activeDirectory.current);
+                  addFolder(activeDirectory);
                 }}
                 className="music-monaco-editor-list-title-icon"
               />
@@ -381,6 +381,7 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
                 currentPath={currentPath}
                 root
                 file={filetree}
+                activeDirectory={activeDirectory}
                 onPathChange={onPathChange}
                 onContextMenu={handleContextMenu}
                 onClickItem={handleClickItem}
@@ -405,6 +406,7 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
               currentPath={currentPath}
               root
               file={filetree}
+              activeDirectory={activeDirectory}
               onPathChange={onPathChange}
               onContextMenu={handleContextMenu}
               onClickItem={handleClickItem}
