@@ -61,7 +61,9 @@ const File: React.FC<{
     const nameRef = useRef<HTMLDivElement>(null);
 
     const isDirectorySelected = useMemo(() => {
-        if (!activeDirectory) return false;
+        if (!activeDirectory || file._isFile) {
+            return false;
+        }
         if (file.path === activeDirectory.replace(/\/$/, '')) {
             const isCurrentFileInChildren = currentPath.replace(/\/[^\/]*$/, '') === file.path;
             return isCurrentFileInChildren ? !showChild : true;

@@ -17,6 +17,7 @@ import {
   deleteSourceFolder,
   editSourceFolderName,
   getOldNewPath,
+  findSource,
 } from "@utils/index";
 import File from "./file";
 import "./index.less";
@@ -270,14 +271,12 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
     }, []);
 
     const updateActiveDirectory = useCallback((path: string) => {
-      const files = getAllFiles();
-      const fileNames = Object.keys(files);
       // ignore the directory not in given file list
-      if (fileNames.every(fileName => !fileName.startsWith(path))) {
+      if (!findSource(filetree, path)) {
         return;
       }
       setActiveDirectory(path);
-    }, [getAllFiles]);
+    }, [filetree]);
 
     const handleClickItem = useCallback((item: { path: string, isFile: boolean }) => {
       const { path, isFile } = item;

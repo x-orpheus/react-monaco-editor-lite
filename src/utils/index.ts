@@ -221,6 +221,11 @@ export function editSourceFolderName(
   return copy;
 }
 
+export function findSource(sourcetree: any, path: string) {
+  const tokens = path.split('/').filter(e => e);
+  return tokens.reduce((tree: any, token) => tree?.children?.[token], sourcetree) || null;
+}
+
 export function getOldNewPath(oldpath: string, newname: string) {
   const paths = oldpath.split('/');
   paths.splice(-1);
