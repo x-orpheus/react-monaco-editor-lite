@@ -207,6 +207,17 @@ const File: React.FC<{
         }
     }, [currentPath, file.path]);
 
+    useEffect(() => {
+        // auto expand if there is a new file in subfolder
+        const traverse = (item: any) => {
+            return !item.name || Object.values(item?.children || []).some?.(traverse);
+        };
+        const hasNewFile = traverse(file);
+        if (hasNewFile) {
+            setShowChild(true);
+        }
+    }, [file]);
+
     const handleFileAction = (action: string, path: string, isFile: boolean) => {
         switch (action) {
             case 'newFile':
