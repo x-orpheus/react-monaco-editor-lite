@@ -3,6 +3,7 @@ import React, {
   useState,
   useImperativeHandle,
   useRef,
+  useEffect,
 } from "react";
 import AddFileIcon from "@components/icons/addfile";
 import AddFolderIcon from "@components/icons/addfolder";
@@ -94,6 +95,7 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
     const menuAction =
       useRef<(action: string, path: string, isFile: boolean) => void | null>();
     const isFirstRun = useRef(true);
+    const activeDirectory = useRef("/");
 
     useImperativeHandle(ref, () => ({
       refresh: (files) => setFiletree(generateFileTree(files)),
@@ -263,6 +265,21 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
       [filetree, onAddFolder]
     );
 
+    const getParentPath = useCallback((path: string) => {
+      return path.replace(/\/[^\/]*$/, "/");
+    }, []);
+
+    const handleClickItem = useCallback((item: { path: string, isFile: boolean }) => {
+      const { path, isFile } = item;
+      activeDirectory.current = isFile ? getParentPath(path) : `${path.replace(/\/$/, "")}/`;
+    }, [getParentPath]);
+
+    useEffect(() => {
+      // update directory in case the current file is changed inside the editor
+      // currentPath can only be file path
+      activeDirectory.current = getParentPath(currentPath);
+    }, [currentPath, getParentPath]);
+
     return (
       <div className="music-monaco-editor-list-wrapper" style={style}>
         <OpenFilePanel
@@ -292,7 +309,7 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
               <AddFileIcon
                 onClick={(e: Event) => {
                   e.stopPropagation();
-                  addFile("/");
+                  addFile(activeDirectory.current);
                 }}
                 className="music-monaco-editor-list-title-icon"
               />
@@ -303,7 +320,7 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
               <AddFolderIcon
                 onClick={(e: Event) => {
                   e.stopPropagation();
-                  addFolder("/");
+                  addFolder(activeDirectory.current);
                 }}
                 className="music-monaco-editor-list-title-icon"
               />
@@ -356,6 +373,7 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
                 file={filetree}
                 onPathChange={onPathChange}
                 onContextMenu={handleContextMenu}
+                onClickItem={handleClickItem}
                 useFileMenu={useFileMenu}
               />
             </div>
@@ -379,6 +397,7 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
               file={filetree}
               onPathChange={onPathChange}
               onContextMenu={handleContextMenu}
+              onClickItem={handleClickItem}
               useFileMenu={useFileMenu}
             />
           </div>

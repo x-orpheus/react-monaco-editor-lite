@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
+import { useState, useRef, useCallback, useEffect, useMemo, MouseEvent } from 'react';
 import Icon from '@components/icons';
 import Arrow from '@components/icons/arrow';
 import DeleteIcon from '@components/icons/delete';
@@ -33,6 +33,7 @@ const File: React.FC<{
     onDeleteFolder: (...args: any[]) => void,
     onEditFolderName: (...args: any[]) => void,
     onContextMenu: (e: any, fileAction:(action:string, path: string, isFile: boolean) => void) => void
+    onClickItem?: (file: any) => void,
 }> = ({
     getAllFiles,
     disableFileOps = {},
@@ -50,19 +51,29 @@ const File: React.FC<{
     onAddFolder,
     onDeleteFolder,
     onEditFolderName,
-    onContextMenu
+    onContextMenu,
+    onClickItem,
 }) => {
     const [showChild, setShowChild] = useState(false);
     const [editing, setEditing] = useState(false);
     const nameRef = useRef<HTMLDivElement>(null);
-    const handleClick = useCallback(() => {
-        setShowChild((pre:boolean) => !pre);
-    }, []);
 
-    const handlePathChange = useCallback((e: any) => {
+    const handleDirectoryClick = useCallback((e: MouseEvent<HTMLDivElement>) => {
+        onClickItem?.({
+            path: e.currentTarget?.dataset?.src,
+            isFile: false,
+        });
+        setShowChild((pre:boolean) => !pre);
+    }, [onClickItem]);
+
+    const handleFileClick = useCallback((e: MouseEvent<HTMLDivElement>) => {
+        onClickItem?.({
+            path: e.currentTarget?.dataset?.src,
+            isFile: true,
+        });
         const key = e.currentTarget.dataset.src!;
         onPathChange(key);
-    }, [onPathChange]);
+    }, [onPathChange, onClickItem]);
 
     const [showError, setShowError] = useState('');
 
@@ -222,7 +233,7 @@ const File: React.FC<{
              <div
                 data-src={file.path}
                 title={file.path}
-                onClick={handlePathChange}
+                onClick={handleFileClick}
                 key={file.path}
                 data-is-file={file._isFile}
                 onContextMenu={e => onContextMenu(e, handleFileAction)}
@@ -280,7 +291,13 @@ const File: React.FC<{
         <div className="music-monaco-editor-list-file-item"> 
             {
                 file._isDirectory && (
-                    <div onClick={handleClick} className="music-monaco-editor-list-file-item-row" title={file.path}  data-src={file.path} data-is-file={file._isFile} onContextMenu={e => onContextMenu(e, handleFileAction)}>
+                    <div
+                        onClick={handleDirectoryClick}
+                        className="music-monaco-editor-list-file-item-row"
+                        title={file.path}
+                        data-src={file.path}
+                        data-is-file={file._isFile}
+                        onContextMenu={e => onContextMenu(e, handleFileAction)}>
                         <Arrow collpase={!showChild} />
                         <Icon
                             style={{
@@ -375,7 +392,8 @@ const File: React.FC<{
                                     key={item}
                                     onContextMenu={onContextMenu}
                                     useFileMenu={useFileMenu}
-                                    />
+                                    onClickItem={onClickItem}
+                                />
                             ))
                         }
                     </div>
