@@ -269,16 +269,26 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
       return path.replace(/\/[^\/]*$/, "/");
     }, []);
 
+    const updateActiveDirectory = useCallback((path: string) => {
+      const files = getAllFiles();
+      const fileNames = Object.keys(files);
+      // ignore the directory not in given file list
+      if (fileNames.every(fileName => !fileName.startsWith(path))) {
+        return;
+      }
+      activeDirectory.current = path;
+    }, [getAllFiles]);
+
     const handleClickItem = useCallback((item: { path: string, isFile: boolean }) => {
       const { path, isFile } = item;
-      activeDirectory.current = isFile ? getParentPath(path) : `${path.replace(/\/$/, "")}/`;
-    }, [getParentPath]);
+      updateActiveDirectory(isFile ? getParentPath(path) : `${path.replace(/\/$/, "")}/`);
+    }, [getParentPath, updateActiveDirectory]);
 
     useEffect(() => {
       // update directory in case the current file is changed inside the editor
       // currentPath can only be file path
-      activeDirectory.current = getParentPath(currentPath);
-    }, [currentPath, getParentPath]);
+      updateActiveDirectory(getParentPath(currentPath));
+    }, [currentPath, getParentPath, updateActiveDirectory]);
 
     return (
       <div className="music-monaco-editor-list-wrapper" style={style}>
