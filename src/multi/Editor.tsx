@@ -334,10 +334,10 @@ const MultiPrivateEditorComp = React.forwardRef<
     );
 
     const handlePathChange = useCallback(
-      (path: string, nofity = true) => {
+      (path: string, notify = true) => {
         const model = restoreModel(path);
         if (model) {
-          openOrFocusPath(path, nofity);
+          openOrFocusPath(path, notify);
         }
       },
       [restoreModel, openOrFocusPath]
@@ -400,7 +400,7 @@ const MultiPrivateEditorComp = React.forwardRef<
     const editorNodeRef = useEditor(
       editorRef,
       optionsRef,
-      openOrFocusPath,
+      handlePathChange,
       ideConfig.saveWhenBlur ? saveFile : noop
     );
 
