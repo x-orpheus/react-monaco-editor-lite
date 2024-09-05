@@ -1,3 +1,17 @@
+## [1.3.16](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.3.15...v1.3.16) (2024-09-05)
+
+
+### Bug Fixes
+
+* fix curValue is not updated after following file link in editor ([#21](https://github.com/x-orpheus/react-monaco-editor-lite/issues/21)) ([92f7262](https://github.com/x-orpheus/react-monaco-editor-lite/commit/92f7262491765ff862e09bf88072a4718f93f6e9))
+
+
+### Features
+
+* create new file/folder based on selected directory & highlight selected directory ([#22](https://github.com/x-orpheus/react-monaco-editor-lite/issues/22)) ([e79316a](https://github.com/x-orpheus/react-monaco-editor-lite/commit/e79316a545b7fc8cc0efa5676972b19d746697b4))
+
+
+
 ## [1.3.15](https://github.com/x-orpheus/react-monaco-editor-lite/compare/v1.3.14...v1.3.15) (2024-06-13)
 
 
