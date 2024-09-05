@@ -3,6 +3,7 @@ import React, {
   useState,
   useImperativeHandle,
   useRef,
+  useEffect,
 } from "react";
 import AddFileIcon from "@components/icons/addfile";
 import AddFolderIcon from "@components/icons/addfolder";
@@ -16,6 +17,7 @@ import {
   deleteSourceFolder,
   editSourceFolderName,
   getOldNewPath,
+  findSource,
 } from "@utils/index";
 import File from "./file";
 import "./index.less";
@@ -94,6 +96,7 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
     const menuAction =
       useRef<(action: string, path: string, isFile: boolean) => void | null>();
     const isFirstRun = useRef(true);
+    const [activeDirectory, setActiveDirectory] = useState("/");
 
     useImperativeHandle(ref, () => ({
       refresh: (files) => setFiletree(generateFileTree(files)),
@@ -106,23 +109,21 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
       [filetree]
     );
 
+    // TODO: rewrite context menu
     const handleContextMenu = useCallback(
       (
         event: any,
         fileAction: (action: string, path: string, isFile: boolean) => void
       ) => {
         event.preventDefault();
-        if (menuVisible) {
-          setMenuPath(event.currentTarget.dataset.src);
-          setIsMenuFile(event.currentTarget.dataset.isFile);
-        }
+
+        const action = fileAction;
+        menuAction.current = action;
+        setMenuPath(event.currentTarget.dataset.src);
+        setIsMenuFile(event.currentTarget.dataset.isFile);
 
         if (!menuVisible && isFirstRun.current) {
-          const action = fileAction;
-          menuAction.current = action;
           isFirstRun.current = false;
-          setMenuPath(event.currentTarget.dataset.src);
-          setIsMenuFile(event.currentTarget.dataset.isFile);
           setMenuVisible(true);
         }
       },
@@ -138,6 +139,9 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
 
         setMenuVisible(false);
         isFirstRun.current = true;
+        // reset everything after menu click
+        menuAction.current = undefined;
+        setMenuPath("");
       },
       [menuAction, setMenuVisible]
     );
@@ -263,6 +267,29 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
       [filetree, onAddFolder]
     );
 
+    const getParentPath = useCallback((path: string) => {
+      return path.replace(/\/[^\/]*$/, "/");
+    }, []);
+
+    const updateActiveDirectory = useCallback((path: string) => {
+      // ignore the directory not in given file list
+      if (!findSource(filetree, path)) {
+        return;
+      }
+      setActiveDirectory(path);
+    }, [filetree]);
+
+    const handleClickItem = useCallback((item: { path: string, isFile: boolean }) => {
+      const { path, isFile } = item;
+      updateActiveDirectory(isFile ? getParentPath(path) : `${path.replace(/\/$/, "")}/`);
+    }, [getParentPath, updateActiveDirectory]);
+
+    useEffect(() => {
+      // update directory in case the current file is changed inside the editor
+      // currentPath can only be file path
+      updateActiveDirectory(getParentPath(currentPath));
+    }, [currentPath, getParentPath, updateActiveDirectory]);
+
     return (
       <div className="music-monaco-editor-list-wrapper" style={style}>
         <OpenFilePanel
@@ -292,7 +319,7 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
               <AddFileIcon
                 onClick={(e: Event) => {
                   e.stopPropagation();
-                  addFile("/");
+                  addFile(activeDirectory);
                 }}
                 className="music-monaco-editor-list-title-icon"
               />
@@ -303,7 +330,7 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
               <AddFolderIcon
                 onClick={(e: Event) => {
                   e.stopPropagation();
-                  addFolder("/");
+                  addFolder(activeDirectory);
                 }}
                 className="music-monaco-editor-list-title-icon"
               />
@@ -335,7 +362,8 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
                 handleMenuClick={handleMenuClick}
               />
             }
-            onVisibleChange={(visible) => setMenuVisible(visible)}
+            // don't show context menu if there's no action
+            onVisibleChange={(visible) => setMenuVisible(visible && !!menuAction.current)}
             alignPoint={true}
           >
             <div className="music-monaco-editor-list-files">
@@ -354,8 +382,10 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
                 currentPath={currentPath}
                 root
                 file={filetree}
+                activeDirectory={activeDirectory}
                 onPathChange={onPathChange}
                 onContextMenu={handleContextMenu}
+                onClickItem={handleClickItem}
                 useFileMenu={useFileMenu}
               />
             </div>
@@ -377,8 +407,10 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
               currentPath={currentPath}
               root
               file={filetree}
+              activeDirectory={activeDirectory}
               onPathChange={onPathChange}
               onContextMenu={handleContextMenu}
+              onClickItem={handleClickItem}
               useFileMenu={useFileMenu}
             />
           </div>
