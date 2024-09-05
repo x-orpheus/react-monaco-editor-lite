@@ -109,23 +109,21 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
       [filetree]
     );
 
+    // TODO: rewrite context menu
     const handleContextMenu = useCallback(
       (
         event: any,
         fileAction: (action: string, path: string, isFile: boolean) => void
       ) => {
         event.preventDefault();
-        if (menuVisible) {
-          setMenuPath(event.currentTarget.dataset.src);
-          setIsMenuFile(event.currentTarget.dataset.isFile);
-        }
+
+        const action = fileAction;
+        menuAction.current = action;
+        setMenuPath(event.currentTarget.dataset.src);
+        setIsMenuFile(event.currentTarget.dataset.isFile);
 
         if (!menuVisible && isFirstRun.current) {
-          const action = fileAction;
-          menuAction.current = action;
           isFirstRun.current = false;
-          setMenuPath(event.currentTarget.dataset.src);
-          setIsMenuFile(event.currentTarget.dataset.isFile);
           setMenuVisible(true);
         }
       },
@@ -141,6 +139,9 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
 
         setMenuVisible(false);
         isFirstRun.current = true;
+        // reset everything after menu click
+        menuAction.current = undefined;
+        setMenuPath("");
       },
       [menuAction, setMenuVisible]
     );
@@ -361,7 +362,8 @@ const FileTree = React.forwardRef<FileTreeRefType, FileTreeIProps>(
                 handleMenuClick={handleMenuClick}
               />
             }
-            onVisibleChange={(visible) => setMenuVisible(visible)}
+            // don't show context menu if there's no action
+            onVisibleChange={(visible) => setMenuVisible(visible && !!menuAction.current)}
             alignPoint={true}
           >
             <div className="music-monaco-editor-list-files">
